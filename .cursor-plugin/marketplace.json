@@ -1,0 +1,7 @@
+{
+  "name": "whitebeard-kit",
+  "owner": { "name": "Whitebeard", "email": "code@whitebeard.dev" },
+  "plugins": [
+    { "name": "kit", "source": "./", "description": "Whitebeard Agentic Engineering Kit — adaptação para .NET, legado, multi-repo, Jira/ClickUp. tlc-spec-driven é instalado à parte pela CLI oficial do Tech Leads Club." }
+  ]
+}

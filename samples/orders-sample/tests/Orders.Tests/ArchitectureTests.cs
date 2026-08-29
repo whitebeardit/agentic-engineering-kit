@@ -1,7 +1,7 @@
 using ArchUnitNET.Domain;
 using ArchUnitNET.Loader;
 using ArchUnitNET.xUnit;
-using Orders.Application.CancelOrderItem;
+using Orders.Application;
 using Orders.Domain;
 using Orders.Infrastructure;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
@@ -12,7 +12,7 @@ namespace Orders.Tests;
 public class ArchitectureTests
 {
     private static readonly Architecture Arch = new ArchLoader()
-        .LoadAssemblies(typeof(Order).Assembly, typeof(CancelOrderItemHandler).Assembly, typeof(InMemoryOrderRepository).Assembly)
+        .LoadAssemblies(typeof(Order).Assembly, typeof(AssemblyMarker).Assembly, typeof(InMemoryOrderRepository).Assembly)
         .Build();
 
     private static readonly IObjectProvider<IType> Domain =

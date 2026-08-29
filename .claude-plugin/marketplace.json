@@ -1,0 +1,38 @@
+{
+  "name": "whitebeard-kit",
+  "owner": { "name": "Whitebeard", "email": "code@whitebeard.dev" },
+  "metadata": {
+    "description": "Whitebeard Agentic Engineering Kit + tlc-spec-driven (Tech Leads Club, CC-BY-4.0, sempre o original do GitHub deles, nunca vendorizado)."
+  },
+  "plugins": [
+    {
+      "name": "kit",
+      "source": "./",
+      "displayName": "Whitebeard Agentic Engineering Kit",
+      "description": "Adaptação Whitebeard para engenharia com agentes: card-intake (Jira/ClickUp/texto) com Definition of Ready, agentes de impacto/legado/testes/review/contrato, MCP Atlassian + ClickUp, aviso de versão do tlc-spec-driven. .NET, legado, multi-repo.",
+      "author": { "name": "Whitebeard", "email": "code@whitebeard.dev" },
+      "homepage": "https://github.com/whitebeardit/agentic-engineering-kit",
+      "repository": "https://github.com/whitebeardit/agentic-engineering-kit",
+      "license": "MIT",
+      "category": "productivity",
+      "keywords": ["dotnet", "spec-driven", "legacy", "jira", "clickup", "harness"]
+    },
+    {
+      "name": "tlc",
+      "source": {
+        "source": "git-subdir",
+        "url": "tech-leads-club/agent-skills",
+        "path": "packages/skills-catalog/skills/(development)/tlc-spec-driven",
+        "ref": "main"
+      },
+      "displayName": "tlc-spec-driven (Tech Leads Club)",
+      "description": "Spec-driven development em 4 fases adaptativas + Verifier independente + STATE.md + lições. © Tech Leads Club / Felipe Rodrigues — CC-BY-4.0. Esta entrada rastreia o branch main do repositório original; nada é copiado para o kit.",
+      "author": { "name": "Tech Leads Club" },
+      "homepage": "https://github.com/tech-leads-club/agent-skills",
+      "repository": "https://github.com/tech-leads-club/agent-skills",
+      "license": "CC-BY-4.0",
+      "category": "productivity",
+      "keywords": ["spec-driven", "verifier", "lessons"]
+    }
+  ]
+}

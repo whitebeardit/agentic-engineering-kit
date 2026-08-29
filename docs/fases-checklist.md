@@ -9,8 +9,8 @@ Detalhe no vault `agentes-ia/processo-engenharia-com-agentes.md`. Nada avança s
 - [ ] Repos do piloto: testes rodam, CI existe, branch protection, lockfile, segredos fora
 
 ## 1 · Contexto mínimo (sem. 2–3)
-- [ ] Workspace pai; `CLAUDE.md` raiz (tabela de serviços) e por repo (< 150 linhas)
-- [ ] `apply.sh` aplicado; hook bloqueia `.env`/migrations; `dotnet format` automático
+- [ ] Workspace pai; `AGENTS.md` raiz (tabela de serviços) e por repo (< 150 linhas); `CLAUDE.md` = `@AGENTS.md`
+- [ ] `apply.sh --claude [--cursor] --with-tlc --dotnet` aplicado; plugin `kit@whitebeard-kit` (+ `tlc`) instalado; hook bloqueia `.env`/migrations; `dotnet format` automático
 - [ ] Analyzers via `Directory.Build.props` (rampa no legado)
 - [ ] Agente builda e testa sozinho; `/context` < 10 %
 
@@ -20,8 +20,8 @@ Detalhe no vault `agentes-ia/processo-engenharia-com-agentes.md`. Nada avança s
 - [ ] `impact-analyzer` acerta repos e ordem em 3 cards históricos
 
 ## 3 · Card → spec → PR (sem. 5–8)
-- [ ] Definition of Ready em uso; specs em 3 arquivos com 2 gates humanos
-- [ ] verifier ≠ autor; AI review antes do humano; PR draft ≤ 400 linhas; CODEOWNERS; tiers de risco
+- [ ] Definition of Ready em uso via `card-intake`; specs pelo tlc-spec-driven (`.specs/`) com 2 gates humanos
+- [ ] Verifier do tlc (≠ autor) com `validation.md`; AI review antes do humano; PR draft ≤ 400 linhas; CODEOWNERS; tiers de risco
 - [ ] 5 cards fim a fim; nota por card no vault; p75 e rework vs baseline
 
 ## 4 · Sensores e segurança (sem. 8–12)
@@ -30,9 +30,9 @@ Detalhe no vault `agentes-ia/processo-engenharia-com-agentes.md`. Nada avança s
 - [ ] Sandbox + egresso + token por repo + OTel de tool-calls; verificação de pacote novo
 
 ## 5 · Harness e escala (mês 3–6)
-- [ ] Plugin interno; managed settings; Writer/Reviewer em worktrees; evaluator com browser; GC semanal
+- [ ] Plugin já existe (`kit@whitebeard-kit`): foco em managed settings (`allowManagedHooksOnly`, `autoUpdate`); Writer/Reviewer em worktrees; evaluator com browser; GC semanal
 - [ ] 2ª equipe operando; DORA não regrediu; nenhuma política depende de "lembrar"
 
 ## 6 · Contínua
-- [ ] Loops com cadência (card · PR · semana · quinzena · mês · trimestre · modelo novo)
+- [ ] Loops com cadência (card · PR · semana · quinzena: lições confirmadas do tlc → hook/rule/analyzer · mês · trimestre · modelo novo)
 - [ ] Todo artefato com dono, data e check de frescor; CLAUDE.md diminui, não cresce

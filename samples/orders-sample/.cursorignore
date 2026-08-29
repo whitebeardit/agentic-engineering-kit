@@ -1,0 +1,8 @@
+# kit Whitebeard — segredos e gerados nunca entram no contexto do Cursor
+.env
+.env.*
+**/appsettings.*.json
+**/secrets/**
+**/docs/generated/**
+bin/
+obj/

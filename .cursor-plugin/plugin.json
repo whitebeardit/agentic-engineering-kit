@@ -1,0 +1,16 @@
+{
+  "name": "kit",
+  "displayName": "Whitebeard Agentic Engineering Kit",
+  "version": "0.2.0",
+  "description": "Adaptação Whitebeard para engenharia com agentes: card-intake (Jira/ClickUp/texto) com Definition of Ready, agentes de impacto/legado/testes/review/contrato, rules para contratos e legado, MCP Atlassian + ClickUp, aviso de versão do tlc-spec-driven (Tech Leads Club, CC-BY-4.0 — instalado pela CLI oficial, nunca copiado).",
+  "author": { "name": "Whitebeard", "email": "code@whitebeard.dev" },
+  "homepage": "https://github.com/whitebeardit/agentic-engineering-kit",
+  "repository": "https://github.com/whitebeardit/agentic-engineering-kit",
+  "license": "MIT",
+  "keywords": ["dotnet", "spec-driven", "legacy", "jira", "clickup"],
+  "skills": "skills",
+  "agents": "agents",
+  "rules": "cursor/rules",
+  "hooks": "cursor/hooks.json",
+  "mcpServers": ".mcp.json"
+}

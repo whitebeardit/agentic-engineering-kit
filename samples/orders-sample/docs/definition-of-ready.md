@@ -1,6 +1,6 @@
 # Definition of Ready — o card só entra se…
 
-Um card de uma linha entregue ao agente é o erro mais comum. Antes de `jira-intake`, o card tem:
+Um card de uma linha entregue ao agente é o erro mais comum. Antes de `card-intake` (e do Specify do tlc-spec-driven), o card tem:
 
 | Campo | Exemplo | Sem isso… |
 |---|---|---|

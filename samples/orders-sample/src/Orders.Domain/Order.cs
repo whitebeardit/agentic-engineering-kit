@@ -1,5 +1,4 @@
 using Orders.Domain.Events;
-using Orders.Domain.Specifications;
 
 namespace Orders.Domain;
 
@@ -57,25 +56,5 @@ public sealed class Order
         }
 
         Status = OrderStatus.Faturado;
-    }
-
-    /// <summary>RN-ORD-012 — Cancelamento parcial. Teste: RN_ORD_012_* · Doc: docs/regras/pedidos.md</summary>
-    public void CancelItem(Guid itemId)
-    {
-        if (!new PedidoElegivelParaCancelamento().IsSatisfiedBy(this))
-        {
-            throw new DomainRuleViolationException("RN-ORD-012", "Pedido faturado não admite cancelamento de item.");
-        }
-
-        var item = _items.Find(i => i.Id == itemId)
-            ?? throw new DomainRuleViolationException("RN-ORD-012", "Item não pertence ao pedido.");
-
-        if (item.Cancelled)
-        {
-            return; // idempotente: cancelar duas vezes não emite dois eventos
-        }
-
-        item.Cancel();
-        _events.Add(new OrderItemCancelled(Id, itemId, Total));
     }
 }

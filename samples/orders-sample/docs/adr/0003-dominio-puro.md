@@ -18,7 +18,7 @@ Regras de pedido estavam espalhadas entre controller, handler e repositório. Ag
 - Confiar em revisão humana — não escala; o teste falha o build com a mensagem certa.
 
 ## Consequências
-- + Regra tem um endereço só; o agente `legacy-navigator` e o `verifier` sabem onde olhar.
+- + Regra tem um endereço só; o agente `legacy-navigator` e o Verifier do tlc-spec-driven sabem onde olhar.
 - − Um pouco mais de cerimônia para persistência simples.
 
 ## Como o agente deve tratar

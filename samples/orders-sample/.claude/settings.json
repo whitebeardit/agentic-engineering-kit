@@ -53,5 +53,17 @@
         ]
       }
     ]
+  },
+  "extraKnownMarketplaces": {
+    "whitebeard-kit": {
+      "source": {
+        "source": "url",
+        "url": "git@github.com:whitebeardit/agentic-engineering-kit.git"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "kit@whitebeard-kit": true,
+    "tlc@whitebeard-kit": true
   }
 }

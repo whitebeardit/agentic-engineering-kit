@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [ { "command": "./.cursor/hooks/guard-bash.sh", "timeout": 10 } ],
+    "beforeReadFile":       [ { "command": "./.cursor/hooks/protect-paths.sh", "timeout": 10 } ],
+    "afterFileEdit":        [ { "command": "./.cursor/hooks/protect-paths.sh", "timeout": 10 },
+                              { "command": "./.cursor/hooks/dotnet-format.sh", "timeout": 60 } ]
+  }
+}
