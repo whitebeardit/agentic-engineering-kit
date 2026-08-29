@@ -137,12 +137,24 @@ Check C: os 2 testes mapeiam para CANC-06; nenhum teste sem requisito. Veredito:
 - MCP: NONE
 - Skill: NONE
 **Done when**:
-- [ ] Testes 1:1: total recalculado (CANC-01); evento único com OrderId/ItemId/NewTotal (CANC-02); faturado recusa com RuleId RN-ORD-012 e nada muda (CANC-03); duas chamadas → um evento, mesmo total (CANC-04); item inexistente recusa sem alterar (CANC-05); último item cancelado → total 0,00 BRL (edge)
-- [ ] Gate check passes: `dotnet test Orders.slnx --filter "FullyQualifiedName~RN_"`
-- [ ] Test count: 9 testes RN_ORD_012 (total da suíte 13); nenhum teste anterior removido
-- [ ] Build gate passes (último da fase): `dotnet build Orders.slnx && dotnet test Orders.slnx`
+- [x] Testes 1:1: total recalculado (CANC-01); evento único com OrderId/ItemId/NewTotal (CANC-02); faturado recusa com RuleId RN-ORD-012 e nada muda (CANC-03); duas chamadas → um evento, mesmo total (CANC-04); item inexistente recusa sem alterar (CANC-05); último item cancelado → total 0,00 BRL (edge)
+- [x] Gate check passes: `dotnet test Orders.slnx --filter "FullyQualifiedName~RN_"` — 8 passed (2026-08-29)
+- [x] Test count: 8 testes RN_ORD_012 (total da suíte 12); nenhum teste anterior removido
+- [x] Build gate passes (último da fase): `dotnet build Orders.slnx && dotnet test Orders.slnx` — 0 warnings, 12 passed
 **Tests**: unit
 **Gate**: build
+**Status**: ✅ Done
+**Post-gate (Check A/C — evidência ou zero)**:
+| Critério | `file:line` + assertion | Spec-defined outcome | Covered? |
+|---|---|---|---|
+| CANC-01 | `…Tests.cs:54` - `Assert.True(a.Cancelled);`; `…Tests.cs:55` - `Assert.Equal(Money.Brl(30), order.Total);`; `…Tests.cs:67` - `var evt = Assert.Single(order.Events.OfType<OrderItemCancelled>());` | item.Cancelled == true; Total == 30,00 BRL | ✅ Yes |
+| CANC-02 | `…Tests.cs:67` - `var evt = Assert.Single(order.Events.OfType<OrderItemCancelled>());`; `…Tests.cs:68` - `Assert.Equal(order.Id, evt.OrderId);`; `…Tests.cs:69` - `Assert.Equal(a.Id, evt.ItemId);`; `…Tests.cs:70` - `Assert.Equal(Money.Brl(30), evt.NewTotal);` | exatamente 1 evento; OrderId, ItemId, NewTotal == 30,00 BRL | ✅ Yes |
+| CANC-03 | `…Tests.cs:81` - `var ex = Assert.Throws<DomainRuleViolationException>(() => order.CancelItem(a.Id));`; `…Tests.cs:83` - `Assert.Equal("RN-ORD-012", ex.RuleId);`; `…Tests.cs:84` - `Assert.False(a.Cancelled);`; `…Tests.cs:85` - `Assert.Equal(Money.Brl(130), order.Total);`; `…Tests.cs:86` - `Assert.Empty(order.Events);` | DomainRuleViolationException RuleId RN-ORD-012; item não cancelado; Total 130,00; Events vazio | ✅ Yes |
+| CANC-04 | `…Tests.cs:99` - `Assert.Single(order.Events.OfType<OrderItemCancelled>());`; `…Tests.cs:100` - `Assert.Equal(Money.Brl(30), order.Total);`; `…Tests.cs:110` - `var ex = Assert.Throws<DomainRuleViolationException>(() => order.CancelItem(Guid.NewGuid()));` | 1 evento após 2 chamadas; Total 30,00 | ✅ Yes |
+| CANC-05 | `…Tests.cs:110` - `var ex = Assert.Throws<DomainRuleViolationException>(() => order.CancelItem(Guid.NewGuid()));`; `…Tests.cs:112` - `Assert.Equal("RN-ORD-012", ex.RuleId);`; `…Tests.cs:113` - `Assert.Equal(Money.Brl(130), order.Total);`; `…Tests.cs:114` - `Assert.Empty(order.Events);` | RuleId RN-ORD-012; Total 130,00; Events vazio | ✅ Yes |
+| edge CANC-01 | `…Tests.cs:127` - `Assert.Equal(Money.Brl(0), order.Total);`; `…Tests.cs:128` - `Assert.Equal(2, order.Events.OfType<OrderItemCancelled>().Count());` | Total 0,00 BRL; 2 eventos | ✅ Yes |
+Check B: nenhuma asserção tautológica; estado (Total, Cancelled, Events) é asserido, não só a chamada. Check C: 6 testes ↔ CANC-01..05 + edge listado na spec; nenhum teste sem requisito. Check D: nomes `RN_ORD_012_…`, local `tests/Orders.Tests/RN_*Tests.cs` (AGENTS.md). Veredito: adequado.
+
 
 ---
 

@@ -1,6 +1,6 @@
 using Orders.Domain;
+using Orders.Domain.Events;
 using Orders.Domain.Specifications;
-using Xunit;
 
 namespace Orders.Tests;
 
@@ -39,5 +39,91 @@ public class RN_ORD_012_CancelamentoParcialTests
         var elegivel = new PedidoElegivelParaCancelamento().IsSatisfiedBy(order);
 
         Assert.False(elegivel);
+    }
+
+    // ----- CANC-01 · WHEN cancela item de pedido Aberto, SHALL marcar cancelado e recalcular o total -----
+
+    [Fact]
+    public void RN_ORD_012_WHEN_cliente_cancela_item_de_pedido_Aberto_SHALL_marcar_cancelado_e_recalcular_total()
+    {
+        var order = PedidoAbertoComDoisItens(out var a, out _);
+
+        order.CancelItem(a.Id);
+
+        Assert.True(a.Cancelled);
+        Assert.Equal(Money.Brl(30), order.Total);
+    }
+
+    // ----- CANC-02 · WHEN cancela item, SHALL emitir exatamente um OrderItemCancelled com OrderId, ItemId e NewTotal -----
+
+    [Fact]
+    public void RN_ORD_012_WHEN_cliente_cancela_item_SHALL_emitir_um_OrderItemCancelled_com_OrderId_ItemId_e_NewTotal()
+    {
+        var order = PedidoAbertoComDoisItens(out var a, out _);
+
+        order.CancelItem(a.Id);
+
+        var evt = Assert.Single(order.Events.OfType<OrderItemCancelled>());
+        Assert.Equal(order.Id, evt.OrderId);
+        Assert.Equal(a.Id, evt.ItemId);
+        Assert.Equal(Money.Brl(30), evt.NewTotal);
+    }
+
+    // ----- CANC-03 · IF pedido faturado THEN SHALL recusar com RuleId RN-ORD-012 sem alterar total, itens ou eventos -----
+
+    [Fact]
+    public void RN_ORD_012_IF_pedido_faturado_THEN_SHALL_recusar_com_RuleId_RN_ORD_012_sem_alterar_o_pedido()
+    {
+        var order = PedidoAbertoComDoisItens(out var a, out _);
+        order.Invoice();
+
+        var ex = Assert.Throws<DomainRuleViolationException>(() => order.CancelItem(a.Id));
+
+        Assert.Equal("RN-ORD-012", ex.RuleId);
+        Assert.False(a.Cancelled);
+        Assert.Equal(Money.Brl(130), order.Total);
+        Assert.Empty(order.Events);
+    }
+
+    // ----- CANC-04 · SHALL ser idempotente: duas vezes → um único evento e o mesmo total -----
+
+    [Fact]
+    public void RN_ORD_012_SHALL_ser_idempotente_ao_cancelar_o_mesmo_item_duas_vezes()
+    {
+        var order = PedidoAbertoComDoisItens(out var a, out _);
+
+        order.CancelItem(a.Id);
+        order.CancelItem(a.Id);
+
+        Assert.Single(order.Events.OfType<OrderItemCancelled>());
+        Assert.Equal(Money.Brl(30), order.Total);
+    }
+
+    // ----- CANC-05 · IF item não pertence ao pedido THEN SHALL recusar sem alterar o pedido -----
+
+    [Fact]
+    public void RN_ORD_012_IF_item_nao_pertence_ao_pedido_THEN_SHALL_recusar_sem_alterar_o_pedido()
+    {
+        var order = PedidoAbertoComDoisItens(out _, out _);
+
+        var ex = Assert.Throws<DomainRuleViolationException>(() => order.CancelItem(Guid.NewGuid()));
+
+        Assert.Equal("RN-ORD-012", ex.RuleId);
+        Assert.Equal(Money.Brl(130), order.Total);
+        Assert.Empty(order.Events);
+    }
+
+    // ----- Edge (CANC-01) · WHEN o último item é cancelado, SHALL recalcular o total para 0,00 BRL -----
+
+    [Fact]
+    public void RN_ORD_012_WHEN_ultimo_item_e_cancelado_SHALL_recalcular_total_para_zero()
+    {
+        var order = PedidoAbertoComDoisItens(out var a, out var b);
+
+        order.CancelItem(a.Id);
+        order.CancelItem(b.Id);
+
+        Assert.Equal(Money.Brl(0), order.Total);
+        Assert.Equal(2, order.Events.OfType<OrderItemCancelled>().Count());
     }
 }
