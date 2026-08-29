@@ -15,6 +15,7 @@ Build sem erro + `dotnet test` verde + `.verified.txt` inalterado (ou mudança e
 - `Erp.Legacy` compila em `AnalysisMode=Minimum` (rampa); o resto em `Recommended` com warnings-as-errors.
 - Characterization test: 1ª execução cria `*.received.txt` e FALHA; humano compara e renomeia para `.verified.txt`. Nunca aprove no automático.
 - `DiffEngine_Disabled=true` no CI, senão o Verify tenta abrir um diff tool.
+- **Nunca julgue um gate com `dotnet test --no-build`**: ele roda o binário anterior e "passa" com o build quebrado. Gate = `dotnet build` (exit 0) + `dotnet test` (exit 0), sempre com build fresco.
 - `nuget.config` isola o feed: o NuGet.config global desta máquina aponta para feeds de outros clientes.
 - Só existe repositório in-memory; não há API nem catálogo AsyncAPI (fora do exemplo).
 

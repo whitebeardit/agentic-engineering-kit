@@ -2,6 +2,7 @@ using Orders.Application.CancelOrderItem;
 using Orders.Domain;
 using Orders.Domain.Events;
 using Orders.Domain.Specifications;
+using Orders.Infrastructure;
 
 namespace Orders.Tests;
 

@@ -3,6 +3,25 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 1,
-  "lessons": []
+  "next_id": 2,
+  "lessons": [
+    {
+      "id": "L-001",
+      "key": "gate_fail::run every gate with a fresh build and check exit codes never judge a gate with no build stale binaries pass while the build is broken",
+      "text": "Run every gate with a fresh build and check exit codes; never judge a gate with --no-build (stale binaries pass while the build is broken)",
+      "signal": "gate_fail",
+      "scope": "tests",
+      "status": "candidate",
+      "features": [
+        "001-cancelamento-parcial"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs:136 (tests)"
+      ],
+      "created": "2026-08-29T12:34:37Z",
+      "last_seen": "2026-08-29T12:34:37Z"
+    }
+  ]
 }

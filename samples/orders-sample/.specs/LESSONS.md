@@ -14,7 +14,11 @@ _none_
 
 Seen once or not yet corroborated. Tracked, not trusted.
 
-_none_
+### L-001 - Run every gate with a fresh build and check exit codes; never judge a gate with --no-build (stale binaries pass while the build is broken)
+- signal: `gate_fail` · recurrence: 1 feature(s) · scope: `tests` · harmful: 0
+- features: 001-cancelamento-parcial
+- evidence: tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs:136 (tests)
+- last seen: 2026-08-29T12:34:37Z
 
 ## Quarantined (failed when applied - ignore)
 

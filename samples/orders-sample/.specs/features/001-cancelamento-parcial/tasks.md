@@ -171,11 +171,11 @@ Check B: nenhuma asserção tautológica; estado (Total, Cancelled, Events) é a
 **Done when**:
 - [x] Handler devolve `NewTotal` 30,00 BRL e 1 evento para o pedido de dois itens; pedido inexistente → `KeyNotFoundException`
 - [x] `ArchitectureTests` continuam verdes (Application não lança `DomainRuleViolationException`) — 3 passed
-- [x] Gate check passes: `dotnet test Orders.slnx` — 14 passed (2026-08-29)
+- [x] Gate check passes: `dotnet test Orders.slnx` — 14 passed (2026-08-29, **após fix**: o 1º commit de T5 tinha build quebrado — `using Orders.Infrastructure;` ausente — e o gate registrado veio de `--no-build` sobre o binário anterior; corrigido em `fix(orders)`, lição L-001 registrada)
 - [x] Test count: 10 RN_ORD_012 (total 14); nenhum teste anterior removido
 **Tests**: integration
 **Gate**: full
-**Status**: ✅ Done
+**Status**: ✅ Done (com fix)
 **Post-gate (Check A/C — evidência ou zero)**:
 | Critério | `file:line` + assertion | Spec-defined outcome | Covered? |
 |---|---|---|---|
