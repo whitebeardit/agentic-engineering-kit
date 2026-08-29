@@ -1,3 +1,4 @@
+using Orders.Application.CancelOrderItem;
 using Orders.Domain;
 using Orders.Domain.Events;
 using Orders.Domain.Specifications;
@@ -125,5 +126,31 @@ public class RN_ORD_012_CancelamentoParcialTests
 
         Assert.Equal(Money.Brl(0), order.Total);
         Assert.Equal(2, order.Events.OfType<OrderItemCancelled>().Count());
+    }
+
+    // ----- CANC-07 · WHEN o handler recebe o comando, SHALL carregar, delegar ao domínio, persistir e devolver (sem regra) -----
+
+    [Fact]
+    public async Task RN_ORD_012_WHEN_handler_recebe_comando_SHALL_orquestrar_persistir_e_devolver_novo_total_e_eventos()
+    {
+        var repo = new InMemoryOrderRepository();
+        var order = PedidoAbertoComDoisItens(out var a, out _);
+        await repo.SaveAsync(order, CancellationToken.None);
+        var handler = new CancelOrderItemHandler(repo);
+
+        var result = await handler.HandleAsync(new CancelOrderItemCommand(order.Id, a.Id), CancellationToken.None);
+
+        Assert.Equal(Money.Brl(30), result.NewTotal);
+        Assert.Single(result.Events);
+        var persisted = await repo.GetAsync(order.Id, CancellationToken.None);
+        Assert.True(persisted!.Items.Single(i => i.Id == a.Id).Cancelled);
+    }
+
+    [Fact]
+    public async Task RN_ORD_012_IF_pedido_inexistente_THEN_handler_SHALL_lancar_KeyNotFoundException()
+    {
+        var handler = new CancelOrderItemHandler(new InMemoryOrderRepository());
+
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.HandleAsync(new CancelOrderItemCommand(Guid.NewGuid(), Guid.NewGuid()), CancellationToken.None));
     }
 }

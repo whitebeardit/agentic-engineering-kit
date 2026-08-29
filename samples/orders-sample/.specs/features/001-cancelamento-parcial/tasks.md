@@ -169,12 +169,20 @@ Check B: nenhuma asserção tautológica; estado (Total, Cancelled, Events) é a
 - MCP: NONE
 - Skill: NONE
 **Done when**:
-- [ ] Handler devolve `NewTotal` 30,00 BRL e 1 evento para o pedido de dois itens; pedido inexistente → `KeyNotFoundException`
-- [ ] `ArchitectureTests` continuam verdes (Application não lança `DomainRuleViolationException`)
-- [ ] Gate check passes: `dotnet test Orders.slnx`
-- [ ] Test count: 11 RN_ORD_012 (total 15); nenhum teste anterior removido
+- [x] Handler devolve `NewTotal` 30,00 BRL e 1 evento para o pedido de dois itens; pedido inexistente → `KeyNotFoundException`
+- [x] `ArchitectureTests` continuam verdes (Application não lança `DomainRuleViolationException`) — 3 passed
+- [x] Gate check passes: `dotnet test Orders.slnx` — 14 passed (2026-08-29)
+- [x] Test count: 10 RN_ORD_012 (total 14); nenhum teste anterior removido
 **Tests**: integration
 **Gate**: full
+**Status**: ✅ Done
+**Post-gate (Check A/C — evidência ou zero)**:
+| Critério | `file:line` + assertion | Spec-defined outcome | Covered? |
+|---|---|---|---|
+| CANC-07 | `…Tests.cs:143` - `Assert.Equal(Money.Brl(30), result.NewTotal);`; `…Tests.cs:144` - `Assert.Single(result.Events);`; `…Tests.cs:146` - `Assert.True(persisted!.Items.Single(i => i.Id == a.Id).Cancelled);` | NewTotal 30,00; 1 evento; item persistido como cancelado | ✅ Yes |
+| CANC-07 (erro) | `…Tests.cs:154` - `await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.HandleAsync(new CancelOrderItemCommand(Guid.NewGuid(), Guid.NewGuid()), CancellationToken.None));` | KeyNotFoundException | ✅ Yes |
+Check B: estado persistido é asserido (não só a chamada). Check C: 2 testes ↔ CANC-07 e caminho de erro do design. Check D: nomes e local conforme AGENTS.md. Veredito: adequado.
+
 
 ---
 
