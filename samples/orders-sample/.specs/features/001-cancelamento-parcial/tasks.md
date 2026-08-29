@@ -9,7 +9,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 ---
 
 **Design**: `.specs/features/001-cancelamento-parcial/design.md`
-**Status**: In Progress
+**Status**: Done — aguardando Verifier
 
 ---
 
@@ -197,10 +197,11 @@ Check B: estado persistido é asserido (não só a chamada). Check C: 2 testes �
 - MCP: NONE
 - Skill: `regras-de-negocio`
 **Done when**:
-- [ ] Bloco aponta arquivo:método reais e o arquivo de teste; `Confiança: verified`
-- [ ] Build gate passes: `dotnet build Orders.slnx && dotnet test Orders.slnx`
+- [x] Bloco aponta arquivo:método reais e o arquivo de teste; `Confiança: verified`
+- [x] Build gate passes: `dotnet build Orders.slnx && dotnet test Orders.slnx` — 14 passed (2026-08-29)
 **Tests**: none
 **Gate**: build
+**Status**: ✅ Done
 
 ---
 

@@ -96,16 +96,16 @@ Each requirement gets a unique ID for tracking across design, tasks, and validat
 
 | Requirement ID | Story | Phase | Status |
 | -------------- | ----- | ----- | ------ |
-| CANC-01 | P1: recalcular total ao cancelar item | Design | Pending |
-| CANC-02 | P1: emitir OrderItemCancelled com novo total | Design | Pending |
-| CANC-03 | P1: pedido faturado recusa sem alterar | Design | Pending |
-| CANC-04 | P1: idempotência (um único evento) | Design | Pending |
-| CANC-05 | P1: item inexistente recusa sem alterar | Design | Pending |
-| CANC-06 | P1: só pedido Aberto é elegível | Design | Pending |
-| CANC-07 | P1: handler orquestra, não decide | Design | Pending |
+| CANC-01 | P1: recalcular total ao cancelar item | Tasks | Implementing |
+| CANC-02 | P1: emitir OrderItemCancelled com novo total | Tasks | Implementing |
+| CANC-03 | P1: pedido faturado recusa sem alterar | Tasks | Implementing |
+| CANC-04 | P1: idempotência (um único evento) | Tasks | Implementing |
+| CANC-05 | P1: item inexistente recusa sem alterar | Tasks | Implementing |
+| CANC-06 | P1: só pedido Aberto é elegível | Tasks | Implementing |
+| CANC-07 | P1: handler orquestra, não decide | Tasks | Implementing |
 
 **ID format:** `[CATEGORY]-[NUMBER]` · **Status values:** Pending → In Design → In Tasks → Implementing → Verified
-**Coverage:** 7 total, 0 mapped to tasks, 7 unmapped ⚠️
+**Coverage:** 7 total, 7 mapped to tasks (T1–T6), 0 unmapped
 
 ---
 
