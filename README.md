@@ -51,7 +51,7 @@ docs/
 ## Início rápido (fase 1 em um repo)
 
 ```bash
-git clone <este kit> ~/DEV/WHITEBEARD/agentic-engineering-kit
+git clone git@github.com:whitebeardit/agentic-engineering-kit.git ~/DEV/WHITEBEARD/agentic-engineering-kit
 ~/DEV/WHITEBEARD/agentic-engineering-kit/apply.sh /caminho/do/repo --dotnet
 cd /caminho/do/repo && claude          # /init, depois pode o CLAUDE.md com a pergunta "remover isto faria o agente errar?"
 ```
