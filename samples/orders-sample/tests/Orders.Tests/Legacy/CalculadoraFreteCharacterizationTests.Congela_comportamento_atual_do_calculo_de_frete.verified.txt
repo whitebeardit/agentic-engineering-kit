@@ -1,0 +1,465 @@
+﻿[
+  {
+    Caso: 1,
+    Uf: RR,
+    PesoKg: 26.71,
+    ValorPedido: 471.17,
+    Vip: false,
+    Frete: 37.44
+  },
+  {
+    Caso: 2,
+    Uf: RR,
+    PesoKg: 33.45,
+    ValorPedido: 136.43,
+    Vip: true,
+    Frete: 77.11
+  },
+  {
+    Caso: 3,
+    Uf: RR,
+    PesoKg: 18.82,
+    ValorPedido: 67.09,
+    Vip: false,
+    Frete: 50.78
+  },
+  {
+    Caso: 4,
+    Uf: RR,
+    PesoKg: 19.08,
+    ValorPedido: 774.00,
+    Vip: false,
+    Frete: 30.57
+  },
+  {
+    Caso: 5,
+    Uf: RJ,
+    PesoKg: 4.13,
+    ValorPedido: 91.70,
+    Vip: true,
+    Frete: 15.0
+  },
+  {
+    Caso: 6,
+    Uf: BA,
+    PesoKg: 9.43,
+    ValorPedido: 249.28,
+    Vip: true
+  },
+  {
+    Caso: 7,
+    Uf: AM,
+    PesoKg: 9.30,
+    ValorPedido: 122.14,
+    Vip: true,
+    Frete: 34.9
+  },
+  {
+    Caso: 8,
+    Uf: RJ,
+    PesoKg: 16.91,
+    ValorPedido: 492.97,
+    Vip: false,
+    Frete: 13.72
+  },
+  {
+    Caso: 9,
+    Uf: MG,
+    PesoKg: 22.21,
+    ValorPedido: 301.00,
+    Vip: false,
+    Frete: 19.74
+  },
+  {
+    Caso: 10,
+    Uf: SP,
+    PesoKg: 1.39,
+    ValorPedido: 583.08,
+    Vip: false,
+    Frete: 6.0
+  },
+  {
+    Caso: 11,
+    Uf: RJ,
+    PesoKg: 17.10,
+    ValorPedido: 364.74,
+    Vip: false,
+    Frete: 13.89
+  },
+  {
+    Caso: 12,
+    Uf: BA,
+    PesoKg: 7.78,
+    ValorPedido: 842.41,
+    Vip: true
+  },
+  {
+    Caso: 13,
+    Uf: AM,
+    PesoKg: 39.33,
+    ValorPedido: 418.28,
+    Vip: false,
+    Frete: 48.80
+  },
+  {
+    Caso: 14,
+    Uf: RJ,
+    PesoKg: 8.38,
+    ValorPedido: 684.46,
+    Vip: true
+  },
+  {
+    Caso: 15,
+    Uf: MG,
+    PesoKg: 2.55,
+    ValorPedido: 315.68,
+    Vip: true
+  },
+  {
+    Caso: 16,
+    Uf: RR,
+    PesoKg: 31.03,
+    ValorPedido: 65.43,
+    Vip: true,
+    Frete: 72.75
+  },
+  {
+    Caso: 17,
+    Uf: PR,
+    PesoKg: 22.34,
+    ValorPedido: 333.70,
+    Vip: true
+  },
+  {
+    Caso: 18,
+    Uf: RJ,
+    PesoKg: 1.62,
+    ValorPedido: 766.34,
+    Vip: true
+  },
+  {
+    Caso: 19,
+    Uf: AM,
+    PesoKg: 7.64,
+    ValorPedido: 191.03,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 20,
+    Uf: BA,
+    PesoKg: 30.18,
+    ValorPedido: 561.31,
+    Vip: true
+  },
+  {
+    Caso: 21,
+    Uf: MG,
+    PesoKg: 27.37,
+    ValorPedido: 791.61,
+    Vip: true
+  },
+  {
+    Caso: 22,
+    Uf: PR,
+    PesoKg: 35.75,
+    ValorPedido: 302.90,
+    Vip: true
+  },
+  {
+    Caso: 23,
+    Uf: BA,
+    PesoKg: 36.94,
+    ValorPedido: 385.87,
+    Vip: false,
+    Frete: 36.75
+  },
+  {
+    Caso: 24,
+    Uf: RR,
+    PesoKg: 8.17,
+    ValorPedido: 181.94,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 25,
+    Uf: MG,
+    PesoKg: 7.21,
+    ValorPedido: 533.74,
+    Vip: true
+  },
+  {
+    Caso: 26,
+    Uf: BA,
+    PesoKg: 35.31,
+    ValorPedido: 271.35,
+    Vip: true
+  },
+  {
+    Caso: 27,
+    Uf: SP,
+    PesoKg: 9.30,
+    ValorPedido: 181.10,
+    Vip: false,
+    Frete: 12.0
+  },
+  {
+    Caso: 28,
+    Uf: SP,
+    PesoKg: 15.21,
+    ValorPedido: 515.76,
+    Vip: false,
+    Frete: 10.69
+  },
+  {
+    Caso: 29,
+    Uf: AM,
+    PesoKg: 1.31,
+    ValorPedido: 140.30,
+    Vip: true,
+    Frete: 34.9
+  },
+  {
+    Caso: 30,
+    Uf: PR,
+    PesoKg: 30.88,
+    ValorPedido: 239.55,
+    Vip: true
+  },
+  {
+    Caso: 31,
+    Uf: RJ,
+    PesoKg: 6.38,
+    ValorPedido: 238.28,
+    Vip: true
+  },
+  {
+    Caso: 32,
+    Uf: RR,
+    PesoKg: 35.73,
+    ValorPedido: 490.10,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 33,
+    Uf: PR,
+    PesoKg: 29.29,
+    ValorPedido: 23.56,
+    Vip: false,
+    Frete: 59.72
+  },
+  {
+    Caso: 34,
+    Uf: RJ,
+    PesoKg: 13.64,
+    ValorPedido: 441.10,
+    Vip: true
+  },
+  {
+    Caso: 35,
+    Uf: MG,
+    PesoKg: 17.16,
+    ValorPedido: 150.05,
+    Vip: false,
+    Frete: 30.39
+  },
+  {
+    Caso: 36,
+    Uf: RR,
+    PesoKg: 13.68,
+    ValorPedido: 189.98,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 37,
+    Uf: MG,
+    PesoKg: 31.15,
+    ValorPedido: 468.34,
+    Vip: false,
+    Frete: 27.79
+  },
+  {
+    Caso: 38,
+    Uf: SP,
+    PesoKg: 6.76,
+    ValorPedido: 521.69,
+    Vip: false,
+    Frete: 6.0
+  },
+  {
+    Caso: 39,
+    Uf: PR,
+    PesoKg: 22.26,
+    ValorPedido: 56.11,
+    Vip: false,
+    Frete: 47.07
+  },
+  {
+    Caso: 40,
+    Uf: RR,
+    PesoKg: 2.82,
+    ValorPedido: 753.02,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 41,
+    Uf: RR,
+    PesoKg: 37.50,
+    ValorPedido: 893.95,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 42,
+    Uf: MG,
+    PesoKg: 36.45,
+    ValorPedido: 435.96,
+    Vip: true
+  },
+  {
+    Caso: 43,
+    Uf: AM,
+    PesoKg: 29.37,
+    ValorPedido: 576.41,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 44,
+    Uf: RR,
+    PesoKg: 21.09,
+    ValorPedido: 305.34,
+    Vip: false,
+    Frete: 32.38
+  },
+  {
+    Caso: 45,
+    Uf: PR,
+    PesoKg: 33.57,
+    ValorPedido: 784.59,
+    Vip: false,
+    Frete: 33.71
+  },
+  {
+    Caso: 46,
+    Uf: MG,
+    PesoKg: 35.25,
+    ValorPedido: 187.18,
+    Vip: false,
+    Frete: 62.95
+  },
+  {
+    Caso: 47,
+    Uf: RJ,
+    PesoKg: 16.97,
+    ValorPedido: 665.82,
+    Vip: false,
+    Frete: 13.77
+  },
+  {
+    Caso: 48,
+    Uf: MG,
+    PesoKg: 32.54,
+    ValorPedido: 710.41,
+    Vip: true
+  },
+  {
+    Caso: 49,
+    Uf: RR,
+    PesoKg: 36.68,
+    ValorPedido: 46.35,
+    Vip: false,
+    Frete: 82.92
+  },
+  {
+    Caso: 50,
+    Uf: MG,
+    PesoKg: 37.19,
+    ValorPedido: 58.19,
+    Vip: true,
+    Frete: 66.44
+  },
+  {
+    Caso: 51,
+    Uf: MG,
+    PesoKg: 16.56,
+    ValorPedido: 110.20,
+    Vip: true,
+    Frete: 29.31
+  },
+  {
+    Caso: 52,
+    Uf: AM,
+    PesoKg: 4.31,
+    ValorPedido: 880.54,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 53,
+    Uf: RJ,
+    PesoKg: 6.64,
+    ValorPedido: 647.44,
+    Vip: false,
+    Frete: 7.5
+  },
+  {
+    Caso: 54,
+    Uf: RJ,
+    PesoKg: 39.89,
+    ValorPedido: 777.64,
+    Vip: false,
+    Frete: 34.40
+  },
+  {
+    Caso: 55,
+    Uf: BA,
+    PesoKg: 6.66,
+    ValorPedido: 113.27,
+    Vip: false,
+    Frete: 25.0
+  },
+  {
+    Caso: 56,
+    Uf: RJ,
+    PesoKg: 34.76,
+    ValorPedido: 735.26,
+    Vip: false,
+    Frete: 29.78
+  },
+  {
+    Caso: 57,
+    Uf: PR,
+    PesoKg: 12.66,
+    ValorPedido: 790.18,
+    Vip: false,
+    Frete: 14.89
+  },
+  {
+    Caso: 58,
+    Uf: AM,
+    PesoKg: 22.77,
+    ValorPedido: 491.46,
+    Vip: true,
+    Frete: 9.9
+  },
+  {
+    Caso: 59,
+    Uf: BA,
+    PesoKg: 17.11,
+    ValorPedido: 488.72,
+    Vip: false,
+    Frete: 18.90
+  },
+  {
+    Caso: 60,
+    Uf: BA,
+    PesoKg: 35.08,
+    ValorPedido: 275.41,
+    Vip: true
+  }
+]

@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Legado: rampa começa em Minimum (kit: Directory.Build.props). Subir um degrau por sprint. -->
+    <AnalysisMode>Minimum</AnalysisMode>
+  </PropertyGroup>
+</Project>

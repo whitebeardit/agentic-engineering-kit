@@ -1,0 +1,30 @@
+<Project>
+  <!-- Whitebeard · Agentic Engineering Kit — analyzers para todos os projetos do repo.
+       Severidade se ajusta no .editorconfig, NUNCA com NoWarn no csproj. -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <!-- IDE0005 (using desnecessário) só roda no build com doc file. CS1591 (falta xml-doc) é silenciado no .editorconfig, como toda severidade. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Rampa: Minimum → Recommended → All, um degrau por sprint. Novo serviço nasce em All. -->
+    <AnalysisMode Condition="'$(AnalysisMode)' == ''">Recommended</AnalysisMode>
+    <!-- Warnings de análise viram erro (o build é o que o agente obedece). Desligue por projeto só com justificativa em ADR. -->
+    <CodeAnalysisTreatWarningsAsErrors Condition="'$(CodeAnalysisTreatWarningsAsErrors)' == ''">true</CodeAnalysisTreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <!-- Legado (csproj não-SDK / .NET Framework): AnalysisLevel não é entendido. Use o pacote + EffectiveAnalysisLevel
+       e comece em Minimum para não travar o build com milhares de warnings. -->
+  <!--
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.*" PrivateAssets="all" />
+  </ItemGroup>
+  <PropertyGroup>
+    <EffectiveAnalysisLevel>9.0</EffectiveAnalysisLevel>
+    <AnalysisMode>Minimum</AnalysisMode>
+  </PropertyGroup>
+  -->
+</Project>

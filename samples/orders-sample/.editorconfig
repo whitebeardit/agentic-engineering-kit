@@ -1,0 +1,39 @@
+# Whitebeard · Agentic Engineering Kit — severidade vive aqui, não em NoWarn.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{json,yml,yaml,md}]
+indent_size = 2
+
+[*.cs]
+# Estilo que o dotnet format aplica
+csharp_new_line_before_open_brace = all
+csharp_prefer_braces = true:warning
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+dotnet_sort_system_directives_first = true
+dotnet_style_qualification_for_field = false:warning
+dotnet_diagnostic.IDE0005.severity = warning   # using desnecessário (exige GenerateDocumentationFile no props)
+dotnet_diagnostic.CS1591.severity = none       # xml-doc ausente: não exigimos doc em todo membro público. Dono: kit · 2026-08-28
+
+# Mascaramento de erro — o que mais cresce com IA
+dotnet_diagnostic.CA1031.severity = warning    # catch de exceção genérica
+dotnet_diagnostic.CA2007.severity = none       # ConfigureAwait: não em apps
+dotnet_diagnostic.CA1062.severity = suggestion # validar argumentos públicos (Nullable já cobre)
+
+# Async e recursos
+dotnet_diagnostic.CA2012.severity = error      # ValueTask consumido errado
+dotnet_diagnostic.CA2000.severity = warning    # dispose
+
+# Rampa no legado: baixe severidades AQUI, por regra, com data e dono no comentário.
+
+# Testes: nome de teste carrega o ID da regra (RN_ORD_012_…) — underscore é intencional. Dono: kit · 2026-08-27
+[tests/**.cs]
+dotnet_diagnostic.CA1707.severity = none
