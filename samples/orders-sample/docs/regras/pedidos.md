@@ -18,5 +18,16 @@ Código: `src/Orders.Domain/Order.cs → AddItem`  Teste: —  Confiança: infer
 ## RN-ORD-004 — Só pedido aberto pode ser faturado
 Código: `src/Orders.Domain/Order.cs → Invoice`  Teste: —  Confiança: inferred  Última revisão: 2026-08-27
 
+## RN-ORD-012 — Cancelamento parcial
+WHEN o cliente cancela um item de pedido Aberto
+THE SYSTEM SHALL marcar o item como cancelado, recalcular o total (soma dos subtotais não cancelados) e emitir exatamente um `OrderItemCancelled` com o novo total
+IF o pedido já foi faturado (ou está Cancelado) THEN THE SYSTEM SHALL recusar com `DomainRuleViolationException(RN-ORD-012)` e não alterar total, itens nem eventos
+IF o item não pertence ao pedido THEN THE SYSTEM SHALL recusar com `DomainRuleViolationException(RN-ORD-012)` sem alterar o pedido
+THE SYSTEM SHALL CONTINUE TO ser idempotente: cancelar o mesmo item duas vezes emite um único evento e mantém o total
+Código: `src/Orders.Domain/Order.cs → CancelItem` · predicado em `Specifications/PedidoElegivelParaCancelamento.cs` (T3/T4)
+Teste: `tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs` (um teste por cláusula; T3–T5)  Confiança: inferred
+Contrato afetado: evento `OrderItemCancelled` v1 (público — `rules/contracts.md`; AD-001)
+Dono: <pessoa>  Desde: ADR-0003/0004, spec `.specs/features/001-cancelamento-parcial/` (CANC-01..07)  Última revisão: 2026-08-29
+
 ## Regras transversais (vivem no vault, não aqui)
 - Política de reembolso após cancelamento → Billing + Orders concordam no vault `engenharia/regras-transversais.md#reembolso`.
