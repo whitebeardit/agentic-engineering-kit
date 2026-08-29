@@ -31,6 +31,14 @@ def snip(path, start_pat, end_pat=None, lang="", title=None, include_end=True):
     t = title or path
     return f'<figure class="code"><figcaption><span class="path">{html.escape(t)}</span></figcaption><pre><code class="lang-{lang}">{body}</code></pre></figure>'
 
+import subprocess
+ASSETS = os.path.join(K, "tools/ebook-assets")
+def asset(name):
+    return open(os.path.join(ASSETS, name), encoding="utf-8").read()
+def sh(cmd, cwd=K):
+    try: return subprocess.run(cmd, shell=True, cwd=cwd, capture_output=True, text=True, timeout=60).stdout.strip()
+    except Exception as e: return f"(erro ao executar: {e})"
+
 def term(text, title="terminal"):
     return f'<figure class="code term"><figcaption><span class="path">{html.escape(title)}</span></figcaption><pre><code>{html.escape(text.strip())}</code></pre></figure>'
 
@@ -38,30 +46,38 @@ def arquivo(path, quem, quando, casa="REPO"):
     return f'<div class="arquivo"><div class="arq-path"><span class="tag {casa.lower()}">{casa}</span><code>{html.escape(path)}</code></div><div class="arq-meta"><b>Quem lê:</b> {quem} · <b>Quando:</b> {quando}</div></div>'
 
 TREE = """orders-sample/
-├── CLAUDE.md                          ← contexto do repo: comandos, custos, gotchas, Never
+├── AGENTS.md                          ← contexto canônico: comandos, custos, gotchas, matriz de testes, Never
+├── CLAUDE.md                          ← @AGENTS.md + só o que é do Claude (plugins, nomes namespaced)
 ├── nuget.config                       ← feed por repo (não herda o global da máquina)
 ├── Directory.Build.props              ← analyzers para todos os projetos (rampa no legado)
 ├── .editorconfig                      ← severidade das regras vive aqui, nunca NoWarn no csproj
 ├── Orders.slnx
 ├── .claude/
-│   ├── settings.json                  ← allowlist, deny e hooks
-│   ├── hooks/                         ← protect-paths · guard-bash · dotnet-format
-│   ├── rules/                         ← contracts.md · legacy.md (ativam por caminho)
-│   ├── agents/                        ← impact-analyzer · legacy-navigator · test-designer · verifier · dotnet-reviewer · contract-reviewer
-│   └── skills/                        ← jira-intake · regras-de-negocio · run-and-test
+│   ├── settings.json                  ← allowlist, deny, hooks de enforcement, plugins esperados
+│   ├── hooks/                         ← protect-paths · guard-bash · dotnet-format (bi-plataforma)
+│   └── rules/                         ← contracts.md · legacy.md (ativam por caminho)
+│       (skills e agentes vêm do plugin kit@whitebeard-kit: card-intake · run-and-test · regras-de-negocio ·
+│        impact-analyzer · legacy-navigator · test-designer · dotnet-reviewer · contract-reviewer)
+├── .cursor/                           ← hooks.json (beforeShellExecution, beforeReadFile, afterFileEdit) · rules/*.mdc
+├── .specs/                            ← tlc-spec-driven (Tech Leads Club, CC-BY-4.0)
+│   ├── STATE.md                       ← decisões AD-NNN + handoff
+│   ├── LESSONS.md · lessons.json      ← lições grounded (candidate → confirmed)
+│   └── features/001-cancelamento-parcial/
+│       ├── spec.md                    ← EARS + IDs CANC-01..07 (gate validate_spec.py)
+│       ├── design.md                  ← impacto (impact-analyzer), componentes, decisões técnicas
+│       ├── tasks.md                   ← Test Coverage Matrix lida do AGENTS.md, gates, T1–T6 (gate validate_tasks.py)
+│       └── validation.md              ← Verifier independente: ACs com file:line, sensor de discriminação
 ├── docs/
 │   ├── regras/pedidos.md              ← AS regras (RN-ORD-*), com código e teste de cada uma
 │   ├── adr/                           ← 0003 domínio puro · 0004 regra no domínio
-│   ├── definition-of-ready.md         ← o card só entra se…
-│   └── evidencia/                     ← output de teste colado, com data
-├── specs/001-cancelamento-parcial/    ← requirements (EARS) · design · tasks (com Verify)
+│   └── definition-of-ready.md         ← o card só entra se… (porteiro: card-intake)
 ├── src/
 │   ├── Orders.Domain/                 ← Order, OrderItem, Money, Specifications, Events, IOrderRepository
-│   ├── Orders.Application/            ← CancelOrderItemHandler (orquestra; não decide)
+│   ├── Orders.Application/            ← CancelOrderItemHandler (orquestra; não decide) · AssemblyMarker
 │   ├── Orders.Infrastructure/         ← InMemoryOrderRepository (adapter)
 │   └── Erp.Legacy/                    ← CalculadoraFrete (2014; ninguém explica)
 └── tests/Orders.Tests/
-    ├── RN_ORD_012_CancelamentoParcialTests.cs   ← um teste por cláusula EARS
+    ├── RN_ORD_012_CancelamentoParcialTests.cs   ← 10 testes, um por cláusula EARS (CANC-01..07)
     ├── ArchitectureTests.cs                     ← ADR-0003/0004 como teste
     └── Legacy/CalculadoraFreteCharacterization… ← baseline .verified.txt aprovado por humano"""
 
@@ -103,6 +119,42 @@ tests/Orders.Tests/Orders.Tests.csproj : error NU1301: Unable to load the servic
 tests/Orders.Tests/Orders.Tests.csproj : error NU1301:   Response status code does not indicate success: 401 (Unauthorized)"""
 
 ARTIFACT_ROTEIRO = "https://claude.ai/code/artifact/e53c902f-b3b0-4334-b3f8-cc52c73f26bb"
+
+TERM_PLUGIN = """$ claude plugin marketplace add git@github.com:whitebeardit/agentic-engineering-kit.git
+✔ Successfully added marketplace: whitebeard-kit
+$ claude plugin install kit@whitebeard-kit
+✔ Successfully installed plugin: kit@whitebeard-kit (scope: user) (+ 1 dependency: tlc)
+$ ls ~/.claude/plugins/cache/whitebeard-kit/tlc/*/scripts
+check_commit.py  lessons.py  validate_spec.py  validate_state.py  validate_tasks.py      # 3.3.0, direto do repo do Tech Leads Club"""
+
+TERM_VALIDATE_SPEC = """$ python3 <skill-dir>/scripts/validate_spec.py 001-cancelamento-parcial
+validate_spec: 0 error(s), 0 warning(s) in .specs/features/001-cancelamento-parcial/spec.md"""
+
+TERM_VALIDATE_TASKS = """$ python3 <skill-dir>/scripts/validate_tasks.py 001-cancelamento-parcial
+  WARN  T1: Tests: none - confirm the Test Coverage Matrix says 'none' for this layer
+  WARN  T3: `Where` names multiple files [...] - granularity smell, consider splitting
+  ERROR T5 declares `Depends on: T4` but the diagram has no T4 -> T5 arrow
+validate_tasks: 1 error(s), 5 warning(s)
+$ # seta T4 → T5 acrescentada ao diagrama da fase 2
+$ python3 <skill-dir>/scripts/validate_tasks.py 001-cancelamento-parcial
+validate_tasks: 0 error(s), 5 warning(s)"""
+
+TERM_CHECK_COMMIT = """$ python3 <skill-dir>/scripts/check_commit.py --message "feat(orders): Order.CancelItem com recálculo, evento único, ..."
+check_commit: FAIL - see https://www.conventionalcommits.org/en/v1.0.0/     # descrição começa com maiúscula
+$ python3 <skill-dir>/scripts/check_commit.py --message "feat(orders): adicionar Order.CancelItem — recálculo, evento único, ..."
+check_commit: OK"""
+
+TERM_T5_FALSE_GREEN = """$ dotnet build Orders.slnx | grep error
+tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs(136,24): error CS0246: The type or namespace name
+  'InMemoryOrderRepository' could not be found (are you missing a using directive or an assembly reference?)
+$ dotnet test Orders.slnx --no-build
+Passed!  - Failed: 0, Passed: 12, Skipped: 0, Total: 12      # ← binário ANTERIOR. Falso verde."""
+
+TERM_LESSON = """$ python3 <skill-dir>/scripts/lessons.py add --feature 001-cancelamento-parcial --signal gate_fail \\
+    --source "tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs:136" \\
+    --text "Run every gate with a fresh build and check exit codes; never judge a gate with --no-build" --scope tests
+ADDED L-001 (status=candidate, recurrence=1)"""
+
 
 page = f"""<title>Engenharia com Agentes em .NET</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -165,29 +217,29 @@ pre.mermaid{{background:var(--paper);border:1px solid var(--rule);border-radius:
 </style>
 <div class="wrap">
 <header class="cover">
-  <div class="eyebrow">E-book Whitebeard · nº 3 · 27 ago 2026 · rev. 28 ago</div>
+  <div class="eyebrow">E-book Whitebeard · nº 3 · 27 ago 2026 · rev. 2 — 29 ago (tlc-spec-driven como motor)</div>
   <h1 style="margin-top:10px">Engenharia com Agentes em .NET</h1>
   <p class="lede">Onde fica cada arquivo, o que ele faz e como se usa — num serviço .NET de verdade, com monolito legado ao lado, compilado e testado antes de entrar neste texto.</p>
-  <div class="meta"><span>kit: <code>~/DEV/WHITEBEARD/agentic-engineering-kit</code></span><span>exemplo: <code>samples/orders-sample</code></span><span>.NET SDK 10.0.103</span><span>9/9 testes verdes</span></div>
+  <div class="meta"><span>kit: <code>github.com/whitebeardit/agentic-engineering-kit</code> (plugin Claude + Cursor)</span><span>exemplo: <code>samples/orders-sample</code></span><span>.NET SDK 10.0.103</span><span>14/14 testes · feature 001 conduzida pelo tlc-spec-driven 3.3.0</span></div>
 </header>
 
 <nav class="toc"><div class="eyebrow">Capítulos</div><ol>
 <li><a href="#c1">Por que um kit, e não um prompt</a></li>
 <li><a href="#c2">As quatro casas: onde cada coisa fica</a></li>
 <li><a href="#c3">A árvore do exemplo, arquivo por arquivo</a></li>
-<li><a href="#c4">CLAUDE.md: o que o agente não adivinha</a></li>
+<li><a href="#c4">AGENTS.md: o que o agente não adivinha</a></li>
 <li><a href="#c5">Hooks, permissões e rules: o que é garantia</a></li>
 <li><a href="#c6">Regra de negócio mora no domínio</a></li>
 <li><a href="#c7">ADR que falha o build</a></li>
 <li><a href="#c8">Legado: congelar antes de mexer</a></li>
-<li><a href="#c9">Do card ao PR: specs, skills e agentes</a></li>
+<li><a href="#c9">Do card ao PR: card-intake, tlc-spec-driven e o Verifier</a></li>
 <li><a href="#c10">Qualidade que o build impõe (e três lições reais)</a></li>
 <li><a href="#c11">Contratos entre serviços</a></li>
 <li><a href="#c12">As 7 fases e como a Whitebeard usa isto</a></li>
 <li><a href="#apendice">Apêndice: comandos, pendências, glossário</a></li>
 </ol></nav>
 
-<p><b>Como ler.</b> Cada capítulo mostra arquivos reais do exemplo <code>orders-sample</code> — o texto é gerado a partir deles, então o que você lê é o que compila. Caixas <em>Para quem é técnico</em> aprofundam; caixas <em>Honestidade</em> dizem o que ainda não está provado. Não há chamada comercial: é um texto de método.</p>
+<p><b>Como ler.</b> Cada capítulo mostra arquivos reais do exemplo <code>orders-sample</code> — o texto é gerado a partir deles, então o que você lê é o que compila. O método de spec (capítulo 9) é o <b>tlc-spec-driven</b> do Tech Leads Club (Felipe Rodrigues, CC-BY-4.0), instalado sempre do repositório original; o kit Whitebeard é a adaptação em volta dele. Caixas <em>Para quem é técnico</em> aprofundam; caixas <em>Honestidade</em> dizem o que ainda não está provado. Não há chamada comercial: é um texto de método.</p>
 
 <!-- ======================= C1 ======================= -->
 <h2 id="c1"><span class="eyebrow">Capítulo 1</span><br>Por que um kit, e não um prompt</h2>
@@ -197,9 +249,9 @@ pre.mermaid{{background:var(--paper);border:1px solid var(--rule);border-radius:
 <tr><td>IA é amplificador: fundação antes do agente</td><td>fase 0 (baseline, branch protection, testes rodando) antes de qualquer <code>.claude/</code></td></tr>
 <tr><td>Contexto mínimo e concreto</td><td><code>CLAUDE.md</code> com comandos, custos e gotchas; nunca prosa de arquitetura</td></tr>
 <tr><td>Enforcement mecânico &gt; texto</td><td>hooks que bloqueiam, analyzers que falham o build, testes de arquitetura</td></tr>
-<tr><td>Spec antes do código, gate humano no meio</td><td><code>specs/NNN/</code> em 3 arquivos; <code>jira-intake</code> para no gate 1</td></tr>
-<tr><td>Autor ≠ verificador</td><td>agente <code>verifier</code> em contexto limpo; <code>dotnet-reviewer</code> antes do humano</td></tr>
-<tr><td>Cada erro vira artefato</td><td>lição → linha no CLAUDE.md, teste, rule ou hook — nunca "tome mais cuidado"</td></tr>
+<tr><td>Spec antes do código, gate humano no meio</td><td><code>card-intake</code> (DoR) → tlc-spec-driven: <code>.specs/features/&lt;f&gt;/</code> com gates determinísticos (<code>validate_spec.py</code>, <code>validate_tasks.py</code>)</td></tr>
+<tr><td>Autor ≠ verificador</td><td>Verifier do tlc em contexto limpo (spec-anchored + sensor de discriminação); <code>dotnet-reviewer</code> antes do humano</td></tr>
+<tr><td>Cada erro vira artefato</td><td>lição grounded em <code>.specs/LESSONS.md</code> (tlc) → linha no AGENTS.md, teste, rule ou hook — nunca "tome mais cuidado"</td></tr>
 <tr><td>Segurança na borda</td><td>deny de segredos, sandbox, conteúdo externo como input não confiável</td></tr>
 </tbody></table></div>
 <div class="box analogia"><span class="lbl">Analogia</span><p>Contratar um engenheiro sênior excelente e colocá-lo num prédio sem placas, sem crachá e sem manual de emergência. Ele vai trabalhar — e vai errar coisas que qualquer estagiário do prédio sabe. O kit são as placas, o crachá e o manual. O agente é o sênior.</p></div>
@@ -208,51 +260,54 @@ pre.mermaid{{background:var(--paper);border:1px solid var(--rule);border-radius:
 <h2 id="c2"><span class="eyebrow">Capítulo 2</span><br>As quatro casas: onde cada coisa fica</h2>
 <p>A pergunta "onde eu coloco isso?" tem quatro respostas possíveis, e misturá-las é a causa número um de artefato que apodrece.</p>
 <div class="tbl"><table><thead><tr><th>Casa</th><th>O que vive lá</th><th>Por quê</th></tr></thead><tbody>
-<tr><td><span class="tag repo">REPO</span></td><td>CLAUDE.md, <code>.claude/</code>, specs, ADRs, <code>docs/regras/</code> do domínio que o serviço é dono, testes</td><td>muda junto com o código; revisado em PR; quem não usa IA também lê</td></tr>
+<tr><td><span class="tag repo">REPO</span></td><td>AGENTS.md/CLAUDE.md, <code>.claude/</code>, <code>.specs/</code>, ADRs, <code>docs/regras/</code> do domínio que o serviço é dono, testes</td><td>muda junto com o código; revisado em PR; quem não usa IA também lê</td></tr>
 <tr><td><span class="tag vault">VAULT</span></td><td>mapa da empresa (quem fala com quem, tabelas compartilhadas, ordem de release), regras transversais, glossário, nota por card</td><td>nenhum repo é dono do que atravessa quatro repos</td></tr>
 <tr><td><span class="tag gen">GERADO</span></td><td>grafo de dependências, inventário de endpoints/eventos, relatórios de analyzers e mutation</td><td>derivável do código: gera em CI, nunca escreve à mão, nunca entra no CLAUDE.md</td></tr>
 <tr><td><span class="tag org">ORG</span></td><td>política de uso de IA, deny de segredos, sandbox, allowlist de MCP</td><td>enforcement que o desenvolvedor não remove (managed settings)</td></tr>
 </tbody></table></div>
 <p>E a regra de decisão para artefatos novos, na ordem em que a Anthropic a formula, com as duas casas extras da empresa:</p>
 <ul>
-<li>Fato curto que vale sempre → <code>CLAUDE.md</code></li>
+<li>Fato curto que vale sempre → <code>AGENTS.md</code> (o <code>CLAUDE.md</code> só o importa)</li>
 <li>Restrição que só vale em certos caminhos → <code>.claude/rules/*.md</code> com <code>paths:</code></li>
 <li>Procedimento que você colou pela terceira vez → skill</li>
 <li>Deve acontecer sempre, sem exceção → hook</li>
 <li>Tarefa que inunda o contexto → subagente</li>
-<li>Serviço ou dado externo → MCP · Mesmo setup em segundo repo → plugin interno</li>
+<li>Serviço ou dado externo → MCP · Mesmo setup em segundo repo → plugin (o kit já é um: <code>kit@whitebeard-kit</code>)</li>
 <li>Conhecimento que cruza serviços → vault (consultado por MCP) · Derivável do código → gerado em CI</li>
 </ul>
 
 <!-- ======================= C3 ======================= -->
 <h2 id="c3"><span class="eyebrow">Capítulo 3</span><br>A árvore do exemplo, arquivo por arquivo</h2>
-<p>O exemplo é um serviço de Pedidos com domínio, aplicação, infraestrutura, um pedaço de monolito legado e os testes que provam tudo isso. Foi criado com <code>apply.sh --dotnet</code> do kit e depois preenchido. Esta é a árvore como está no disco:</p>
+<p>O exemplo é um serviço de Pedidos com domínio, aplicação, infraestrutura, um pedaço de monolito legado e os testes que provam tudo isso. Foi criado com <code>apply.sh --claude --cursor --dotnet</code> do kit, com o plugin <code>kit@whitebeard-kit</code> instalado (que traz o tlc-spec-driven como dependência), e a feature 001 foi conduzida pelo tlc de ponta a ponta. Esta é a árvore como está no disco:</p>
 {term(TREE, "samples/orders-sample")}
 <p>Cada arquivo abaixo tem duas perguntas respondidas: <b>quem lê</b> e <b>quando</b>. Se você não consegue responder as duas para um arquivo do seu repositório, ele provavelmente não deveria existir.</p>
-{arquivo("CLAUDE.md","o agente, em toda sessão (carrega sozinho); humanos no onboarding","sempre que o Claude abre no repo")}
+{arquivo("AGENTS.md","qualquer agente (Claude Code, Cursor, Copilot) e o tlc-spec-driven ao montar a matriz de testes; humanos no onboarding","sempre que um agente abre no repo")}
+{arquivo("CLAUDE.md","só o Claude Code — importa o AGENTS.md e acrescenta nomes de plugin","toda sessão do Claude")}
 {arquivo(".claude/settings.json","o harness do Claude Code — não o modelo","antes de cada tool call (hooks) e em cada permissão")}
 {arquivo(".claude/rules/legacy.md","o agente, só ao tocar arquivos que batem no glob","ao editar src/Erp.Legacy/**")}
-{arquivo(".claude/agents/verifier.md","um subagente com contexto limpo","ao final de cada task e antes do PR")}
-{arquivo(".claude/skills/regras-de-negocio/SKILL.md","o agente, ao tocar docs/regras/ ou o Domain, ou quando invocada","antes de implementar critério que muda comportamento")}
-{arquivo("docs/regras/pedidos.md","jira-intake, verifier, PO e engenheiro — todos a mesma versão","antes de escrever spec; ao mudar comportamento")}
+{arquivo(".specs/features/001-cancelamento-parcial/validation.md","o revisor do PR e o gate validate_state.py","escrito pelo Verifier do tlc após a última task; sem ele a feature não está pronta")}
+{arquivo("skills/regras-de-negocio/SKILL.md (plugin kit)","o agente, ao tocar docs/regras/ ou o Domain, ou quando invocada","antes de implementar critério que muda comportamento")}
+{arquivo("docs/regras/pedidos.md","card-intake, Verifier, PO e engenheiro — todos a mesma versão","antes de escrever spec; ao mudar comportamento")}
 {arquivo("docs/adr/0004-regra-no-dominio.md","quem vê 'viola ADR-0004' no build","quando o teste de arquitetura falha")}
-{arquivo("specs/001-cancelamento-parcial/tasks.md","o agente executor (uma task por sessão) e o verifier","durante a implementação")}
+{arquivo(".specs/features/001-cancelamento-parcial/tasks.md","o agente executor (uma task por sessão) e o Verifier","durante a implementação — cada task fecha com gate + commit atômico")}
 {arquivo("tests/Orders.Tests/Legacy/….verified.txt","um humano, na primeira execução e a cada mudança","antes de qualquer refactor no legado")}
-{arquivo("docs/evidencia/2026-08-27-dotnet-test.txt","o revisor do PR","ao abrir o PR: sem output, não está pronto")}
+{arquivo(".specs/LESSONS.md","o agente no Specify e no Design (lições confirmed) e o ritual quinzenal","lida antes de especificar; escrita só pelo lessons.py a partir de sinal do Verifier")}
 
 <!-- ======================= C4 ======================= -->
-<h2 id="c4"><span class="eyebrow">Capítulo 4</span><br>CLAUDE.md: o que o agente não adivinha</h2>
+<h2 id="c4"><span class="eyebrow">Capítulo 4</span><br>AGENTS.md: o que o agente não adivinha</h2>
 <p>Um estudo de ablação com 288 execuções (jul/2026) mediu que instruções genéricas de arquitetura e estilo no arquivo de contexto <em>não melhoram a correção</em> — enquanto avisos concretos como "a suíte completa leva 20 minutos" cortaram reexecuções em 45 %. A Anthropic recomenda menos de 200 linhas; a meta do roteiro Whitebeard é ainda mais curta, ≤ 150 por repositório. A pergunta-poda: <em>remover esta linha faria o agente errar?</em></p>
-<p>É por isso que o <code>CLAUDE.md</code> do exemplo tem comandos com <b>tempo medido</b>, definição de pronto como exit code e gotchas — e nada sobre "arquitetura limpa":</p>
+<p>É por isso que o <code>AGENTS.md</code> do exemplo tem comandos com <b>tempo medido</b>, definição de pronto como exit code, gotchas — e a <b>matriz de testes por camada</b> que o tlc-spec-driven lê para montar a Test Coverage Matrix de cada feature. Nada sobre "arquitetura limpa". É <code>AGENTS.md</code>, não <code>CLAUDE.md</code>, porque Cursor, Copilot e o próprio tlc leem o mesmo arquivo:</p>
+{code("AGENTS.md","md",title="orders-sample/AGENTS.md")}
+<p>O <code>CLAUDE.md</code> vira duas linhas de import e o que só o Claude precisa saber:</p>
 {code("CLAUDE.md","md",title="orders-sample/CLAUDE.md")}
-<p>No workspace pai (o diretório que contém todos os repos) vive um segundo <code>CLAUDE.md</code>, com a tabela de serviços, a ordem padrão entre eles e a etiqueta de PR. O Claude é iniciado no subdiretório do serviço; o raiz carrega junto.</p>
-{code("templates/CLAUDE.root.md","md",title="kit/templates/CLAUDE.root.md (workspace pai)")}
+<p>No workspace pai (o diretório que contém todos os repos) vive um segundo <code>AGENTS.md</code>, com a tabela de serviços, a ordem padrão entre eles e a etiqueta de PR. O agente é iniciado no subdiretório do serviço; o raiz carrega junto.</p>
+{code("templates/AGENTS.root.md","md",title="kit/templates/AGENTS.root.md (workspace pai)")}
 <h3>Como usar</h3>
 <ol class="steps">
-<li><code>apply.sh /repo --dotnet</code> cria o esqueleto; <code>/init</code> dentro do Claude rascunha o resto.</li>
+<li><code>apply.sh /repo --claude --cursor --with-tlc --dotnet</code> cria o esqueleto e instala o plugin (com o tlc); <code>/init</code> dentro do Claude rascunha o resto.</li>
 <li>Pode linha a linha. Comando com custo fica; "escreva código limpo" sai.</li>
 <li><code>/context</code> mostra a carga: abaixo de 10 % do contexto está bom.</li>
-<li>Toda vez que o agente errar por não saber algo do repo, uma linha entra aqui — e só assim ele cresce.</li>
+<li>Toda vez que o agente errar por não saber algo do repo, uma linha entra aqui — e só assim ele cresce. No exemplo, o gotcha "nunca julgue um gate com <code>--no-build</code>" nasceu de um erro real durante a feature 001 (capítulo 9).</li>
 </ol>
 <div class="box tech"><span class="lbl">Para quem é técnico</span><p>Hierarquia de carga: <code>~/.claude/CLAUDE.md</code> (pessoal) → raiz do workspace → repo → <code>CLAUDE.local.md</code> (gitignore). Subdiretórios carregam sob demanda quando o agente lê arquivos neles. <code>@path</code> importa outro arquivo <em>no launch</em> (não economiza tokens, só organiza). Comentários HTML são removidos antes de injetar — servem para notas humanas sem custo.</p></div>
 
@@ -260,7 +315,7 @@ pre.mermaid{{background:var(--paper);border:1px solid var(--rule);border-radius:
 <h2 id="c5"><span class="eyebrow">Capítulo 5</span><br>Hooks, permissões e rules: o que é garantia</h2>
 <p>"Nunca edite o <code>.env</code>" no CLAUDE.md é um pedido. Um hook <code>PreToolUse</code> que retorna exit 2 é uma garantia: dispara antes de qualquer checagem de permissão, em todo modo — inclusive <code>bypassPermissions</code>. A diferença é a mesma entre uma placa e uma catraca. Uma ressalva honesta: um hook de repositório pode ser desligado por quem edita o <code>settings.json</code> (<code>disableAllHooks</code>); a garantia que sobrevive a isso é o hook <em>gerenciado</em> pela organização (<code>allowManagedHooksOnly</code>), que é assunto da fase 5.</p>
 {code(".claude/settings.json","json",title="orders-sample/.claude/settings.json")}
-<p>Os três hooks são scripts curtos, escritos para <em>explicar ao agente</em> por que foi bloqueado e o que fazer — não só para negar:</p>
+<p>Os três hooks são scripts curtos, escritos para <em>explicar ao agente</em> por que foi bloqueado e o que fazer — não só para negar. São bi-plataforma: o mesmo script lê o payload do Claude Code (<code>tool_input</code> → exit 2 + stderr) ou do Cursor (<code>file_path</code>/<code>command</code> → JSON <code>{{"permission":"deny"}}</code>; em <code>afterFileEdit</code>, reverte o arquivo, porque o Cursor não tem hook pré-escrita):</p>
 {code(".claude/hooks/protect-paths.sh","bash",title=".claude/hooks/protect-paths.sh (PreToolUse · Edit|Write)")}
 <p>Testado de verdade contra o baseline do characterization test:</p>
 {term(TERM_HOOK, "hook em ação (27-08-2026)")}
@@ -283,11 +338,11 @@ pre.mermaid{{background:var(--paper);border:1px solid var(--rule);border-radius:
 {code("src/Orders.Application/CancelOrderItem/CancelOrderItemHandler.cs","csharp")}
 <h3>4. A prova: um teste por cláusula EARS, com o ID no nome</h3>
 {snip("tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs", r"^/// <summary>Prova", r"SHALL_CONTINUE_TO_ser_idempotente", "csharp", "tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs (trecho: 3 de 5 testes)", include_end=False)}
-<p>O nome do teste repete a cláusula da regra. Quem lê <code>docs/regras</code>, o teste ou a exceção com <code>RuleId</code> chega ao mesmo lugar — e o <code>verifier</code> cruza os três.</p>
+<p>O nome do teste repete a cláusula da regra. Quem lê <code>docs/regras</code>, o teste ou a exceção com <code>RuleId</code> chega ao mesmo lugar — e o Verifier do tlc cruza os três com <code>file:line</code>.</p>
 <p>Isto <em>não</em> é TDD forçado no loop do agente — prática que a Thoughtworks mediu sem ganho de qualidade e com 3–8× de custo em tokens, e que o roteiro desaconselha. É outra coisa: um teste por cláusula EARS, escrito <b>uma vez</b> a partir da spec pelo <code>test-designer</code> (ou numa sessão separada), que fica vermelho até a regra existir e depois vira sensor permanente. Quem implementa não edita esses testes; faz passar.</p>
 <h3>5. A skill: o procedimento, não o conhecimento</h3>
 <p>A skill <code>regras-de-negocio</code> vive no repo dono do domínio, ativa por <code>paths:</code> e <em>aponta</em> para <code>docs/regras/</code> — se ela embutisse as regras, as duas cópias divergiriam em duas semanas.</p>
-{code(".claude/skills/regras-de-negocio/SKILL.md","md",title=".claude/skills/regras-de-negocio/SKILL.md")}
+{code("skills/regras-de-negocio/SKILL.md","md",title="kit/skills/regras-de-negocio/SKILL.md (no plugin: /kit:regras-de-negocio)")}
 <div class="box analogia"><span class="lbl">Analogia</span><p>A regra escrita é a lei no Diário Oficial; o método do agregado é a catraca que a aplica; o teste é o fiscal que passa todo dia; a skill é o procedimento do cartório para mudar a lei. Quatro coisas, quatro lugares — e um único número de protocolo, <code>RN-ORD-012</code>, ligando todas.</p></div>
 
 <!-- ======================= C7 ======================= -->
@@ -313,48 +368,81 @@ pre.mermaid{{background:var(--paper);border:1px solid var(--rule);border-radius:
 <div class="box tech"><span class="lbl">Para quem é técnico</span><p>Verify (VerifyTests) suporta de <code>net462</code> a <code>net10</code>; no .NET Framework use SDK 9.0.301+. Bogus com <code>new Randomizer(seed)</code> garante repetibilidade. No CI, <code>DiffEngine_Disabled=true</code> evita que o Verify tente abrir um diff tool. O projeto legado compila em <code>AnalysisMode=Minimum</code> — a rampa sobe um degrau por sprint, e o kit deixa isso explícito no <code>Directory.Build.props</code>.</p></div>
 
 <!-- ======================= C9 ======================= -->
-<h2 id="c9"><span class="eyebrow">Capítulo 9</span><br>Do card ao PR: specs, skills e agentes</h2>
-<p>O fluxo tem dois gates humanos — o PO aprova os requisitos (gate 1) e o tech lead aprova o design (gate 2) — mais o UAT com o PO antes de fechar o card. Cada etapa tem um arquivo ou um agente responsável. Nunca um prompt solto.</p>
+<h2 id="c9"><span class="eyebrow">Capítulo 9</span><br>Do card ao PR: card-intake, tlc-spec-driven e o Verifier</h2>
+<p>O motor deste capítulo não é nosso. É o <b>tlc-spec-driven</b> do Tech Leads Club (Felipe Rodrigues, CC-BY-4.0): quatro fases auto-dimensionadas — Specify, Design, Tasks, Execute — com gates determinísticos em scripts, um Verifier independente que injeta falhas para provar que os testes discriminam, memória em <code>STATE.md</code> e lições que só nascem de sinal real. O kit Whitebeard entra <em>em volta</em>: o porteiro <code>card-intake</code> antes do Specify, o <code>impact-analyzer</code> como primeiro passo do Design, a matriz de testes no <code>AGENTS.md</code> que o tlc lê, e o enforcement que ele não cobre. E o tlc é instalado sempre do repositório original deles — como dependência do plugin:</p>
+{term(TERM_PLUGIN, "instalação (27–29 ago 2026)")}
 <pre class="mermaid">
 flowchart LR
-  J[Card Jira] -->|skill jira-intake| R[requirements.md]
-  R -->|gate 1: PO| I[agente impact-analyzer]
+  J[Card ORD-231] -->|/kit:card-intake · DoR| B[briefing]
+  B -->|specify feature| S[spec.md · validate_spec.py]
+  S -->|gate 1: PO| I[kit:impact-analyzer]
   I --> D[design.md]
-  D -->|gate 2: tech lead| T[tasks.md]
-  T -->|1 task = 1 repo = 1 PR| E[execute]
-  E -->|agente verifier ≠ autor| V{{PASS?}}
-  V -->|sim| PR[PR draft + evidência]
-  V -->|não| E
-  PR -->|dotnet-reviewer, depois humano por tier| M[merge]
-  M -->|UAT com o PO| W[nota no vault]
+  D --> T[tasks.md · matriz do AGENTS.md · validate_tasks.py]
+  T -->|gate 2: tech lead| E[Execute: teste → código → gate → check_commit]
+  E -->|última task| V[Verifier: file:line · sensor · validation.md · validate_state.py]
+  V -->|sinal| L[LESSONS.md]
+  V -->|PASS| PR[PR draft + validation.md]
+  PR -->|UAT com o PO| W[nota no vault]
 </pre>
-<h3>A spec em três arquivos</h3>
-{code("specs/001-cancelamento-parcial/requirements.md","md")}
-{code("specs/001-cancelamento-parcial/tasks.md","md")}
-<p>O <code>design.md</code> (não reproduzido inteiro) traz a tabela de impacto, o contrato do evento <code>OrderItemCancelled</code>, a sequência e — o mais importante — a tabela <b>critério → teste nomeado</b>, que é o que o verifier usa.</p>
-<h3>A skill que recusa card ruim</h3>
-<p>O Definition of Ready canônico vive no vault e no template do card no Jira — é regra da empresa, não de um repositório. <code>docs/definition-of-ready.md</code> é a cópia que o agente lê no repo; o kit a instala para que <code>jira-intake</code> nunca dependa de rede para recusar um card.</p>
-{code(".claude/skills/jira-intake/SKILL.md","md")}
-<h3>Os agentes: uma responsabilidade cada</h3>
-<p>O roteiro cataloga nove agentes; o exemplo traz seis. <code>security-reviewer</code> (fase 4), <code>evaluator</code> e <code>docs-gc</code> (fase 5) ficam fora do escopo deste repo. Ferramentas: "só leitura" significa Read/Grep/Glob; "+ Bash" significa Bash sob a allowlist do <code>settings.json</code> (build, test, git de leitura).</p>
+<p>Tudo abaixo aconteceu de verdade em 29 de agosto de 2026 no <code>orders-sample</code>: a feature RN-ORD-012 foi <b>removida</b> do código e reconstruída pelo fluxo, com os scripts 3.3.0 do tlc rodando a cada passo.</p>
+
+<h3>1. O card e o porteiro</h3>
+<p>O card chegou como texto (o MCP do Jira não estava conectado nesta sessão — o adaptador de texto é exatamente para isso). O <code>card-intake</code> aplicou o Definition of Ready, dimensionou e parou no gate:</p>
+{term(asset("card-ORD-231.md"), "ORD-231, como veio do PO")}
+{term(asset("briefing-card-intake.md"), "/kit:card-intake · saída (briefing para o Specify — não é spec)")}
+
+<h3>2. Specify: a spec com IDs e o gate que não depende de memória</h3>
+<p>O tlc escreve <code>spec.md</code> com problema, fora de escopo, assumptions (nada fica "silenciosamente" indefinido), histórias com critérios EARS e uma tabela de rastreabilidade. Antes de pedir confirmação, o script valida seções, IDs e forma dos critérios:</p>
+{snip(".specs/features/001-cancelamento-parcial/spec.md", r"^### P1:", r"^\*\*Independent Test\*\*", "md", ".specs/features/001-cancelamento-parcial/spec.md — P1 (CANC-01..07)")}
+{snip(".specs/features/001-cancelamento-parcial/spec.md", r"^## Assumptions", r"^\*\*Open questions", "md", "spec.md — Assumptions & Open Questions (o que decidimos por default e o que fica para o PO)")}
+{term(TERM_VALIDATE_SPEC, "gate determinístico do Specify")}
+
+<h3>3. Design: o impact-analyzer entra primeiro</h3>
+<p>Para um card que cruza serviços, o Design não é pulado. O primeiro passo é o agente <code>kit:impact-analyzer</code> (só leitura), que devolveu a tabela de impacto e três achados que a spec não tinha: o gancho <code>OrderItem.Cancel()</code> já existia sem ninguém chamar; <b>não há mecanismo de publicação de eventos</b> no exemplo; e o "ERP" do card não é o <code>Erp.Legacy</code> deste repo.</p>
+{snip(".specs/features/001-cancelamento-parcial/design.md", r"^## Impacto", r"^## Code Reuse", "md", "design.md — Impacto (saída do impact-analyzer)", include_end=False)}
+{snip(".specs/features/001-cancelamento-parcial/design.md", r"^## Tech Decisions", None, "md", "design.md — Tech Decisions (o que foi decidido e o que foi deixado fora)")}
+
+<h3>4. Tasks: a matriz de testes vem do AGENTS.md</h3>
+<p>O tlc monta a Test Coverage Matrix lendo as diretrizes do repo — e é por isso que o <code>AGENTS.md</code> do capítulo 4 tem aquela tabela por camada. Seis tasks em duas fases, cada uma com <code>Done when</code>, tipo de teste e gate. O script pegou um erro real no diagrama:</p>
+{snip(".specs/features/001-cancelamento-parcial/tasks.md", r"^## Test Coverage Matrix", r"^## Execution Plan", "md", "tasks.md — Test Coverage Matrix e Gate Check Commands", include_end=False)}
+{term(TERM_VALIDATE_TASKS, "gate determinístico das Tasks")}
+
+<h3>5. Execute: teste vermelho, código, gate, commit atômico</h3>
+<p>Cada task segue o mesmo ciclo. O teste é escrito <b>a partir da cláusula da spec</b>, antes do código — em C#, "vermelho" é erro de compilação:</p>
+{term(asset("gate-T4-red.txt").strip(), "T4 · gate antes da implementação")}
+{term(asset("gate-T4.txt").strip(), "T4 · gate depois (build fresco, 0 warnings)")}
+<p>O commit só é aceito se a mensagem passar no <code>check_commit.py</code> (Conventional Commits). O script reprovou a minha primeira tentativa:</p>
+{term(TERM_CHECK_COMMIT, "gate da mensagem de commit")}
+{term(sh("git log --oneline 545d58a..HEAD"), "commits da feature — um por task (git log)")}
+
+<h3>6. O erro que virou lição</h3>
+<p>Na task T5 o build quebrou (um <code>using</code> ausente), mas o gate que eu registrei veio de <code>dotnet test --no-build</code> — rodando o binário da task anterior. Passou. Era falso. O tlc chama isso de <em>victory declaration bias</em>, e a regra dele é literal: o test runner decide, não a auto-avaliação; exit code diferente de zero é STOP.</p>
+{term(TERM_T5_FALSE_GREEN, "T5 · o falso verde")}
+<p>A correção foi um commit de <code>fix</code>, um gotcha novo no <code>AGENTS.md</code> ("nunca julgue um gate com <code>--no-build</code>") e uma <b>lição grounded</b> registrada pelo script — com o <code>file:line</code> obrigatório, sem o qual ele recusa gravar:</p>
+{term(TERM_LESSON, "lições: só com evidência")}
+{snip(".specs/LESSONS.md", r"^## Candidates", None, "md", ".specs/LESSONS.md — L-001 (candidate: vira confirmed quando reincidir em outra feature)")}
+
+<h3>7. O Verifier: autor ≠ verificador, evidência ou zero</h3>
+<p>Depois da última task, um sub-agente <b>novo</b>, sem o contexto de quem implementou, refaz a cobertura do zero: para cada critério da spec, o <code>file:line</code> e a expressão de assert que prova o resultado <em>definido na spec</em>; o gate com build fresco; e o <b>sensor de discriminação</b> — três falhas injetadas num worktree descartável para confirmar que os testes matam o mutante. Tudo vai para <code>validation.md</code>, e o <code>validate_state.py</code> só aceita o veredito com PASS explícito e evidência citada.</p>
+{snip(".specs/features/001-cancelamento-parcial/validation.md", r"^## Spec-Anchored", r"^## Discrimination Sensor", "md", "validation.md — critérios ancorados na spec (trecho)", include_end=False)}
+{snip(".specs/features/001-cancelamento-parcial/validation.md", r"^## Discrimination Sensor", r"^## (Interactive UAT|Code Quality)", "md", "validation.md — sensor de discriminação", include_end=False)}
+{snip(".specs/features/001-cancelamento-parcial/validation.md", r"^## Summary", None, "md", "validation.md — veredito")}
+
+<h3>8. Memória: decisões que sobrevivem à feature</h3>
+<p><code>STATE.md</code> guarda só decisões de projeto (as que outra feature precisa conhecer) e o handoff para retomar sem reler tudo. As duas decisões desta feature já apontam para ADRs com <code>enforced-by</code> — é a ponte AD-NNN → ADR do kit:</p>
+{snip(".specs/STATE.md", r"^## Decisions", r"^## Handoff", "md", ".specs/STATE.md — Decisions", include_end=False)}
+
+<h3>Os agentes do kit em volta do tlc</h3>
+<p>O roteiro cataloga nove; o exemplo usa seis (o Verifier é o do tlc, não um agente nosso). "Só leitura" = Read/Grep/Glob; "+ Bash" = Bash sob a allowlist do <code>settings.json</code>.</p>
 <div class="tbl"><table><thead><tr><th>Agente</th><th>Quando</th><th>Entrada → saída</th><th>Ferramentas</th></tr></thead><tbody>
-<tr><td><code>impact-analyzer</code></td><td>antes do design de card que cruza serviços</td><td>fluxo → repos, contratos, ordem, riscos, "o que não encontrei"</td><td>só leitura</td></tr>
+<tr><td><code>card-intake</code> (skill)</td><td>ao pegar o card</td><td>card (Jira/ClickUp/texto) → DoR + dimensionamento + briefing; não escreve spec</td><td>MCP atlassian/clickup, leitura</td></tr>
+<tr><td><code>impact-analyzer</code></td><td>passo 1 do Design</td><td>fluxo → repos, contratos, ordem, riscos, "o que não encontrei"</td><td>só leitura</td></tr>
 <tr><td><code>legacy-navigator</code></td><td>antes de mudar comportamento do monolito</td><td>regra → onde vive, entradas, tabelas, efeitos colaterais, há characterization?</td><td>leitura + Bash</td></tr>
-<tr><td><code>test-designer</code></td><td>task de testes, antes da implementação</td><td>requirements.md → um teste por cláusula EARS com o ID no nome; characterization no legado; contagem de falhas esperadas</td><td>leitura + Write só em <code>tests/</code></td></tr>
-<tr><td><code>verifier</code></td><td>fim de cada task e antes do PR</td><td>spec + diff → PASS/FAIL por critério, com output colado</td><td>leitura + test/build</td></tr>
+<tr><td><code>test-designer</code></td><td>tier alto ou legado (opcional; default é o do tlc)</td><td>spec → um teste por cláusula com o ID no nome; characterization no legado</td><td>leitura + Write só em <code>tests/</code></td></tr>
 <tr><td><code>dotnet-reviewer</code></td><td>todo PR, antes do humano</td><td>diff → achados por severidade; "precisa de humano em…"</td><td>leitura + Bash</td></tr>
 <tr><td><code>contract-reviewer</code></td><td>quando a rule de contratos ativa</td><td>diff de contrato → breaking, consumidores, ação</td><td>leitura + oasdiff</td></tr>
 </tbody></table></div>
-{code(".claude/agents/verifier.md","md",title=".claude/agents/verifier.md")}
-<h3>Uma sessão típica</h3>
-<ol class="steps">
-<li><code>claude</code> no diretório do serviço → <code>/jira-intake ORD-231</code> → <code>requirements.md</code> com duas perguntas ao PO. Sessão encerra.</li>
-<li>PO responde; <code>impact-analyzer</code> roda (subagente); tech lead aprova o <code>design.md</code>.</li>
-<li>Sessão nova: <code>test-designer</code> escreve a regra em <code>docs/regras</code> e os testes da T2 (um por cláusula; ficam vermelhos). Commit. Sessão nova, plan mode: T3 (implementação) faz passar sem editar os testes. Commit.</li>
-<li><code>verifier</code> em subagente: cola o output real. PR draft com intenção, prova, risco, áreas geradas por IA rotuladas.</li>
-<li><code>dotnet-reviewer</code> no CI; humano revisa spec e testes (tier médio). Merge. Nota no vault.</li>
-</ol>
-<div class="box honesto"><span class="lbl">Honestidade</span><p>T1 está parcial: o record do evento existe e é aditivo, mas não há catálogo AsyncAPI no exemplo para publicar o schema. T4 (o consumidor no ERP) e T5 (nota no vault) estão em aberto. O fluxo foi exercitado até T3 — o que basta para mostrar os arquivos, não para afirmar que o ciclo inteiro rodou num cliente. Onde rodou, está registrado nas notas de projeto do vault, não aqui.</p></div>
+<div class="box honesto"><span class="lbl">Honestidade</span><p>O que é real: os artefatos de <code>.specs/</code>, os sete commits, os gates e o Verifier (sub-agente com contexto limpo) rodaram nesta data com a skill 3.3.0 instalada pelo plugin. O que não é: os dois gates humanos foram registrados pela aprovação do plano da v0.2 pelo fundador, não por um PO em reunião; o MCP do Jira não foi conectado (texto colado); o consumidor no ERP (R2.1) ficou fora por decisão multi-repo e não existe catálogo AsyncAPI no exemplo; o status <code>Cancelado</code> não é alcançável neste repo, então a cláusula WHILE ficou coberta por construção e registrada como assumption.</p></div>
 
 <!-- ======================= C10 ======================= -->
 <h2 id="c10"><span class="eyebrow">Capítulo 10</span><br>Qualidade que o build impõe (e três lições reais)</h2>
@@ -381,14 +469,14 @@ flowchart LR
 
 <!-- ======================= C12 ======================= -->
 <h2 id="c12"><span class="eyebrow">Capítulo 12</span><br>As 7 fases e como a Whitebeard usa isto</h2>
-<p>Tudo o que este e-book mostra é a <b>fase 1</b> (contexto mínimo), parte da <b>fase 2</b> (ADRs e <code>docs/regras/</code> — sem o mapa da empresa nem o grafo gerado), a <b>fase 3</b> (card → spec → PR) e parte da <b>fase 4</b> (sensores) do roteiro. As fases têm critério de saída, e nenhuma começa sem o da anterior:</p>
+<p>Tudo o que este e-book mostra é a <b>fase 1</b> (contexto mínimo), parte da <b>fase 2</b> (ADRs e <code>docs/regras/</code> — sem o mapa da empresa nem o grafo gerado), a <b>fase 3</b> (card → spec → PR, com o tlc-spec-driven como motor) e parte da <b>fase 4</b> (sensores) do roteiro. A fase 5 já tem o seu artefato central: o kit é um plugin instalável (<code>claude plugin install kit@whitebeard-kit</code>; no Cursor, o mesmo repo com <code>.cursor-plugin/</code>). As fases têm critério de saída, e nenhuma começa sem o da anterior:</p>
 <div class="tbl"><table><thead><tr><th>Fase</th><th>Quando</th><th>Sai quando</th></tr></thead><tbody>
 <tr><td>0 Fundação</td><td>sem. 1–2</td><td>política de IA publicada; baseline medido; repos com teste rodando e branch protegida</td></tr>
 <tr><td>1 Contexto mínimo</td><td>sem. 2–3</td><td>agente builda e testa sozinho; <code>.env</code> bloqueado por hook; <code>/context</code> &lt; 10 %</td></tr>
 <tr><td>2 Mapa da empresa</td><td>sem. 3–5</td><td><code>impact-analyzer</code> acerta repos e ordem em 3 cards históricos</td></tr>
 <tr><td>3 Card → spec → PR</td><td>sem. 5–8</td><td>5 cards fim a fim; nenhum PR sem evidência; rework e p75 vs baseline</td></tr>
 <tr><td>4 Sensores e segurança</td><td>sem. 8–12</td><td>quebra de contrato falha no CI; refactor sem characterization bloqueado; sessão auditável</td></tr>
-<tr><td>5 Harness e escala</td><td>mês 3–6</td><td>2ª equipe operando via plugin; DORA não regrediu</td></tr>
+<tr><td>5 Harness e escala</td><td>mês 3–6</td><td>2ª equipe operando via plugin (já existe); managed settings; DORA não regrediu</td></tr>
 <tr><td>6 Contínua</td><td>sempre</td><td>artefato com dono, data e frescor; CLAUDE.md diminui, não cresce</td></tr>
 </tbody></table></div>
 <p>A Whitebeard usa o mesmo kit de três formas: nos <b>próprios repositórios</b> (toda lição vira template no kit, não num repo só); como <b>serviço de implantação</b> (fases 0→3 em cerca de oito semanas no cliente, 4→6 como advisory recorrente); e como <b>formação</b> — o time do cliente executa cada fase pelo checklist e a Whitebeard revisa. A transferência de conhecimento é o entregável; o kit é o que permite que ela seja verificável.</p>
@@ -396,8 +484,11 @@ flowchart LR
 <!-- ======================= APÊNDICE ======================= -->
 <h2 id="apendice"><span class="eyebrow">Apêndice</span><br>Comandos, pendências, glossário</h2>
 <h3>Comandos do dia a dia</h3>
-{term('''$ ~/DEV/WHITEBEARD/agentic-engineering-kit/apply.sh /caminho/do/repo --dotnet   # esqueleto sem sobrescrever
-$ claude                                  # no diretório do serviço; /init, depois pode o CLAUDE.md
+{term('''$ claude plugin marketplace add git@github.com:whitebeardit/agentic-engineering-kit.git && claude plugin install kit@whitebeard-kit
+$ ~/DEV/WHITEBEARD/agentic-engineering-kit/apply.sh /caminho/do/repo --claude --cursor --with-tlc --dotnet
+$ claude                                  # no diretório do serviço; /init, depois pode o AGENTS.md
+$ /kit:card-intake ORD-231                # porteiro → briefing → "specify feature ..." (tlc)
+$ claude plugin update tlc@whitebeard-kit  # o tlc é sempre o original do Tech Leads Club
 $ /context                                # carga do contexto (< 10 %)
 $ dotnet build Orders.slnx                # ≈ 2 s; warning de análise é erro
 $ dotnet test Orders.slnx                 # ≈ 9 s; 9 testes
@@ -406,8 +497,9 @@ $ dotnet format Orders.slnx --diagnostics IDE0005
 $ DiffEngine_Disabled=true dotnet test    # no CI''', "referência")}
 <h3>O que o exemplo ainda não prova</h3>
 <ul>
-<li>Projeto de API e pipeline de CI (portanto <code>oasdiff</code>, Pact e Stryker não rodaram).</li>
-<li>Consumidor no ERP (T4) e nota no vault (T5) da spec 001.</li>
+<li>Projeto de API e pipeline de CI (portanto <code>oasdiff</code>, Pact e Stryker não rodaram); catálogo AsyncAPI para o evento.</li>
+<li>Consumidor no ERP (feature separada no repo do ERP, pela regra multi-repo) e nota no vault.</li>
+<li>Gates humanos com PO/tech lead reais e o MCP do Jira/ClickUp conectado (a sessão usou o adaptador de texto).</li>
 <li>Grafo de dependências gerado e mapa da empresa no vault (fase 2) — o exemplo é um repo só.</li>
 <li>Sandbox com egresso controlado (fase 4) e managed settings (fase 5) — configuração de máquina e de organização, não de repositório.</li>
 </ul>
@@ -421,9 +513,11 @@ $ DiffEngine_Disabled=true dotnet test    # no CI''', "referência")}
 <dt>Skill</dt><dd>Procedimento reutilizável em <code>.claude/skills/&lt;nome&gt;/SKILL.md</code>; a <code>description</code> é a regra de roteamento.</dd>
 <dt>Specification</dt><dd>Objeto do domínio que encapsula um predicado de negócio reutilizável (<code>IsSatisfiedBy</code>).</dd>
 <dt>Value object</dt><dd>Tipo sem identidade, imutável, que nasce válido ou não nasce (<code>Money</code>).</dd>
-<dt>Verifier</dt><dd>Agente em contexto limpo que valida a implementação contra a spec com comandos executados; nunca é quem implementou.</dd>
+<dt>Verifier (tlc)</dt><dd>Sub-agente do tlc-spec-driven, em contexto limpo, que valida a implementação contra a spec com <code>file:line</code>, gate com build fresco e sensor de discriminação; nunca é quem implementou. Escreve <code>validation.md</code>.</dd>
+<dt>Sensor de discriminação</dt><dd>Injeção de falhas de comportamento num worktree descartável para confirmar que os testes falham (mutante morto); mutante que sobrevive vira fix task.</dd>
+<dt>Lição (tlc)</dt><dd>Regra geral e curta gravada por <code>lessons.py</code> só a partir de um sinal do Verifier com <code>file:line</code>; <em>candidate</em> até reincidir em outra feature, então <em>confirmed</em>.</dd>
 </dl>
-<p class="eyebrow" style="margin-top:40px">Whitebeard · Engenharia · IA · Advisory — texto de método, sem chamada comercial. Roteiro completo com fontes: <a href="{ARTIFACT_ROTEIRO}">Roteiro de Engenharia com Agentes</a>.</p>
+<p class="eyebrow" style="margin-top:40px">Whitebeard · Engenharia · IA · Advisory — texto de método, sem chamada comercial. Roteiro completo com fontes: <a href="{ARTIFACT_ROTEIRO}">Roteiro de Engenharia com Agentes</a>. Método de spec: <a href="https://github.com/tech-leads-club/agent-skills">tlc-spec-driven</a> © Tech Leads Club / Felipe Rodrigues, CC-BY-4.0. Kit: <a href="https://github.com/whitebeardit/agentic-engineering-kit">whitebeardit/agentic-engineering-kit</a>.</p>
 </div>
 """
 open(OUT, "w", encoding="utf-8").write(page)

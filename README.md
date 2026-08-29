@@ -78,7 +78,7 @@ Detalhes: `docs/tlc-adaptacao.md` (dimensionamento, AD-NNN ↔ ADR, multi-repo, 
 
 Serviço de Pedidos em .NET 10 (Domain / Application / Infrastructure + `Erp.Legacy`) com o kit aplicado e a feature 001
 (cancelamento parcial) conduzida pelo tlc-spec-driven: `.specs/STATE.md`, `spec.md`, `tasks.md` com Test Coverage
-Matrix lida do `AGENTS.md`, `validation.md` do Verifier e `LESSONS.md`. Build limpo, 9/9 testes. O e-book
+Matrix lida do `AGENTS.md`, `validation.md` do Verifier e `LESSONS.md`. Feature 001 conduzida pelo tlc-spec-driven de ponta a ponta (spec → tasks → 6 commits → Verifier). Build limpo, 14/14 testes. O e-book
 "Engenharia com Agentes em .NET" é gerado destes arquivos por `tools/gen-ebook.py`
 (artifact: https://claude.ai/code/artifact/2746fde4-f60e-4189-bc26-8203a1758373).
 
