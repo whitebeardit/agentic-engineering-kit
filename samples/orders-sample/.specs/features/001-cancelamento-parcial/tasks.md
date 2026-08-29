@@ -90,10 +90,11 @@ T4 → T5 → T6
 - MCP: NONE
 - Skill: NONE
 **Done when**:
-- [ ] Record com os quatro campos; comentário XML dizendo que é contrato público (mudar = versionar)
-- [ ] Build gate passes: `dotnet build Orders.slnx && dotnet test Orders.slnx`
+- [x] Record com os quatro campos; comentário XML dizendo que é contrato público (mudar = versionar)
+- [x] Build gate passes: `dotnet build Orders.slnx && dotnet test Orders.slnx` — 4 passed (2026-08-29)
 **Tests**: none
 **Gate**: build
+**Status**: ✅ Done
 
 ---
 
