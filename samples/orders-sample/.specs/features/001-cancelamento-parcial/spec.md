@@ -86,7 +86,7 @@ Every ambiguity is resolved or recorded here - nothing is left silently unclear.
 Edge cases are usually unwanted-behavior (IF/THEN) or boundary (WHEN) criteria:
 - IF o item não pertence ao pedido THEN system SHALL recusar sem alterar o pedido (CANC-05)
 - WHEN o único item restante é cancelado THEN system SHALL recalcular o total para 0,00 BRL (boundary de CANC-01)
-- IF o pedido está Cancelado THEN system SHALL recusar como não elegível (CANC-06)
+- IF o pedido está Cancelado THEN system SHALL recusar como não elegível (CANC-06) — inalcançável neste repositório (sem `Order.Cancel()`; ver Assumptions): coberto por construção (`Status == Aberto`). A feature que criar `Order.Cancel()` deve adicionar o teste `RN_ORD_012_WHILE_pedido_Cancelado…`
 
 ---
 
@@ -96,13 +96,13 @@ Each requirement gets a unique ID for tracking across design, tasks, and validat
 
 | Requirement ID | Story | Phase | Status |
 | -------------- | ----- | ----- | ------ |
-| CANC-01 | P1: recalcular total ao cancelar item | Tasks | Implementing |
-| CANC-02 | P1: emitir OrderItemCancelled com novo total | Tasks | Implementing |
-| CANC-03 | P1: pedido faturado recusa sem alterar | Tasks | Implementing |
-| CANC-04 | P1: idempotência (um único evento) | Tasks | Implementing |
-| CANC-05 | P1: item inexistente recusa sem alterar | Tasks | Implementing |
-| CANC-06 | P1: só pedido Aberto é elegível | Tasks | Implementing |
-| CANC-07 | P1: handler orquestra, não decide | Tasks | Implementing |
+| CANC-01 | P1: recalcular total ao cancelar item | Done | ✅ Verified |
+| CANC-02 | P1: emitir OrderItemCancelled com novo total | Done | ✅ Verified |
+| CANC-03 | P1: pedido faturado recusa sem alterar | Done | ✅ Verified |
+| CANC-04 | P1: idempotência (um único evento) | Done | ✅ Verified |
+| CANC-05 | P1: item inexistente recusa sem alterar | Done | ✅ Verified |
+| CANC-06 | P1: só pedido Aberto é elegível | Done | ✅ Verified |
+| CANC-07 | P1: handler orquestra, não decide | Done | ✅ Verified |
 
 **ID format:** `[CATEGORY]-[NUMBER]` · **Status values:** Pending → In Design → In Tasks → Implementing → Verified
 **Coverage:** 7 total, 7 mapped to tasks (T1–T6), 0 unmapped

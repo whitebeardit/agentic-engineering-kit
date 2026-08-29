@@ -4,7 +4,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 
 ## Comandos
 - Build: `dotnet build Orders.slnx` (≈ 2 s; warnings de análise são ERRO — o build é o que o agente obedece)
-- Testes: `dotnet test Orders.slnx` (≈ 9 s com build; 9 testes: 5 regra, 3 arquitetura, 1 characterization)
+- Testes: `dotnet test Orders.slnx` (≈ 9 s com build; 14 testes: 10 regra RN_ORD_012, 3 arquitetura, 1 characterization)
 - Só a regra: `dotnet test --filter "FullyQualifiedName~RN_ORD_012"` · Só arquitetura: `dotnet test --filter ArchitectureTests`
 - Formatar: `dotnet format Orders.slnx` (hook roda no arquivo tocado) · Usings: `dotnet format --diagnostics IDE0005`
 

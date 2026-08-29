@@ -21,10 +21,10 @@
 ## Handoff
 
 - **Feature**: 001-cancelamento-parcial / `.specs/features/001-cancelamento-parcial`
-- **Phase / Task**: Tasks aprovadas; Execute não iniciado
-- **Completed**: none
+- **Phase / Task**: Done — Verifier PASS (validation.md: 7/7 ACs, gate 14/14, sensor 3/3 mortos); validate_state.py exit 0
+- **Completed**: T1, T2, T3, T4, T5, T6
 - **In-progress** (file:line): none
-- **Next step**: Executar T1 (bloco RN-ORD-012 em docs/regras/pedidos.md) com gate build
+- **Next step**: Merge de tlc/001 em main; próxima feature: 002 — consumidor do evento no repo do ERP (fora deste repo), ou `Order.Cancel()` com o teste WHILE_pedido_Cancelado
 - **Blockers**: none
-- **Uncommitted files**: .specs/** (spec, tasks, STATE, lessons)
+- **Uncommitted files**: none após o commit de validação
 - **Branch**: tlc/001
