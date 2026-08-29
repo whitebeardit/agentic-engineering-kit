@@ -337,7 +337,7 @@ pre.mermaid{{background:var(--paper);border:1px solid var(--rule);border-radius:
 <h3>3. A aplicação orquestra e não decide</h3>
 {code("src/Orders.Application/CancelOrderItem/CancelOrderItemHandler.cs","csharp")}
 <h3>4. A prova: um teste por cláusula EARS, com o ID no nome</h3>
-{snip("tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs", r"^/// <summary>Prova", r"SHALL_CONTINUE_TO_ser_idempotente", "csharp", "tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs (trecho: 3 de 5 testes)", include_end=False)}
+{snip("tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs", r"^public class RN_ORD_012", r"SHALL_ser_idempotente", "csharp", "tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs (trecho: 5 de 10 testes — CANC-06, 01, 02, 03)", include_end=False)}
 <p>O nome do teste repete a cláusula da regra. Quem lê <code>docs/regras</code>, o teste ou a exceção com <code>RuleId</code> chega ao mesmo lugar — e o Verifier do tlc cruza os três com <code>file:line</code>.</p>
 <p>Isto <em>não</em> é TDD forçado no loop do agente — prática que a Thoughtworks mediu sem ganho de qualidade e com 3–8× de custo em tokens, e que o roteiro desaconselha. É outra coisa: um teste por cláusula EARS, escrito <b>uma vez</b> a partir da spec pelo <code>test-designer</code> (ou numa sessão separada), que fica vermelho até a regra existir e depois vira sensor permanente. Quem implementa não edita esses testes; faz passar.</p>
 <h3>5. A skill: o procedimento, não o conhecimento</h3>
