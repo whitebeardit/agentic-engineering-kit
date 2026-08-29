@@ -39,6 +39,7 @@ Every ambiguity is resolved or recorded here - nothing is left silently unclear.
 | Pedido em status Cancelado tenta cancelar item | Recusar, igual a Faturado: só pedido Aberto é elegível | Uma única regra de elegibilidade (status == Aberto) | n |
 | Item que não pertence ao pedido | Recusar com violação de regra (RN-ORD-012), sem alterar o pedido | Entrada inválida não pode mutar o agregado | y (RN-ORD-002/003 seguem o mesmo padrão) |
 | Payload do evento | OrderId, ItemId, NewTotal (Money), OccurredAt | Mínimo que o consumidor (ERP) precisa; mudar campo = versionar (rules/contracts) | y |
+| Status `Cancelado` não é alcançável neste repositório (não existe `Order.Cancel()`) | A specification testa `Status == Aberto`; os casos Faturado e Aberto têm teste; Cancelado fica coberto por construção | Não adicionar código de produção só para testar; o card diz que cancelamento total "já existe" — não neste exemplo | y |
 | Concorrência entre dois cancelamentos simultâneos | N/A neste exemplo (repositório in-memory, sem transação) | Fora do escopo do exemplo; registrar como limitação | y |
 
 **Open questions:** none - all resolved or logged above (required before the spec is confirmed).
