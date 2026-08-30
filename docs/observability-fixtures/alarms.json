@@ -1,0 +1,59 @@
+{
+  "medido_em": "2026-08-24T15:00:00Z",
+  "conta": "ficticia",
+  "alarmes": [
+    {
+      "nome": "cadastro-prod-dlq-nao-vazia",
+      "metrica": "fila/ApproximateNumberOfMessagesVisible",
+      "dimensoes": { "QueueName": "cadastro-prod-dlq.fifo" },
+      "condicao": "Maximum > 0 por 1 período de 300 s; dado ausente = notBreaching",
+      "estado": "OK",
+      "ultima_transicao": "2026-07-23T18:40:00Z",
+      "acoes": ["topico:cadastro-prod-alertas"],
+      "dono": null
+    },
+    {
+      "nome": "cadastro-prod-fila-envelhecendo",
+      "metrica": "fila/ApproximateAgeOfOldestMessage",
+      "dimensoes": { "QueueName": "cadastro-prod.fifo" },
+      "condicao": "Maximum > 900 s por 1 período de 300 s",
+      "estado": "OK",
+      "ultima_transicao": "2026-08-13T09:12:00Z",
+      "acoes": ["topico:cadastro-prod-alertas"],
+      "dono": "dono do serviço"
+    },
+    {
+      "nome": "cadastro-prod-5xx",
+      "metrica": "http_server_duration{status=5xx} (taxa)",
+      "dimensoes": {},
+      "condicao": "taxa > 2 % por 5 min",
+      "estado": "INSUFFICIENT_DATA",
+      "ultima_transicao": "2026-06-02T11:00:00Z",
+      "acoes": [],
+      "dono": null
+    }
+  ],
+  "topicos": [
+    {
+      "nome": "cadastro-prod-alertas",
+      "assinaturas": [
+        { "protocolo": "email", "destino": "on-call@<dominio-ficticio>", "estado": "PendingConfirmation", "criada_em": "2026-07-23T18:38:00Z" }
+      ]
+    },
+    {
+      "nome": "cadastro-prod-alertas-financeiro",
+      "assinaturas": [
+        { "protocolo": "email", "destino": "financeiro@<dominio-ficticio>", "estado": "Confirmed", "criada_em": "2026-08-01T10:00:00Z" }
+      ]
+    }
+  ],
+  "script_de_verificacao": {
+    "arquivo": "scripts/check-production-infra.sh",
+    "passo_10": "confere que os alarmes existem (describe-alarms) e que o tópico existe (list-topics); NÃO consulta list-subscriptions-by-topic",
+    "resultado_da_ultima_execucao": "ok"
+  },
+  "doc_de_infra": {
+    "arquivo": "docs/infra/infra-stages.md",
+    "diz": ["Tópico de alertas + assinaturas ❌", "Alarme DLQ não vazia ❌"]
+  }
+}

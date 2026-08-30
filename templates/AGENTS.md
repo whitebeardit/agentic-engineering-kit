@@ -26,6 +26,7 @@ Sem output, não está pronto.
 - Decisões: `docs/adr/` (com `enforced-by`) e `.specs/STATE.md` (AD-NNN, decisões leves) — conflito é sinalizado, não resolvido em silêncio
 - Specs, tasks, validação e lições: `.specs/` (tlc-spec-driven)
 - Contratos: `docs/openapi.yaml` ou `src/contracts/`, `asyncapi.yaml` (mudar = versionar)
+- Produção: `docs/debug-prod.md` (coordenadas, primeiro movimento por sintoma, trace sob demanda) — lido pelo agente `trace-finder`
 
 ## Processo (tlc-spec-driven · © Tech Leads Club, CC-BY-4.0)
 - Card entra por `card-intake` (Definition of Ready) → `specify feature` → gate humano 1 (spec) → design/tasks → gate humano 2 → execute → Verifier automático (autor ≠ verificador).

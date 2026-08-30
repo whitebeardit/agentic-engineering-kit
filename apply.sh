@@ -26,6 +26,7 @@ echo "kit → $TARGET"
 if [ $ROOT -eq 1 ]; then copy "$KIT/templates/AGENTS.root.md" "$TARGET/AGENTS.md"; else copy "$KIT/templates/AGENTS.md" "$TARGET/AGENTS.md"; fi
 copy "$KIT/docs/definition-of-ready.md" "$TARGET/docs/definition-of-ready.md"
 copy "$KIT/docs/adr/0000-template.md" "$TARGET/docs/adr/0000-template.md"
+copy "$KIT/templates/debug-prod.md" "$TARGET/docs/debug-prod.md"
 
 if [ $CLAUDE -eq 1 ]; then
   copy "$KIT/templates/CLAUDE.md" "$TARGET/CLAUDE.md"

@@ -1,5 +1,12 @@
 # Changelog
 
+## kit--v0.4.0 — 2026-08-30
+- **Sub-agentes de observabilidade (só leitura)**: `trace-finder` (busca canônica por traceId/cid/eventId — logs primeiro, `trace_flags` antes de culpar retenção, guarda de LGPD, replay com `-01` e `eventId` novo), `telemetry-cost-auditor` (custo e ruído com evidência medida; cortes por custo × ruído; nunca `AlwaysOn` global) e `alert-auditor` (alarme existe, mede o certo e **alguém confirmou receber**; pontos cegos em scripts de verificação e docs de infra).
+- **`templates/debug-prod.md`**: primeiro movimento por sintoma, coordenadas, trace sob demanda e verdades operacionais — copiado por `apply.sh` para `docs/debug-prod.md`; o `trace-finder` o lê antes de procurar.
+- **`docs/observability-fixtures/`**: fixtures sintéticas na forma das saídas reais (logs com `eventName`/`trace_flags`, inventário de séries, alarmes com assinaturas) e, em `runs/`, a saída real de cada agente rodando sobre elas.
+- Manifestos 0.4.0 (keyword `observability`); `templates/{AGENTS,CLAUDE}.md` citam os agentes e o `debug-prod.md`.
+
+
 ## kit--v0.3.4 — 2026-08-30
 - enrichment-lab: `max-len` 88 também nos `.js/.cjs/.mjs`; comentário do sequenciador reembrulhado.
 

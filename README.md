@@ -37,6 +37,13 @@ git clone git@github.com:whitebeardit/agentic-engineering-kit.git ~/DEV/WHITEBEA
 ```
 `--standalone` copia skills e agentes para `.claude/`/`.cursor/` de quem não usa marketplace (nomes sem o prefixo `kit:`).
 
+## Produção: três agentes que só leem
+
+`trace-finder` (o que aconteceu com um pedido, pelo id), `telemetry-cost-auditor` (o que emite, o que vira sinal, o que
+cortar) e `alert-auditor` (se disparar, alguém recebe?). Nenhum muda produção; todo número vem com o comando que o mediu.
+`templates/debug-prod.md` é o arquivo por serviço que eles leem primeiro. Exemplos de execução em
+`docs/observability-fixtures/runs/`.
+
 ## Dois laboratórios, dois perfis
 
 | Laboratório | Stack | Onde é usado | Rodar |
