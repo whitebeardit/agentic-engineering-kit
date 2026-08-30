@@ -12,5 +12,5 @@ export function clienteComUnidades(
   const unidades = new Map<string, Unidade>();
   for (let i = 1; i <= n; i++)
     unidades.set(`campo.c${i}`, { valor: `v${i}`, instante, origem });
-  return Cliente.reidratar(CPF_VALIDO, 'F', versao, unidades, undefined);
+  return Cliente.reidratar(CPF_VALIDO, 'F', versao, unidades);
 }

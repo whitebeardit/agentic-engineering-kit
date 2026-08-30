@@ -8,13 +8,13 @@ describe('RN-ENR-005 — Gravação condicional por versão', () => {
   it('RN_ENR_005_WHEN_documento_novo_SHALL_gravar_esperando_versao_zero', async () => {
     const repo = new ClienteRepositoryMemoria();
     const c = Cliente.novo(CPF_VALIDO, 'F');
-    c.substituir(eventoValido());
+    c.aplicar(eventoValido(), 11);
     await expect(repo.gravar(c, 0)).resolves.toBe(1);
   });
   it('RN_ENR_005_IF_versao_persistida_mudou_THEN_SHALL_lancar_conflito', async () => {
     const repo = new ClienteRepositoryMemoria();
     const c = Cliente.novo(CPF_VALIDO, 'F');
-    c.substituir(eventoValido());
+    c.aplicar(eventoValido(), 11);
     await repo.gravar(c, 0);
     await expect(repo.gravar(c, 0)).rejects.toBeInstanceOf(ConflictError);
     expect((await repo.obter(CPF_VALIDO))?.versao).toBe(1);
@@ -27,8 +27,9 @@ describe('RN-ENR-005 — Gravação condicional por versão', () => {
       if (!interferiu) {
         interferiu = true; // alguém gravou entre a leitura e a escrita
         const outro = Cliente.novo(cliente.documento, cliente.tipoPessoa);
-        outro.substituir(
+        outro.aplicar(
           eventoValido({ data: { cadastro: { nome: 'Outro Processo' } } }),
+          11,
         );
         await original(outro, 0);
       }

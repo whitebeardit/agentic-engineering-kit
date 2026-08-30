@@ -86,7 +86,7 @@ export class EventoIngestaoWorker {
         (await this.repo.obter(evento.documento)) ??
         Cliente.novo(evento.documento, evento.tipoPessoa);
       const versaoEsperada = cliente.versao;
-      cliente.substituir(evento);
+      cliente.aplicar(evento, 11);
       try {
         await this.repo.gravar(cliente, versaoEsperada);
         return;

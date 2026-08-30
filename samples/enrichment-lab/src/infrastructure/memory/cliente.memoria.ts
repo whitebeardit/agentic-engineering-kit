@@ -12,7 +12,7 @@ export class ClienteRepositoryMemoria implements ClienteRepository {
   async obter(documento: string): Promise<Cliente | undefined> {
     const c = this.itens.get(documento);
     return c
-      ? Cliente.reidratar(c.documento, c.tipoPessoa, c.versao, c.unidades, c.apto)
+      ? Cliente.reidratar(c.documento, c.tipoPessoa, c.versao, c.unidades)
       : undefined;
   }
 
@@ -28,13 +28,7 @@ export class ClienteRepositoryMemoria implements ClienteRepository {
     const nova = versaoEsperada + 1;
     this.itens.set(
       cliente.documento,
-      Cliente.reidratar(
-        cliente.documento,
-        cliente.tipoPessoa,
-        nova,
-        cliente.unidades,
-        cliente.apto,
-      ),
+      Cliente.reidratar(cliente.documento, cliente.tipoPessoa, nova, cliente.unidades),
     );
     return nova;
   }

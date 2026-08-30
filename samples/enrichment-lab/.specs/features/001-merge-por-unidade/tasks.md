@@ -125,11 +125,11 @@ T4 → T5 → T6
 **Tools**:
 - MCP: NONE
 **Done when**:
-- [ ] `substituir` não existe mais; os testes RN_ENR_005 que o usavam passam a usar `aplicar`
-- [ ] Quick gate passes: `npm run test:regra` exit 0 (≥ 12 testes RN_ENR_004)
+- [x] `substituir` não existe mais; os testes RN_ENR_005 que o usavam passam a usar `aplicar`
+- [x] Quick gate passes: `npm run test:regra` exit 0 (≥ 12 testes RN_ENR_004)
 **Tests**: unit (9 novos)
 **Gate**: quick
-**Status**: Pending
+**Status**: ✅ Done
 
 ---
 
