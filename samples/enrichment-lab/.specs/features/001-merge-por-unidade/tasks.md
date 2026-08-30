@@ -71,11 +71,11 @@ T4 → T5 → T6
 - MCP: NONE
 - Skill: `regras-de-negocio`
 **Done when**:
-- [ ] Bloco com as cláusulas WHEN/IF da spec, `Código:` e `Teste:` apontando para os arquivos que T2–T5 criarão, `Confiança: inferred`
-- [ ] Build gate passes: `npm run gate` exit 0
+- [x] Bloco com as cláusulas WHEN/IF da spec, `Código:` e `Teste:` apontando para os arquivos que T2–T5 criarão, `Confiança: inferred`
+- [x] Build gate passes: `npm run gate` exit 0
 **Tests**: none
 **Gate**: build
-**Status**: Pending
+**Status**: ✅ Done
 
 ---
 
