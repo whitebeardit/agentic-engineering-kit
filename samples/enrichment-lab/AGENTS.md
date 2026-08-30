@@ -8,6 +8,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 - Gate: `npm run gate` = `tsc --noEmit && eslint . && jest --ci` (≈ 9 s; é o que o agente obedece)
 - Tipos: `npm run typecheck` (≈ 2 s) · Lint: `npm run lint` (≈ 4 s; `legacy/` emite warnings da rampa, nunca erro — ver Gotchas)
 - Testes: `npm test` (≈ 3 s; 44 testes: 29 regra RN_ENR_*, 3 arquitetura, 1 characterization, 11 integração)
+- Ordem dos arquivos invertida (caça dependência de ordem): `npm run test:reverso`
 - Só a regra: `npm run test:regra` (`jest -t 'RN_ENR_'`) · Só arquitetura: `npm run test:arquitetura` · Unit/int: `npm run test:unit` / `npm run test:int`
 - Subir: `npm run dev` (build + `http://localhost:3000`: `POST /v1/eventos`, `GET /v1/clientes/{documento}`, `/health`)
 

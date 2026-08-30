@@ -1,5 +1,8 @@
 # Changelog
 
+## kit--v0.3.3 — 2026-08-30
+- enrichment-lab: `jest/sequencer-reverso.cjs` + `npm run test:reverso` (roda os arquivos de teste ao contrário para expor dependência de ordem).
+
 ## kit--v0.3.2 — 2026-08-30
 - enrichment-lab: `max-len` 88 colunas no lint (comentários inclusive; imports e strings isentos); comentários e nomes de teste longos reembrulhados. Nada funcional muda.
 

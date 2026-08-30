@@ -21,7 +21,8 @@
     "gate": "npm run typecheck && npm run lint && npm test",
     "build": "tsc -p tsconfig.build.json && cp -r src/contracts dist/src/ && mkdir -p dist/legacy && cp legacy/*.js dist/legacy/",
     "start": "node dist/src/main.js",
-    "dev": "npm run build && node dist/src/main.js"
+    "dev": "npm run build && node dist/src/main.js",
+    "test:reverso": "jest --ci --testSequencer ./jest/sequencer-reverso.cjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -45,6 +46,7 @@
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.12",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.68.0"
+    "typescript-eslint": "^8.68.0",
+    "@jest/test-sequencer": "^30.5.0"
   }
 }
