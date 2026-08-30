@@ -7,6 +7,9 @@ globs:
   - "**/Contracts/**"
   - "**/*.Contracts/**"
   - "**/Events/**"
+  - "**/contracts/**"
+  - "**/events/**"
+  - "**/*.schema.json"
 alwaysApply: false
 ---
 # Contratos (ativa ao tocar em API, eventos ou DTOs públicos)

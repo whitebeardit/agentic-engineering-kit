@@ -1,12 +1,14 @@
 ---
 paths:
-  - '**/openapi*.{yaml,yml,json}'
-  - '**/asyncapi*.{yaml,yml,json}'
-  - '**/Contracts/**'
-  - '**/*.Contracts/**'
-  - '**/Events/**'
+  - "**/openapi*.{yaml,yml,json}"
+  - "**/asyncapi*.{yaml,yml,json}"
+  - "**/Contracts/**"
+  - "**/*.Contracts/**"
+  - "**/Events/**"
+  - "**/contracts/**"
+  - "**/events/**"
+  - "**/*.schema.json"
 ---
-
 # Contratos (ativa ao tocar em API, eventos ou DTOs públicos)
 
 - Mudança de contrato é **sempre** compatível retroativa ou versionada (`v2`, novo tópico). Remoção de campo = deprecação com prazo.
