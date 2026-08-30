@@ -19,7 +19,7 @@
     "test:arquitetura": "jest --ci -t 'ADR-'",
     "baseline": "jest -u -t 'characterization'",
     "gate": "npm run typecheck && npm run lint && npm test",
-    "build": "tsc -p tsconfig.build.json && cp -r src/contracts dist/src/",
+    "build": "tsc -p tsconfig.build.json && cp -r src/contracts dist/src/ && mkdir -p dist/legacy && cp legacy/*.js dist/legacy/",
     "start": "node dist/src/main.js",
     "dev": "npm run build && node dist/src/main.js"
   },
