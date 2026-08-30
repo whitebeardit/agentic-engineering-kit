@@ -107,11 +107,11 @@ T4 → T5 → T6
 **Tools**:
 - MCP: NONE
 **Done when**:
-- [ ] 3 testes verdes com o ID da regra no nome
-- [ ] Quick gate passes: `npm run test:regra` exit 0
+- [x] 3 testes verdes com o ID da regra no nome
+- [x] Quick gate passes: `npm run test:regra` exit 0
 **Tests**: unit (3)
 **Gate**: quick
-**Status**: Pending
+**Status**: ✅ Done
 
 ---
 
