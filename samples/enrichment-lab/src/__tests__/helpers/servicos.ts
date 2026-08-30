@@ -8,5 +8,6 @@ export function servicosDeTeste(
   const s = criarServicos({ LOG_NIVEL: 'debug', ...env }, (l) => linhasDeLog.push(l));
   s.repo.limpar();
   s.fila.limpar();
+  s.publicador.limpar();
   return { ...s, linhasDeLog };
 }

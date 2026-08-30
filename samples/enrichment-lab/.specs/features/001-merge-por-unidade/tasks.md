@@ -143,11 +143,11 @@ T4 → T5 → T6
 **Tools**:
 - MCP: NONE
 **Done when**:
-- [ ] Worker sem regra de negócio (só orquestra); teste de integração observa 2 eventos publicados e o `sem-mudanca`
-- [ ] Full gate passes: `npm test` exit 0
+- [x] Worker sem regra de negócio (só orquestra); teste de integração observa 2 eventos publicados e o `sem-mudanca`
+- [x] Full gate passes: `npm test` exit 0
 **Tests**: integration (2 novos)
 **Gate**: full
-**Status**: Pending
+**Status**: ✅ Done
 
 ---
 
