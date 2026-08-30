@@ -4,7 +4,7 @@ Fonte de verdade escrita. O card descreve a **mudança**; este arquivo descreve 
 onde vive no código, qual teste a prova, **confiança** (`verified` = teste passa; `inferred` = lida do código, sem teste
 completo), dono e data. A skill `regras-de-negocio` é o procedimento para mudar isto.
 
-Ordem fixa das guardas no worker: RN-ENR-002 → RN-ENR-001 → RN-ENR-003 → (apto e limiar: RN-ENR-004) → gravação (RN-ENR-005).
+Ordem fixa das guardas no worker: RN-ENR-002 → RN-ENR-001 → RN-ENR-003 → RN-ENR-006 (apto) → RN-ENR-004 (limiar e merge) → gravação (RN-ENR-005).
 
 ## RN-ENR-001 — Documento válido
 
@@ -36,6 +36,12 @@ THE SYSTEM SHALL gravar o cadastro só se a versão persistida for a que foi lid
 IF a versão persistida for outra THEN THE SYSTEM SHALL lançar `ConflictError`, e o worker SHALL reler, refazer a aplicação do evento e tentar de novo (até 3 vezes)
 IF a falha for técnica e persistir THEN THE SYSTEM SHALL devolver a mensagem à fila; após 5 recebimentos ela vai para a DLQ
 Código: `src/infrastructure/memory/cliente.memoria.ts` (`gravar`) · `src/infrastructure/messaging/worker.ts` (`gravarComRetry`) · `src/infrastructure/memory/fila.memory.ts` (`devolver`) Teste: `src/__tests__/unit/RN_ENR_005.gravacao-condicional.unit.test.ts` (4) Confiança: inferred Dono: <pessoa> Desde: 2026-08-30 Última revisão: 2026-08-30
+
+## RN-ENR-006 — Aptidão inferida pelo legado
+
+IF o evento não declara `apto` THEN THE SYSTEM SHALL inferir `apto` pela pontuação de `legacy/calcula-apto.js` (só "APTO" vira `true`)
+THE SYSTEM SHALL CONTINUE TO respeitar `apto` quando o evento o declara (o legado não sobrescreve)
+Código: `src/domain/cliente/service/apto.ts` (`inferirApto`) · `legacy/calcula-apto.js` (pesos e cortes sem explicação; characterization em `src/__tests__/unit/legacy/`) Teste: `src/__tests__/unit/RN_ENR_006.apto.unit.test.ts` (2) Confiança: inferred Dono: <pessoa> Desde: 2026-08-30 Última revisão: 2026-08-30
 
 ## Regras transversais (vivem no vault, não aqui)
 

@@ -9,7 +9,7 @@ module.exports = {
       name: 'adr-0003-domain-puro',
       severity: 'error',
       comment:
-        'ADR-0003: src/domain não importa application, infrastructure nem interfaces. ' +
+        'ADR-0003: src/domain não importa application, infrastructure, interfaces. ' +
         'Defina uma porta (interface) no domínio e implemente fora.',
       from: { path: '^src/domain' },
       to: { path: '^src/(application|infrastructure|interfaces)' },

@@ -3,6 +3,7 @@ import type { EventoIngestao } from '../interfaces/evento-ingestao';
 import { exigirDocumentoValido } from '../documento';
 import { achatar, aninhar } from '../unidades';
 import type { ClienteRepository } from '../cliente.repository';
+import { inferirApto } from './apto';
 
 export interface BlacklistConfig {
   /** Valores proibidos em qualquer unidade (ex.: placeholders que sistemas antigos
@@ -17,7 +18,7 @@ export type ResultadoGuarda =
 
 /**
  * Ordem fixa das guardas (docs/regras/enriquecimento.md): idempotência → dígitos →
- * blacklist → (apto e limiar: RN-ENR-004).
+ * blacklist → apto (RN-ENR-006) → limiar (RN-ENR-004).
  * Descarte por regra lança DomainRuleViolation; duplicado devolve `ok: false` (não é
  * erro, é ack).
  */
@@ -44,5 +45,6 @@ export async function aplicarGuardas(
   if (unidades.size === 0 && evento.apto === undefined) {
     throw new DomainRuleViolation('RN-ENR-003', 'descartado-blacklist');
   }
-  return { ok: true, evento: { ...evento, data: aninhar(unidades) } };
+  // RN-ENR-006 — apto inferido pelo legado quando o evento não declara
+  return { ok: true, evento: inferirApto({ ...evento, data: aninhar(unidades) }) };
 }
