@@ -3,6 +3,25 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 1,
-  "lessons": []
+  "next_id": 2,
+  "lessons": [
+    {
+      "id": "L-001",
+      "key": "spec_deviation::editing docs by exact string replacement after prettier reformats them silently no ops assert every replacement and run prettier before editing or the task closes in two commits",
+      "text": "Editing docs by exact-string replacement after prettier reformats them silently no-ops; assert every replacement and run prettier before editing, or the task closes in two commits.",
+      "signal": "spec_deviation",
+      "scope": "docs",
+      "status": "candidate",
+      "features": [
+        "001-merge-por-unidade"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/001-merge-por-unidade/validation.md (Verifier, nota 1: T6 em dois commits) (docs)"
+      ],
+      "created": "2026-08-30T16:54:41Z",
+      "last_seen": "2026-08-30T16:54:41Z"
+    }
+  ]
 }

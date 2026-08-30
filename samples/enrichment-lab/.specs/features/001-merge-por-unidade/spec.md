@@ -100,13 +100,13 @@ Each requirement gets a unique ID for tracking across design, tasks, and validat
 
 | Requirement ID | Story | Phase | Status |
 | -------------- | ----- | ----- | ------ |
-| ING-01 | P1: documento novo cria cadastro com versão 1 | In Tasks | In Tasks |
-| ING-02 | P1: unidade ausente é preenchida mesmo de evento antigo | In Tasks | In Tasks |
-| ING-03 | P1: sobrescreve só se estritamente mais novo; empate mantém | In Tasks | In Tasks |
-| ING-04 | P1: provedor só preenche lacuna ou sobrescreve provedor | In Tasks | In Tasks |
-| ING-05 | P1: limiar de completude recusa com RN-ENR-004 | In Tasks | In Tasks |
-| ING-06 | P1: anti-eco — nada muda, nada grava, sem evento | In Tasks | In Tasks |
-| ING-07 | P1: um ClienteAtualizado v1 por mudança; worker orquestra | In Tasks | In Tasks |
+| ING-01 | P1: documento novo cria cadastro com versão 1 | Done | ✅ Verified |
+| ING-02 | P1: unidade ausente é preenchida mesmo de evento antigo | Done | ✅ Verified |
+| ING-03 | P1: sobrescreve só se estritamente mais novo; empate mantém | Done | ✅ Verified |
+| ING-04 | P1: provedor só preenche lacuna ou sobrescreve provedor | Done | ✅ Verified |
+| ING-05 | P1: limiar de completude recusa com RN-ENR-004 | Done | ✅ Verified |
+| ING-06 | P1: anti-eco — nada muda, nada grava, sem evento | Done | ✅ Verified |
+| ING-07 | P1: um ClienteAtualizado v1 por mudança; worker orquestra | Done | ✅ Verified |
 
 **ID format:** `[CATEGORY]-[NUMBER]` · **Status values:** Pending → In Design → In Tasks → Implementing → Verified
 **Coverage:** 7 total, 7 mapped to tasks (T1–T6), 0 unmapped

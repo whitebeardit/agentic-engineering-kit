@@ -32,10 +32,10 @@
 ## Handoff
 
 - **Feature**: 001-merge-por-unidade / `.specs/features/001-merge-por-unidade`
-- **Phase / Task**: T1–T6 Done — aguardando Verifier (validation.md)
+- **Phase / Task**: Done — Verifier PASS (validation.md: 7/7 ACs, gate 44/44, sensor 3/3 mortos); validate_state.py exit 0
 - **Completed**: T1, T2, T3, T4, T5, T6
 - **In-progress** (file:line): none
-- **Next step**: Verifier (autor ≠ verificador) com mutantes; depois `validate_state.py`
+- **Next step**: próxima feature candidata: 002 — consulta ao provedor quando o documento não existe (hybrid miss: 200/202/404 com cache negativo), ou consumidor do `ClienteAtualizado` no repo do CRM (fora deste repo)
 - **Blockers**: none
-- **Uncommitted files**: none após o commit de T6
-- **Branch**: kit/v0.3
+- **Uncommitted files**: none após o commit de validação
+- **Branch**: kit/v0.3 → main (kit--v0.3.0)
