@@ -89,11 +89,11 @@ T4 → T5 → T6
 **Tools**:
 - MCP: NONE
 **Done when**:
-- [ ] Evento e porta compilam; adaptador guarda os eventos e tem `limpar()`
-- [ ] Build gate passes: `npm run gate` exit 0
+- [x] Evento e porta compilam; adaptador guarda os eventos e tem `limpar()`
+- [x] Build gate passes: `npm run gate` exit 0
 **Tests**: none (coberto por T4/T5)
 **Gate**: build
-**Status**: Pending
+**Status**: ✅ Done
 
 ---
 
