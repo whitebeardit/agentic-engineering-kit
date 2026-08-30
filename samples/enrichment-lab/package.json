@@ -1,0 +1,50 @@
+{
+  "name": "enrichment-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Laboratório do kit Whitebeard: serviço de enriquecimento de cadastro em miniatura (Node/TypeScript). Sintético.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "dist/src/main.js",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "jest --ci",
+    "test:unit": "jest --ci --selectProjects unit",
+    "test:int": "jest --ci --selectProjects int",
+    "test:regra": "jest --ci -t 'RN_ENR_'",
+    "test:arquitetura": "jest --ci -t 'ADR-'",
+    "baseline": "jest -u -t 'characterization'",
+    "gate": "npm run typecheck && npm run lint && npm test",
+    "build": "tsc -p tsconfig.build.json && cp -r src/contracts dist/src/",
+    "start": "node dist/src/main.js",
+    "dev": "npm run build && node dist/src/main.js"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "express": "^5.1.0",
+    "express-openapi-validator": "^5.6.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@faker-js/faker": "^9.9.0",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.19.0",
+    "@types/supertest": "^6.0.3",
+    "dependency-cruiser": "^18.2.0",
+    "eslint": "^9.39.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
+    "jest": "^30.5.0",
+    "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.12",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.68.0"
+  }
+}

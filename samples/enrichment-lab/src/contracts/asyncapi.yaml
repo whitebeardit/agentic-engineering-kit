@@ -1,0 +1,40 @@
+asyncapi: 3.0.0
+info:
+  title: enrichment-lab — eventos publicados
+  version: 1.0.0
+  description: |
+    Catálogo dos eventos que este serviço PUBLICA. Mudar um campo de um evento
+    publicado = nova versão
+    (rules/contracts.md; AD-001). O consumidor conhecido está listado para o revisor
+    de contrato saber quem quebra.
+channels:
+  cliente-atualizado:
+    address: cliente.atualizado.v1
+    messages:
+      ClienteAtualizado:
+        $ref: '#/components/messages/ClienteAtualizadoV1'
+operations:
+  publicarClienteAtualizado:
+    action: send
+    channel:
+      $ref: '#/channels/cliente-atualizado'
+    summary: |
+      Emitido uma vez por mudança real do cadastro (RN-ENR-004, feature 001 — pendente).
+components:
+  messages:
+    ClienteAtualizadoV1:
+      name: ClienteAtualizado
+      title: Cliente atualizado (v1)
+      summary: |
+        Consumidores conhecidos — CRM interno (leitura do cadastro consolidado por GET
+        /v1/clientes/{documento}).
+      payload:
+        type: object
+        additionalProperties: false
+        required: [type, version, documento, versao, occurredAt]
+        properties:
+          type: { const: ClienteAtualizado }
+          version: { const: 1 }
+          documento: { type: string }
+          versao: { type: integer, minimum: 1 }
+          occurredAt: { type: string, format: date-time }

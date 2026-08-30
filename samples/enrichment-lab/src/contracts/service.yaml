@@ -1,0 +1,120 @@
+openapi: 3.0.3
+info:
+  title: enrichment-lab
+  version: 2.1.0
+  description: |
+    Serviço de enriquecimento de cadastro em miniatura (laboratório do kit
+    Whitebeard). Contract-first:
+    este arquivo valida request E response em runtime (`validateResponses: true`).
+    Rota que não está aqui
+    não existe para o serviço — exceto as operacionais (`/health`), registradas antes
+    do validador.
+    O payload de `POST /v1/eventos` tem o envelope descrito aqui; o schema
+    autoritativo é
+    `evento-ingestao.schema.json` (JSON Schema 2020-12), aplicado antes de enfileirar.
+paths:
+  /v1/eventos:
+    post:
+      operationId: publicarEvento
+      summary: |
+        Recebe um evento de cadastro e o enfileira (202). Nada é gravado de forma
+        síncrona.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventoIngestaoEnvelope'
+      responses:
+        '202':
+          description: Aceito para processamento assíncrono.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Aceito'
+        '400':
+          description: Payload fora do contrato ou do schema do evento.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+  /v1/clientes/{documento}:
+    get:
+      operationId: consultarCliente
+      summary: |
+        Consulta o cadastro consolidado. Pull-only; ETag = versão; If-None-Match → 304.
+      parameters:
+        - name: documento
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9]{11}$|^[0-9]{14}$'
+        - name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cadastro consolidado.
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '304':
+          description: Não modificado desde a versão informada.
+        '404':
+          description: Documento sem cadastro.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+components:
+  schemas:
+    EventoIngestaoEnvelope:
+      type: object
+      description: Envelope frouxo; o schema completo é evento-ingestao.schema.json.
+      required:
+        [schemaVersion, type, origin, eventId, updatedAt, documento, tipoPessoa, data]
+      properties:
+        schemaVersion: { type: string, enum: ['2.1'] }
+        type: { type: string, enum: [CLIENTE.NOVO, CLIENTE.ATUALIZADO] }
+        origin: { type: string }
+        eventId: { type: string, format: uuid }
+        updatedAt: { type: string, format: date-time }
+        documento: { type: string }
+        tipoPessoa: { type: string, enum: [F, J] }
+        apto: { type: boolean }
+        data: { type: object }
+    Aceito:
+      type: object
+      required: [message, cid]
+      additionalProperties: false
+      properties:
+        message: { type: string, enum: [aceito] }
+        cid: { type: string }
+    Cliente:
+      type: object
+      required: [documento, tipoPessoa, versao, data]
+      additionalProperties: false
+      properties:
+        documento: { type: string }
+        tipoPessoa: { type: string, enum: [F, J] }
+        versao: { type: integer, minimum: 1 }
+        apto: { type: boolean }
+        data: { type: object }
+    Erro:
+      type: object
+      required: [erro, mensagem]
+      additionalProperties: false
+      properties:
+        erro: { type: string }
+        mensagem: { type: string }
+        detalhes:
+          type: array
+          items: { type: string }

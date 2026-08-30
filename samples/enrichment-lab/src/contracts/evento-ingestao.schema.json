@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kit.whitebeard.dev/enrichment-lab/evento-ingestao/2.1",
+  "title": "Evento de ingestão de cadastro (v2.1)",
+  "description": "Fonte de verdade do payload de POST /v1/eventos (Ajv 2020-12).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "type",
+    "origin",
+    "eventId",
+    "updatedAt",
+    "documento",
+    "tipoPessoa",
+    "data"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "2.1"
+    },
+    "type": {
+      "enum": ["CLIENTE.NOVO", "CLIENTE.ATUALIZADO"]
+    },
+    "origin": {
+      "type": "string",
+      "pattern": "^(cliente|provedor):[a-z0-9-]+$"
+    },
+    "eventId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "documento": {
+      "type": "string",
+      "pattern": "^[0-9]{11}$|^[0-9]{14}$"
+    },
+    "tipoPessoa": {
+      "enum": ["F", "J"]
+    },
+    "apto": {
+      "type": "boolean"
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cadastro": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "nome": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 120
+            },
+            "canalEntrada": {
+              "enum": ["app", "site", "loja", "parceiro"]
+            }
+          }
+        },
+        "contato": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "telefone": {
+              "type": "string",
+              "pattern": "^[0-9]{10,11}$"
+            }
+          }
+        },
+        "endereco": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cep": {
+              "type": "string",
+              "pattern": "^[0-9]{8}$"
+            },
+            "cidade": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "uf": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "tipoPessoa": {
+            "const": "F"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "documento": {
+            "pattern": "^[0-9]{11}$",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "tipoPessoa": {
+            "const": "J"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "documento": {
+            "pattern": "^[0-9]{14}$",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "apto": {
+            "const": true
+          }
+        },
+        "required": ["apto"]
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "properties": {
+              "cadastro": {
+                "required": ["canalEntrada"],
+                "type": "object",
+                "properties": {
+                  "canalEntrada": true
+                }
+              }
+            },
+            "required": ["cadastro"],
+            "type": "object"
+          }
+        }
+      }
+    }
+  ]
+}
