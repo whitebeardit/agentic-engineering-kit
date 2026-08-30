@@ -6,7 +6,7 @@
 - **Hooks**: `format.sh` (despacha por extensão: dotnet format · prettier + eslint); `protect-paths.sh` também bloqueia `__snapshots__/*.snap`; `guard-bash.sh` também bloqueia `jest -u`/`--updateSnapshot`, `npm run baseline`, `npm publish`, `npm version`.
 - **Agentes**: `code-reviewer` (agnóstico, com perfil .NET e Node/TS); `dotnet-reviewer` mantido por compatibilidade; `test-designer` cita snapshot + faker.
 - **Rules/skills**: globs Node (`**/legacy/**`, `**/contracts/**`, `**/events/**`, `**/*.schema.json`, `src/domain/**`).
-- Manifestos 0.3.0 (keywords `node`, `typescript`). `samples/orders-sample` inalterado; em `tools/gen-ebook.py` só o intervalo do `git log` foi fixado em `545d58a..kit--v0.2.0` (antes `..HEAD`, que passaria a listar commits do enrichment-lab) — HTML do e-book byte a byte igual ao anterior.
+- Manifestos 0.3.0 (keywords `node`, `typescript`). `samples/orders-sample` inalterado; em `tools/gen-ebook.py` só o intervalo do `git log` foi fixado em `545d58a..kit--v0.2.0` (antes `..HEAD`, que passaria a listar commits do enrichment-lab) — no HTML do e-book só mudam as linhas de globs novas das rules/skill embutidas (5 linhas).
 
 ## kit--v0.2.0 — 2026-08-29
 - Plugin Claude Code + Cursor com o tlc-spec-driven como dependência; `samples/orders-sample` (.NET) e e-book "Engenharia com Agentes em .NET".
