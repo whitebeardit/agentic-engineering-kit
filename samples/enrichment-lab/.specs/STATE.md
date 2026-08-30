@@ -31,11 +31,11 @@
 
 ## Handoff
 
-- **Feature**: nenhuma em curso — próximo card: `docs/cards/ENR-042.md` (RN-ENR-004, feature `001-merge-por-unidade`)
-- **Phase / Task**: esqueleto pronto (guardas RN-ENR-001/002/003, gravação RN-ENR-005, contrato, worker, legado + characterization, arquitetura)
-- **Completed**: —
+- **Feature**: 001-merge-por-unidade / `.specs/features/001-merge-por-unidade`
+- **Phase / Task**: T1–T6 Done — aguardando Verifier (validation.md)
+- **Completed**: T1, T2, T3, T4, T5, T6
 - **In-progress** (file:line): none
-- **Next step**: `card-intake` do ENR-042 (briefing já em `docs/cards/`) → `specify feature 001-merge-por-unidade`
+- **Next step**: Verifier (autor ≠ verificador) com mutantes; depois `validate_state.py`
 - **Blockers**: none
-- **Uncommitted files**: none
-- **Branch**: main
+- **Uncommitted files**: none após o commit de T6
+- **Branch**: kit/v0.3

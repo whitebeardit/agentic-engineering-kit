@@ -19,7 +19,7 @@ operations:
     channel:
       $ref: '#/channels/cliente-atualizado'
     summary: |
-      Emitido uma vez por mudança real do cadastro (RN-ENR-004, feature 001 — pendente).
+      Emitido uma vez por mudança real do cadastro (RN-ENR-004, feature 001).
 components:
   messages:
     ClienteAtualizadoV1:

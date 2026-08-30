@@ -7,7 +7,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 - Instalar: `npm install` (≈ 30 s, uma vez; Node 22 — `.nvmrc`)
 - Gate: `npm run gate` = `tsc --noEmit && eslint . && jest --ci` (≈ 9 s; é o que o agente obedece)
 - Tipos: `npm run typecheck` (≈ 2 s) · Lint: `npm run lint` (≈ 4 s; `legacy/` emite warnings da rampa, nunca erro — ver Gotchas)
-- Testes: `npm test` (≈ 3 s; 30 testes: 16 regra RN_ENR_*, 3 arquitetura, 1 characterization, 10 integração)
+- Testes: `npm test` (≈ 3 s; 44 testes: 29 regra RN_ENR_*, 3 arquitetura, 1 characterization, 11 integração)
 - Só a regra: `npm run test:regra` (`jest -t 'RN_ENR_'`) · Só arquitetura: `npm run test:arquitetura` · Unit/int: `npm run test:unit` / `npm run test:int`
 - Subir: `npm run dev` (build + `http://localhost:3000`: `POST /v1/eventos`, `GET /v1/clientes/{documento}`, `/health`)
 
@@ -22,7 +22,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 - `legacy/` não é type-checked (só `legacy/*.d.ts` entra no `tsc`); o lint dele é a rampa em `eslint.config.mjs` (`// Rampa`): severidade sobe por regra, com dono e data, nunca com `eslint-disable` no arquivo.
 - Contrato em duas camadas: `src/contracts/service.yaml` valida request **e** response (rota fora dele = 404; `/health` é registrado antes); o payload de `POST /v1/eventos` é validado pelo `evento-ingestao.schema.json` (Ajv 2020-12) antes de enfileirar — o validador OpenAPI não expressa esse schema.
 - A fila em memória reentrega na hora (sem visibility timeout): uma mensagem envenenada vai para a DLQ em cinco recebimentos numa passada só.
-- Ordem das guardas é fixa (`docs/regras/enriquecimento.md`): idempotência → dígitos → blacklist → apto pelo legado (RN-ENR-006) → limiar e merge (RN-ENR-004, pendente) → gravação condicional.
+- Ordem das guardas é fixa (`docs/regras/enriquecimento.md`): idempotência → dígitos → blacklist → apto pelo legado (RN-ENR-006) → limiar e merge (RN-ENR-004) → gravação condicional (RN-ENR-005).
 
 ## Onde estão as regras
 
