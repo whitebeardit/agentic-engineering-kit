@@ -9,6 +9,9 @@ export default tseslint.config(
     files: ['**/*.{js,mjs,cjs}'],
     ...js.configs.recommended,
     languageOptions: { globals: globals.node },
+    rules: {
+      'max-len': ['error', { code: 88, ignoreUrls: true, ignoreStrings: true }],
+    },
   },
   {
     files: ['src/**/*.ts', 'legacy/**/*.d.ts'],
@@ -26,7 +29,8 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'no-console': 'error',
       eqeqeq: 'error',
-      // 88 colunas, comentários inclusive (o prettier não os quebra); imports e strings ficam de fora.
+      // 88 colunas, comentários inclusive (o prettier não os quebra); imports e
+      // strings ficam de fora.
       'max-len': [
         'error',
         {

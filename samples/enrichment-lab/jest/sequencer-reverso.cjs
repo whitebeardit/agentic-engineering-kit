@@ -1,5 +1,5 @@
-// Roda os arquivos de teste na ordem inversa da padrão. Serve para expor teste que só passa
-// porque outro arquivo rodou antes (dependência de ordem). Uso: npm run test:reverso
+// Roda os arquivos de teste na ordem inversa da padrão: expõe teste que só passa porque
+// outro arquivo rodou antes (dependência de ordem). Uso: npm run test:reverso
 const Sequencer = require('@jest/test-sequencer').default;
 
 module.exports = class SequenciadorReverso extends Sequencer {

@@ -1,5 +1,8 @@
 # Changelog
 
+## kit--v0.3.4 — 2026-08-30
+- enrichment-lab: `max-len` 88 também nos `.js/.cjs/.mjs`; comentário do sequenciador reembrulhado.
+
 ## kit--v0.3.3 — 2026-08-30
 - enrichment-lab: `jest/sequencer-reverso.cjs` + `npm run test:reverso` (roda os arquivos de teste ao contrário para expor dependência de ordem).
 
