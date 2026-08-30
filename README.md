@@ -1,7 +1,7 @@
 # Whitebeard · Agentic Engineering Kit
 
-Como a Whitebeard desenvolve software com agentes de IA — e como implanta e ensina isso em clientes (.NET, legado,
-microserviços, cards no Jira ou ClickUp). É o lado executável do roteiro em 7 fases
+Como a Whitebeard desenvolve software com agentes de IA — e como implanta e ensina isso em clientes (Node/TypeScript,
+.NET, legado, microserviços, cards no Jira ou ClickUp). É o lado executável do roteiro em 7 fases
 (vault: `30-Areas/Whitebeard/agentes-ia/processo-engenharia-com-agentes.md`;
 página: https://claude.ai/code/artifact/e53c902f-b3b0-4334-b3f8-cc52c73f26bb).
 
@@ -30,12 +30,21 @@ claude plugin update tlc@whitebeard-kit           # ou ative auto-update em /plu
 ```bash
 npx -y @tech-leads-club/agent-skills install -s tlc-spec-driven -a cursor -g
 ```
-**No repositório** (enforcement: contexto canônico, permissões, hooks, rules, perfil .NET):
+**No repositório** (enforcement: contexto canônico, permissões, hooks, rules, perfil Node/TS ou .NET):
 ```bash
 git clone git@github.com:whitebeardit/agentic-engineering-kit.git ~/DEV/WHITEBEARD/agentic-engineering-kit
-~/DEV/WHITEBEARD/agentic-engineering-kit/apply.sh /caminho/do/repo --claude --cursor --with-tlc --dotnet
+~/DEV/WHITEBEARD/agentic-engineering-kit/apply.sh /caminho/do/repo --claude --cursor --with-tlc --node-ts   # ou --dotnet
 ```
 `--standalone` copia skills e agentes para `.claude/`/`.cursor/` de quem não usa marketplace (nomes sem o prefixo `kit:`).
+
+## Dois laboratórios, dois perfis
+
+| Laboratório | Stack | Onde é usado | Rodar |
+|---|---|---|---|
+| `samples/enrichment-lab` | Node 22 / TypeScript — serviço de enriquecimento de cadastro em miniatura (contract-first, fila, worker com guardas, merge por unidade, legado com characterization) | livro *Cercando a IA* | `npm install && npm run gate` |
+| `samples/orders-sample` | .NET 10 — serviço de pedidos (regra RN-ORD-012, ArchUnitNET, Verify+Bogus, rampa de analyzers) | e-book *Engenharia com Agentes em .NET* (`tools/gen-ebook.py`) | `dotnet build Orders.slnx && dotnet test Orders.slnx` |
+
+Os cinco mecanismos são os mesmos; a tabela ferramenta a ferramenta está em `docs/perfil-node-ts.md`.
 
 ## Princípios (o kit existe para impor estes, não para descrevê-los)
 

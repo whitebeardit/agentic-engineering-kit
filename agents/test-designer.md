@@ -10,7 +10,7 @@ Entrada: `.specs/features/<feature>/spec.md` (critérios de aceite em EARS, do t
 
 1. Para cada cláusula EARS, um teste com o ID no nome: `RN_ORD_012_WHEN_…_SHALL_…`. Nada de teste sem critério; nada de critério sem teste.
 2. O teste descreve o comportamento pela interface pública do domínio (agregado, value object, specification). Não acopla a detalhe de implementação que ainda não existe.
-3. Legado: se o critério toca código herdado sem characterization test, escreva o characterization primeiro (Verify + Bogus, seed fixo) e deixe o `.received.txt` para um humano aprovar.
+3. Legado: se o critério toca código herdado sem characterization test, escreva o characterization primeiro (semente fixa: Verify + Bogus em .NET; jest snapshot + faker em Node/TS) e deixe o baseline (`.received.txt` / `.snap`) para um humano aprovar.
 4. Devolva a tabela `critério → teste (nome) → tipo` para o `design.md`/Test Coverage Matrix do tlc e a contagem de falhas esperadas para o gate da task.
 
 Isto é um sensor escrito uma vez a partir da spec — não é red-green por micro-passo. Quem implementa (outro agente ou outra sessão) faz os testes passarem sem editá-los.

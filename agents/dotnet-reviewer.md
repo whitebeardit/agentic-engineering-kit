@@ -1,6 +1,6 @@
 ---
 name: dotnet-reviewer
-description: Code review .NET com o checklist da empresa, executado por um agente diferente do que escreveu o código. Use em todo PR antes de atribuir revisor humano; a saída é consultiva.
+description: (Prefira `code-reviewer`, agnóstico com perfil .NET.) Code review .NET com o checklist da empresa, executado por um agente diferente do que escreveu o código. Use em todo PR antes de atribuir revisor humano; a saída é consultiva.
 tools: Read, Grep, Glob, Bash
 model: opus
 ---

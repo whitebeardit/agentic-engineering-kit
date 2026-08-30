@@ -14,6 +14,8 @@ case "$cmd" in
   *"dotnet ef database update"*|*"dotnet ef migrations remove"*)  why="migration aplicada/removida pelo agente" ;;
   *"rm -rf /"*|*"rm -rf ~"*|*"rm -rf \$HOME"*)                    why="remoção destrutiva" ;;
   *"git checkout -- ."*|*"git reset --hard"*)                     why="descarte de trabalho não commitado" ;;
+  *"jest -u"*|*"jest --ci -u"*|*"--updateSnapshot"*|*"npm run baseline"*) why="baseline de characterization test só humano aprova (npm run baseline no terminal)" ;;
+  *"npm publish"*|*"npm version"*)                                why="publicação/versionamento é do humano" ;;
 esac
 [ -z "$why" ] && exit 0
 reason="$why — veja AGENTS.md › Never. Se for realmente necessário, um humano executa."

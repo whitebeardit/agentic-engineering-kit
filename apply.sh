@@ -2,19 +2,20 @@
 # apply.sh — implanta o que é ENFORCEMENT do kit num repositório, sem sobrescrever o que já existe.
 # Skills, agentes e MCP vêm do plugin (Claude: kit@whitebeard-kit · Cursor: plugin kit) — use --standalone para copiá-los.
 #
-# uso: apply.sh /caminho/do/repo [--claude] [--cursor] [--standalone] [--with-tlc] [--dotnet] [--root]
+# uso: apply.sh /caminho/do/repo [--claude] [--cursor] [--standalone] [--with-tlc] [--dotnet] [--node-ts] [--root]
 #   --claude      (default) AGENTS.md, CLAUDE.md, .claude/settings.json (permissões + hooks), .claude/hooks, .claude/rules, DoR, ADR template
 #   --cursor      AGENTS.md, .cursor/hooks.json, .cursor/hooks, .cursor/rules (*.mdc), .cursorignore
 #   --standalone  também copia skills/ e agents/ para .claude/ e/ou .cursor/ (para quem não usa marketplace)
 #   --with-tlc    instala o tlc-spec-driven ORIGINAL (Claude: marketplace do kit · Cursor: CLI do Tech Leads Club) — nunca copiado
-#   --dotnet      Directory.Build.props, .editorconfig, nuget.config, exemplo de teste de arquitetura
+#   --dotnet      Directory.Build.props, .editorconfig, nuget.config, exemplo de teste de arquitetura (perfil .NET)
+#   --node-ts     tsconfig, eslint (rampa), dependency-cruiser, jest, prettier — exemplos em docs/node-ts/ (perfil Node/TypeScript)
 #   --root        usa AGENTS.root.md (workspace pai) em vez de AGENTS.md (serviço)
 set -euo pipefail
 KIT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET="${1:?informe o caminho do repositório}"; shift || true
-CLAUDE=0; CURSOR=0; STANDALONE=0; WITH_TLC=0; DOTNET=0; ROOT=0
+CLAUDE=0; CURSOR=0; STANDALONE=0; WITH_TLC=0; DOTNET=0; NODETS=0; ROOT=0
 for a in "$@"; do case "$a" in
-  --claude) CLAUDE=1;; --cursor) CURSOR=1;; --standalone) STANDALONE=1;; --with-tlc) WITH_TLC=1;; --dotnet) DOTNET=1;; --root) ROOT=1;;
+  --claude) CLAUDE=1;; --cursor) CURSOR=1;; --standalone) STANDALONE=1;; --with-tlc) WITH_TLC=1;; --dotnet) DOTNET=1;; --node-ts) NODETS=1;; --root) ROOT=1;;
   *) echo "flag desconhecida: $a" >&2; exit 1;; esac; done
 [ $CLAUDE -eq 0 ] && [ $CURSOR -eq 0 ] && CLAUDE=1
 [ -d "$TARGET" ] || { echo "diretório não existe: $TARGET" >&2; exit 1; }
@@ -29,7 +30,7 @@ copy "$KIT/docs/adr/0000-template.md" "$TARGET/docs/adr/0000-template.md"
 if [ $CLAUDE -eq 1 ]; then
   copy "$KIT/templates/CLAUDE.md" "$TARGET/CLAUDE.md"
   copy "$KIT/templates/.claude/settings.json" "$TARGET/.claude/settings.json"
-  for f in protect-paths.sh guard-bash.sh dotnet-format.sh; do copy "$KIT/hooks/$f" "$TARGET/.claude/hooks/$f"; done
+  for f in protect-paths.sh guard-bash.sh format.sh dotnet-format.sh; do copy "$KIT/hooks/$f" "$TARGET/.claude/hooks/$f"; done
   for f in "$KIT"/rules/*.md; do copy "$f" "$TARGET/.claude/rules/$(basename "$f")"; done
   chmod +x "$TARGET"/.claude/hooks/*.sh
   if [ $STANDALONE -eq 1 ]; then
@@ -42,7 +43,7 @@ fi
 
 if [ $CURSOR -eq 1 ]; then
   copy "$KIT/templates/.cursor/hooks.json" "$TARGET/.cursor/hooks.json"
-  for f in protect-paths.sh guard-bash.sh dotnet-format.sh tlc-version.sh; do copy "$KIT/hooks/$f" "$TARGET/.cursor/hooks/$f"; done
+  for f in protect-paths.sh guard-bash.sh format.sh dotnet-format.sh tlc-version.sh; do copy "$KIT/hooks/$f" "$TARGET/.cursor/hooks/$f"; done
   for f in "$KIT"/cursor/rules/*.mdc; do copy "$f" "$TARGET/.cursor/rules/$(basename "$f")"; done
   copy "$KIT/templates/.cursorignore" "$TARGET/.cursorignore"
   chmod +x "$TARGET"/.cursor/hooks/*.sh
@@ -57,6 +58,11 @@ if [ $DOTNET -eq 1 ]; then
   copy "$KIT/dotnet/.editorconfig" "$TARGET/.editorconfig"
   copy "$KIT/dotnet/nuget.config" "$TARGET/nuget.config"
   copy "$KIT/dotnet/ArchitectureTests.example.cs" "$TARGET/docs/ArchitectureTests.example.cs"
+fi
+
+if [ $NODETS -eq 1 ]; then
+  for f in "$KIT"/node-ts/*; do copy "$f" "$TARGET/docs/node-ts/$(basename "$f")"; done
+  echo "  ! node-ts: exemplos em docs/node-ts/ — adapte e mova para a raiz (tsconfig, eslint com rampa, dependency-cruiser, jest, prettier)"
 fi
 
 if [ $WITH_TLC -eq 1 ]; then

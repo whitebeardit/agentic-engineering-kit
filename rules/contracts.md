@@ -5,6 +5,9 @@ paths:
   - "**/Contracts/**"
   - "**/*.Contracts/**"
   - "**/Events/**"
+  - "**/contracts/**"
+  - "**/events/**"
+  - "**/*.schema.json"
 ---
 # Contratos (ativa ao tocar em API, eventos ou DTOs públicos)
 

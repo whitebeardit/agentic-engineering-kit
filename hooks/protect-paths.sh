@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bloqueia segredos, migrations, artefatos gerados e baselines de characterization test.
+# Bloqueia segredos, migrations, artefatos gerados e baselines de characterization test (.verified.txt e snapshots do jest).
 # Claude Code: PreToolUse (Edit|Write|MultiEdit) → exit 2 + stderr.  Cursor: beforeReadFile → JSON deny; afterFileEdit → reverte + avisa.
 input=$(cat)
 read -r kind f < <(printf '%s' "$input" | python3 -c '
@@ -11,7 +11,7 @@ else:
     print("cursor-edit" if "edits" in d else "cursor", d.get("file_path") or "")' 2>/dev/null)
 [ -z "$f" ] && exit 0
 case "$f" in
-  *.env|*.env.*|*/appsettings.*.json|*/secrets/*|*/Migrations/*|*/migrations/*|*/docs/generated/*|*.verified.txt) ;;
+  *.env|*.env.*|*/appsettings.*.json|*/secrets/*|*/Migrations/*|*/migrations/*|*/docs/generated/*|*.verified.txt|*/__snapshots__/*|*.snap) ;;
   *) exit 0 ;;
 esac
 reason="'$f' é segredo, migration, artefato gerado ou baseline de characterization test. Mudança aqui passa por humano em PR separado — veja AGENTS.md › Never."

@@ -5,6 +5,8 @@ paths:
   - "docs/regras/**"
   - "src/**/Domain/**"
   - "src/**.Domain/**"
+  - "src/domain/**"
+  - "src/**/domain/**"
 ---
 # regras-de-negocio
 

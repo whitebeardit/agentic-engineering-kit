@@ -413,7 +413,7 @@ flowchart LR
 {term(asset("gate-T4.txt").strip(), "T4 · gate depois (build fresco, 0 warnings)")}
 <p>O commit só é aceito se a mensagem passar no <code>check_commit.py</code> (Conventional Commits). O script reprovou a minha primeira tentativa:</p>
 {term(TERM_CHECK_COMMIT, "gate da mensagem de commit")}
-{term(sh("git log --oneline 545d58a..HEAD"), "commits da feature — um por task (git log)")}
+{term(sh("git log --oneline 545d58a..kit--v0.2.0"), "commits da feature — um por task (git log)")}
 
 <h3>6. O erro que virou lição</h3>
 <p>Na task T5 o build quebrou (um <code>using</code> ausente), mas o gate que eu registrei veio de <code>dotnet test --no-build</code> — rodando o binário da task anterior. Passou. Era falso. O tlc chama isso de <em>victory declaration bias</em>, e a regra dele é literal: o test runner decide, não a auto-avaliação; exit code diferente de zero é STOP.</p>

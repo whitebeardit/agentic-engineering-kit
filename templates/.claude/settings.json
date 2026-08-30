@@ -6,6 +6,13 @@
       "Bash(dotnet test *)",
       "Bash(dotnet format *)",
       "Bash(dotnet restore *)",
+      "Bash(npm run *)",
+      "Bash(npm test*)",
+      "Bash(npm ci)",
+      "Bash(npx tsc *)",
+      "Bash(npx jest *)",
+      "Bash(npx eslint *)",
+      "Bash(npx prettier *)",
       "Bash(git status *)",
       "Bash(git diff *)",
       "Bash(git log *)",
@@ -48,7 +55,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dotnet-format.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format.sh"
           }
         ]
       }
