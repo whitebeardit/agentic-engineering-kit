@@ -161,8 +161,8 @@ T4 → T5 → T6
 **Tools**:
 - MCP: NONE
 **Done when**:
-- [ ] Bloco `verified`; contagens batem com `npm test`
-- [ ] Build gate passes: `npm run gate` exit 0
+- [x] Bloco `verified`; contagens batem com `npm test`
+- [x] Build gate passes: `npm run gate` exit 0
 **Tests**: none
 **Gate**: build
-**Status**: Pending
+**Status**: ✅ Done
