@@ -87,7 +87,8 @@ export class EventoIngestaoWorker {
     }
   }
 
-  /** Só orquestra: carrega, delega a decisão ao domínio, grava condicionalmente e publica. */
+  /** Só orquestra: carrega, delega a decisão ao domínio, grava condicionalmente e
+   * publica. */
   private async gravarComRetry(
     evento: EventoIngestao,
   ): Promise<'gravado' | 'sem-mudanca'> {

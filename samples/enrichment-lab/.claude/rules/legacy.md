@@ -1,10 +1,11 @@
 ---
 paths:
-  - "**/erp-mono/**"
-  - "**/Legacy/**"
-  - "**/*.Legacy/**"
-  - "**/legacy/**"
+  - '**/erp-mono/**'
+  - '**/Legacy/**'
+  - '**/*.Legacy/**'
+  - '**/legacy/**'
 ---
+
 # Legado (ativa ao tocar no monolito)
 
 - **Nenhum refactor sem characterization test** cobrindo o fluxo (semente fixa: Verify + Bogus · jest snapshot + faker). Se não existe, a primeira task é criá-lo.

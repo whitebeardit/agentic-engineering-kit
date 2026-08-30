@@ -1,6 +1,8 @@
 /**
- * Contrato público (v1): consumido por outro serviço (CRM). Mudar campo = `cliente-atualizado.v2.ts`, nunca
- * edição in-place (AD-001; rules/contracts.md). Catalogado em src/contracts/asyncapi.yaml.
+ * Contrato público (v1): consumido por outro serviço (CRM). Mudar campo = `cliente-
+ * atualizado.v2.ts`, nunca
+ * edição in-place (AD-001; rules/contracts.md). Catalogado em
+ * src/contracts/asyncapi.yaml.
  */
 export interface ClienteAtualizadoV1 {
   readonly type: 'ClienteAtualizado';

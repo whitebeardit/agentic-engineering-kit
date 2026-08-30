@@ -5,7 +5,8 @@ import { achatar } from '../unidades';
 export type Elegibilidade = { ok: true } | { ok: false; motivo: 'descartado-limiar' };
 
 /**
- * RN-ENR-004 (ING-05) — limiar de completude: um evento com menos de N unidades não pode alterar um cadastro
+ * RN-ENR-004 (ING-05) — limiar de completude: um evento com menos de N unidades não
+ * pode alterar um cadastro
  * que já tem N ou mais. Evento de provedor nunca é recusado por isto.
  */
 export const EventoElegivelParaMerge = {

@@ -12,11 +12,13 @@ const igual = (a: unknown, b: unknown): boolean =>
 const instante = (iso: string): number => Date.parse(iso);
 
 /**
- * RN-ENR-004 (ING-02/03/04/06) — merge por unidade folha. Função pura: não grava, não decide versão.
+ * RN-ENR-004 (ING-02/03/04/06) — merge por unidade folha. Função pura: não grava, não
+ * decide versão.
  * - ausente → entra, mesmo de evento mais antigo;
  * - presente → só se o evento é estritamente mais novo; empate mantém;
  * - origem provedor só preenche lacuna ou sobrescreve unidade escrita por provedor;
- * - `apto` é a unidade "apto"; valor idêntico não conta como mudança (nem renova a anotação).
+ * - `apto` é a unidade "apto"; valor idêntico não conta como mudança (nem renova a
+ * anotação).
  */
 export function mesclar(
   atuais: Map<Caminho, Unidade>,

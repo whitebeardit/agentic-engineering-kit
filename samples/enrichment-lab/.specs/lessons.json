@@ -12,9 +12,7 @@
       "signal": "spec_deviation",
       "scope": "docs",
       "status": "candidate",
-      "features": [
-        "001-merge-por-unidade"
-      ],
+      "features": ["001-merge-por-unidade"],
       "recurrence": 1,
       "harmful": 0,
       "evidence": [

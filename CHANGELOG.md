@@ -1,5 +1,8 @@
 # Changelog
 
+## kit--v0.3.2 — 2026-08-30
+- enrichment-lab: `max-len` 88 colunas no lint (comentários inclusive; imports e strings isentos); comentários e nomes de teste longos reembrulhados. Nada funcional muda.
+
 ## kit--v0.3.1 — 2026-08-30
 - fix(enrichment-lab): `npm run build` copia `legacy/*.js` para `dist/` (o `npm run dev` quebrava).
 

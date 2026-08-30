@@ -17,22 +17,22 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 
 > Generated from codebase, project guidelines, and spec - confirm before Execute. Guidelines found: `AGENTS.md` (seção "Testes", tabela por camada + gates), `docs/regras/enriquecimento.md`, `docs/adr/0003`, `docs/adr/0004`.
 
-| Code Layer | Required Test Type | Coverage Expectation | Location Pattern | Run Command |
-| ---------- | ------------------ | -------------------- | ---------------- | ----------- |
-| Domain (`Cliente.aplicar`, specification, `merge.ts`, evento) | unit | 1:1 com cada cláusula EARS (ING-01..06); nome `RN_ENR_004_…`; edge cases listados na spec | `src/__tests__/unit/RN_ENR_004.merge-por-unidade.unit.test.ts` | `npm run test:regra` |
-| Infrastructure (worker) + HTTP | integration (supertest, app real, memória) | orquestra, não decide (ING-07): carrega, delega, grava, publica um evento | `src/__tests__/integration/clientes.get.int.test.ts` | `npm run test:int` |
-| Arquitetura (ADR-0003/0004) | dependency-cruiser em jest | regra de camada continua imposta; application/interfaces não importam `DomainRuleViolation` | `src/__tests__/unit/arquitetura.unit.test.ts` | `npm run test:arquitetura` |
-| Docs (`docs/regras/enriquecimento.md`) | none | gate de tipos e lint | - | `npm run typecheck && npm run lint` |
+| Code Layer                                                    | Required Test Type                         | Coverage Expectation                                                                        | Location Pattern                                               | Run Command                         |
+| ------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------- |
+| Domain (`Cliente.aplicar`, specification, `merge.ts`, evento) | unit                                       | 1:1 com cada cláusula EARS (ING-01..06); nome `RN_ENR_004_…`; edge cases listados na spec   | `src/__tests__/unit/RN_ENR_004.merge-por-unidade.unit.test.ts` | `npm run test:regra`                |
+| Infrastructure (worker) + HTTP                                | integration (supertest, app real, memória) | orquestra, não decide (ING-07): carrega, delega, grava, publica um evento                   | `src/__tests__/integration/clientes.get.int.test.ts`           | `npm run test:int`                  |
+| Arquitetura (ADR-0003/0004)                                   | dependency-cruiser em jest                 | regra de camada continua imposta; application/interfaces não importam `DomainRuleViolation` | `src/__tests__/unit/arquitetura.unit.test.ts`                  | `npm run test:arquitetura`          |
+| Docs (`docs/regras/enriquecimento.md`)                        | none                                       | gate de tipos e lint                                                                        | -                                                              | `npm run typecheck && npm run lint` |
 
 ## Gate Check Commands
 
 > Generated from codebase - confirm before Execute.
 
-| Gate Level | When to Use | Command |
-| ---------- | ----------- | ------- |
-| Quick | After tasks with unit tests only | `npm run test:regra` |
-| Full | After tasks with e2e/integration tests | `npm test` |
-| Build | After phase completion or config/entity-only tasks | `npm run gate` |
+| Gate Level | When to Use                                        | Command              |
+| ---------- | -------------------------------------------------- | -------------------- |
+| Quick      | After tasks with unit tests only                   | `npm run test:regra` |
+| Full       | After tasks with e2e/integration tests             | `npm test`           |
+| Build      | After phase completion or config/entity-only tasks | `npm run gate`       |
 
 ---
 
@@ -68,14 +68,15 @@ T4 → T5 → T6
 **Reuses**: formato dos blocos RN-ENR-001..006
 **Requirement**: ING-01, ING-02, ING-03, ING-04, ING-05, ING-06, ING-07
 **Tools**:
+
 - MCP: NONE
 - Skill: `regras-de-negocio`
-**Done when**:
+  **Done when**:
 - [x] Bloco com as cláusulas WHEN/IF da spec, `Código:` e `Teste:` apontando para os arquivos que T2–T5 criarão, `Confiança: inferred`
 - [x] Build gate passes: `npm run gate` exit 0
-**Tests**: none
-**Gate**: build
-**Status**: ✅ Done
+      **Tests**: none
+      **Gate**: build
+      **Status**: ✅ Done
 
 ---
 
@@ -87,13 +88,14 @@ T4 → T5 → T6
 **Reuses**: `FilaMemoria` como modelo de adaptador em memória; `rules/contracts.md`
 **Requirement**: ING-07
 **Tools**:
+
 - MCP: NONE
-**Done when**:
+  **Done when**:
 - [x] Evento e porta compilam; adaptador guarda os eventos e tem `limpar()`
 - [x] Build gate passes: `npm run gate` exit 0
-**Tests**: none (coberto por T4/T5)
-**Gate**: build
-**Status**: ✅ Done
+      **Tests**: none (coberto por T4/T5)
+      **Gate**: build
+      **Status**: ✅ Done
 
 ---
 
@@ -105,13 +107,14 @@ T4 → T5 → T6
 **Reuses**: `ehProvedor`, `achatar`, `Cliente.quantidadeDeCampos`
 **Requirement**: ING-05
 **Tools**:
+
 - MCP: NONE
-**Done when**:
+  **Done when**:
 - [x] 3 testes verdes com o ID da regra no nome
 - [x] Quick gate passes: `npm run test:regra` exit 0
-**Tests**: unit (3)
-**Gate**: quick
-**Status**: ✅ Done
+      **Tests**: unit (3)
+      **Gate**: quick
+      **Status**: ✅ Done
 
 ---
 
@@ -123,13 +126,14 @@ T4 → T5 → T6
 **Reuses**: `Unidade`, `achatar`, `ehProvedor`, `criarClienteAtualizadoV1`
 **Requirement**: ING-01, ING-02, ING-03, ING-04, ING-06, ING-07
 **Tools**:
+
 - MCP: NONE
-**Done when**:
+  **Done when**:
 - [x] `substituir` não existe mais; os testes RN_ENR_005 que o usavam passam a usar `aplicar`
 - [x] Quick gate passes: `npm run test:regra` exit 0 (≥ 12 testes RN_ENR_004)
-**Tests**: unit (9 novos)
-**Gate**: quick
-**Status**: ✅ Done
+      **Tests**: unit (9 novos)
+      **Gate**: quick
+      **Status**: ✅ Done
 
 ---
 
@@ -141,13 +145,14 @@ T4 → T5 → T6
 **Reuses**: `PublicadorMemoria`, `servicosDeTeste`
 **Requirement**: ING-07
 **Tools**:
+
 - MCP: NONE
-**Done when**:
+  **Done when**:
 - [x] Worker sem regra de negócio (só orquestra); teste de integração observa 2 eventos publicados e o `sem-mudanca`
 - [x] Full gate passes: `npm test` exit 0
-**Tests**: integration (2 novos)
-**Gate**: full
-**Status**: ✅ Done
+      **Tests**: integration (2 novos)
+      **Gate**: full
+      **Status**: ✅ Done
 
 ---
 
@@ -159,10 +164,11 @@ T4 → T5 → T6
 **Reuses**: —
 **Requirement**: ING-01, ING-02, ING-03, ING-04, ING-05, ING-06, ING-07
 **Tools**:
+
 - MCP: NONE
-**Done when**:
+  **Done when**:
 - [x] Bloco `verified`; contagens batem com `npm test`
 - [x] Build gate passes: `npm run gate` exit 0
-**Tests**: none
-**Gate**: build
-**Status**: ✅ Done
+      **Tests**: none
+      **Gate**: build
+      **Status**: ✅ Done

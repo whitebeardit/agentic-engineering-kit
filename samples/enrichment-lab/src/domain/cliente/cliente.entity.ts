@@ -8,7 +8,8 @@ import { mesclar } from './service/merge';
 import { EventoElegivelParaMerge } from './specifications/evento-elegivel-para-merge';
 import { aninhar, type Caminho } from './unidades';
 
-/** Anotação de cada unidade gravada: valor, instante do evento que a escreveu e de quem veio. */
+/** Anotação de cada unidade gravada: valor, instante do evento que a escreveu e de
+ * quem veio. */
 export interface Unidade {
   valor: unknown;
   instante: string;
@@ -42,8 +43,10 @@ export class Cliente {
   }
 
   /**
-   * RN-ENR-004 — aplica o evento por unidade (recência e proveniência), recusa evento incompleto
-   * contra cadastro completo e emite um `ClienteAtualizado` só quando algo mudou. Não grava: a
+   * RN-ENR-004 — aplica o evento por unidade (recência e proveniência), recusa evento
+   * incompleto
+   * contra cadastro completo e emite um `ClienteAtualizado` só quando algo mudou. Não
+   * grava: a
    * versão nova é a que a gravação condicional (RN-ENR-005) vai atribuir.
    */
   aplicar(evento: EventoIngestao, limiarN: number): ResultadoAplicacao {

@@ -20,7 +20,7 @@ describe('When we read a consolidated customer', () => {
     expect(r.headers.etag).toBe('"v1"');
     expect(r.body.data.cadastro.nome).toBe('Ana Exemplo');
   });
-  it('should publish one ClienteAtualizado v1 per real change and none when nothing changes', async () => {
+  it('should publish one ClienteAtualizado v1 per real change, none otherwise', async () => {
     expect(s.publicador.publicados).toHaveLength(1); // o evento do teste anterior
     const empresa = { documento: CNPJ_VALIDO, tipoPessoa: 'J' as const };
     const parcial = eventoValido({
@@ -44,14 +44,16 @@ describe('When we read a consolidated customer', () => {
     ]);
     const r = await supertest(app).get(`/v1/clientes/${CNPJ_VALIDO}`);
     expect(r.headers.etag).toBe('"v2"');
-    expect(r.body.data.cadastro.nome).toBe('Empresa Exemplo'); // mais antigo não sobrescreve
+    // mais antigo não sobrescreve
+    expect(r.body.data.cadastro.nome).toBe('Empresa Exemplo');
     expect(r.body.data.endereco.cep).toBe('20040020'); // lacuna preenchida
     expect(s.publicador.publicados.map((e) => [e.documento, e.versao])).toEqual([
       [CPF_VALIDO, 1],
       [CNPJ_VALIDO, 1],
       [CNPJ_VALIDO, 2],
     ]);
-    const mesmoEstado = { ...parcial, eventId: randomUUID() }; // eventId novo: passa a dedup
+    // eventId novo: passa pela dedup da fila
+    const mesmoEstado = { ...parcial, eventId: randomUUID() };
     await supertest(app).post('/v1/eventos').send(mesmoEstado).expect(202);
     await expect(s.worker.processarPendentes()).resolves.toEqual(['sem-mudanca']);
     expect(s.publicador.publicados).toHaveLength(3);
