@@ -1,5 +1,8 @@
 # Changelog
 
+## kit--v0.3.1 — 2026-08-30
+- fix(enrichment-lab): `npm run build` copia `legacy/*.js` para `dist/` (o `npm run dev` quebrava).
+
 ## kit--v0.3.0 — 2026-08-30
 - **Novo laboratório `samples/enrichment-lab`** (Node 22 / TypeScript): serviço de enriquecimento de cadastro em miniatura, sintético — contrato em duas camadas (OpenAPI `validateResponses` + JSON Schema 2020-12 + AsyncAPI), fila FIFO em processo com dedup e DLQ, worker com guardas (RN-ENR-001..006), merge por unidade (feature 001 pelo tlc-spec-driven, Verifier com mutantes), legado `legacy/calcula-apto.js` com characterization por snapshot, arquitetura por ADR com dependency-cruiser, rampa de severidade no eslint. Gate `npm run gate` ≈ 9 s, 44 testes.
 - **Perfis por stack**: `node-ts/` (`apply.sh --node-ts`) ao lado de `dotnet/`; `templates/AGENTS.md` agnóstico + `templates/profiles/{node-ts,dotnet}.md`; `docs/perfil-node-ts.md` (tabela dos cinco mecanismos nas duas stacks).
