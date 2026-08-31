@@ -1,5 +1,9 @@
 # Changelog
 
+## kit--v0.5.0 — 2026-08-31
+- **`docs/licoes-do-metodo.md`**: seis regras nascidas de defeitos reais no segundo repositório onde o kit foi aplicado — afirmação de mecanismo só com `arquivo:linha`; falha de acesso não é evidência de ausência; confiança baixa não recebe aspas; contagem sobre si mesmo se reconta no artefato construído; chave de sanitização sem fronteira de palavra esconde vazamento; e um limiar de forma mede o que é entregue, não o que é escrito. Cada regra traz o defeito de origem e como verificar.
+- Manifesto 0.5.0. Nenhum template, hook ou agente existente foi alterado: a versão só acrescenta.
+
 ## kit--v0.4.0 — 2026-08-30
 - **Sub-agentes de observabilidade (só leitura)**: `trace-finder` (busca canônica por traceId/cid/eventId — logs primeiro, `trace_flags` antes de culpar retenção, guarda de LGPD, replay com `-01` e `eventId` novo), `telemetry-cost-auditor` (custo e ruído com evidência medida; cortes por custo × ruído; nunca `AlwaysOn` global) e `alert-auditor` (alarme existe, mede o certo e **alguém confirmou receber**; pontos cegos em scripts de verificação e docs de infra).
 - **`templates/debug-prod.md`**: primeiro movimento por sintoma, coordenadas, trace sob demanda e verdades operacionais — copiado por `apply.sh` para `docs/debug-prod.md`; o `trace-finder` o lê antes de procurar.
