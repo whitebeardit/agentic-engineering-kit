@@ -165,4 +165,4 @@ Aplicado em `spec.md` › Requirement Traceability (Phase → Done, Status → �
 
 ## Deterministic gate
 
-`python3 <skill-dir>/scripts/validate_state.py --root /home/whitebeard/DEV/WHITEBEARD/agentic-engineering-kit/samples/enrichment-lab 001-merge-por-unidade` — saída colada na resposta ao usuário.
+`python3 <skill-dir>/scripts/validate_state.py --root ~/DEV/WHITEBEARD/agentic-engineering-kit/samples/enrichment-lab 001-merge-por-unidade` — saída colada na resposta ao usuário.
