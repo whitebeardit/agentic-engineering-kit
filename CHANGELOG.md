@@ -1,5 +1,10 @@
 # Changelog
 
+## kit--v0.5.1 — 2026-09-03
+- **`LICENSE`** (MIT): o manifesto e o catálogo do livro declaravam MIT desde a v0.2, mas o arquivo não existia. Entra em nome da Whitebeard.
+- Repositório **público** a partir desta versão. Varredura do histórico inteiro antes de abrir: zero termo da blocklist do livro, zero segredo, zero host/ARN/conta real; quatro arquivos com caminho absoluto da máquina do autor viraram `~/`.
+- Manifesto do Cursor sobe de 0.4.0 (estava parado) para 0.5.1, igual ao do Claude. Nenhum template, hook, agente ou skill foi alterado: a versão só acrescenta.
+
 ## kit--v0.5.0 — 2026-08-31
 - **`docs/licoes-do-metodo.md`**: seis regras nascidas de defeitos reais no segundo repositório onde o kit foi aplicado — afirmação de mecanismo só com `arquivo:linha`; falha de acesso não é evidência de ausência; confiança baixa não recebe aspas; contagem sobre si mesmo se reconta no artefato construído; chave de sanitização sem fronteira de palavra esconde vazamento; e um limiar de forma mede o que é entregue, não o que é escrito. Cada regra traz o defeito de origem e como verificar.
 - Manifesto 0.5.0. Nenhum template, hook ou agente existente foi alterado: a versão só acrescenta.
