@@ -26,6 +26,13 @@ claude plugin marketplace add git@github.com:whitebeardit/agentic-engineering-ki
 claude plugin install kit@whitebeard-kit          # instala kit e tlc@whitebeard-kit
 claude plugin update tlc@whitebeard-kit           # ou ative auto-update em /plugin › Marketplaces
 ```
+**Veio do livro *Cercando a IA*?** Registre o catálogo do livro em vez deste — ele fixa a versão do kit que o livro
+imprime — e instale `kit@cercando-a-ia`. O exemplo completo de aplicação do kit (o "segundo repositório" do capítulo 13)
+está nesse repositório, com um guia do leitor. Registre um catálogo só: os dois publicam os mesmos nomes de plugin.
+```bash
+claude plugin marketplace add https://github.com/whitebeardit/cercando-a-ia-harness
+claude plugin install kit@cercando-a-ia
+```
 **Cursor** (plugin neste repo; tlc pela CLI oficial do Tech Leads Club):
 ```bash
 npx -y @tech-leads-club/agent-skills install -s tlc-spec-driven -a cursor -g
