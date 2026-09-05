@@ -28,7 +28,8 @@ claude plugin update tlc@whitebeard-kit           # ou ative auto-update em /plu
 ```
 **Veio do livro *Cercando a IA*?** Registre o catálogo do livro em vez deste — ele fixa a versão do kit que o livro
 imprime — e instale `kit@cercando-a-ia`. O exemplo completo de aplicação do kit (o "segundo repositório" do capítulo 13)
-está nesse repositório, com um guia do leitor. Registre um catálogo só: os dois publicam os mesmos nomes de plugin.
+está nesse repositório, com um guia do leitor. Os dois catálogos publicam os mesmos nomes de plugin e o `@` diz de
+qual você instala: o do livro fixa a versão impressa; este acompanha a mais nova.
 ```bash
 claude plugin marketplace add https://github.com/whitebeardit/cercando-a-ia-harness
 claude plugin install kit@cercando-a-ia
