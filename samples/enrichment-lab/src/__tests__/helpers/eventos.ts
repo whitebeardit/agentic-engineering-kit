@@ -1,8 +1,12 @@
 import { randomUUID } from 'node:crypto';
 import type { EventoIngestao } from '../../domain/cliente/interfaces/evento-ingestao';
 
-/** CPF e CNPJ sintéticos com dígitos válidos (gerados pela RN-ENR-001, não copiados de
- * lugar nenhum). */
+/** CPF e CNPJ com dígitos verificadores válidos: a RN-ENR-001 valida o
+ * documento, então o caminho feliz precisa de um que passe. Gerados pelo
+ * algoritmo, não copiados de registro nenhum — e "gerado" não prova que
+ * ninguém os tenha. Por isso ficam só aqui: nenhum artefato de exibição do
+ * kit (fixture, captura, doc) usa documento que passe na validação; ali o
+ * exemplo é sempre um número que reprova. */
 export const CPF_VALIDO = '52998224725';
 export const CNPJ_VALIDO = '11444777000161';
 

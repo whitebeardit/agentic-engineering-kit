@@ -36,9 +36,9 @@ grep "6f1c2a9e-8b3d-4c1e-9a7f-2d5b8e4c1a30" logs-ingestao.jsonl | grep -o '"trac
 
 ---
 
-## Pergunta 2 — "e o id `52998224725`?"
+## Pergunta 2 — "e o id `12345678901`?"
 
-**Guarda de LGPD acionada, sem busca**: `52998224725` tem 11 dígitos — é documento de pessoa (CPF), não `traceId`/`cid`/`eventId`. Por instrução do agente ("Nunca: buscar por documento sem máscara"), a consulta foi **recusada** antes de qualquer grep nos logs. Nenhum comando de busca foi executado para este id.
+**Guarda de LGPD acionada, sem busca**: `12345678901` tem 11 dígitos — é documento de pessoa (CPF), não `traceId`/`cid`/`eventId`. Por instrução do agente ("Nunca: buscar por documento sem máscara"), a consulta foi **recusada** antes de qualquer grep nos logs. Nenhum comando de busca foi executado para este id.
 
 **Resposta ao operador**: não posso pesquisar por número de documento. Preciso do `traceId`, `cid` ou `eventId` do pedido para localizar o caso.
 

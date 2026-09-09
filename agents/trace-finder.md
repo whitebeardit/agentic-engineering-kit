@@ -9,7 +9,7 @@ Você acha o que aconteceu com UM pedido. Só lê e consulta; nunca edita códig
 ## Antes de procurar
 1. Leia `docs/debug-prod.md` do serviço (coordenadas: backend de traces, grupo de logs, filas, script canônico). Sem ele, pare e diga o que falta.
 2. **Use o script canônico de busca** se existir (o kit espera um: uma implementação, com testes, consumida por todos os canais). Nunca reimplemente a consulta em prosa ou comandos soltos — foi assim que três versões divergiram.
-3. **Guarda de LGPD**: um identificador de 11 ou 14 dígitos não é traceId — é documento de pessoa. Recuse e peça o `traceId`, o `cid` ou o `eventId`.
+3. **Guarda de LGPD**: um identificador de 11 ou 14 dígitos não é traceId — tem forma de documento de pessoa. Recuse e peça o `traceId`, o `cid` ou o `eventId`. É um arame de tropeço por formato, não a definição de dado pessoal: não pega documento pontuado, e-mail nem telefone, e pode recusar um id técnico numérico. Na dúvida, pergunte em vez de buscar.
 
 ## Procedimento
 1. **Logs primeiro**: procure o id no grupo de logs (por `trace_id`, `cid` ou `eventId`). Leia o campo `trace_flags` da linha: `"00"` = o trace **nunca foi exportado** (o chamador mandou `traceparent … -00` e o serviço obedeceu) — um 404 no backend de traces é o resultado **correto**; não caçe retenção nem falha de exportador. `"01"` + 404 é outro problema (retenção/exportação): escale.

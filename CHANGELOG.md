@@ -1,5 +1,16 @@
 # Changelog
 
+## Não lançado (main)
+
+- **Correção de exposição de dado (09/09/2026)**: `docs/observability-fixtures/runs/trace-finder.md` usava, como
+  exemplo da guarda de LGPD, um número de onze dígitos que **passa** na validação de CPF — num repositório público.
+  Trocado por `12345678901`, que reprova na validação: a guarda dispara por formato, então a demonstração continua
+  idêntica e o exemplo não pode ser o documento de ninguém. O `CPF_VALIDO` dos testes do laboratório continua válido
+  (a RN-ENR-001 valida o documento e o caminho feliz precisa disso), com o comentário dizendo por que ele existe e por
+  que não sai de lá. `agents/trace-finder.md`: a guarda passa a se descrever como arame de tropeço por formato, não
+  como definição de dado pessoal — ela não pega documento pontuado, e-mail nem telefone, e pode recusar id técnico.
+  Achado na revisão externa contra-verificada do cap. 12 do livro; o livro segue fixado em `kit--v0.5.1` e não muda.
+
 ## kit--v0.5.1 — 2026-09-03
 - **`LICENSE`** (MIT): o manifesto e o catálogo do livro declaravam MIT desde a v0.2, mas o arquivo não existia. Entra em nome da Whitebeard.
 - Repositório **público** a partir desta versão. Varredura do histórico inteiro antes de abrir: zero termo da blocklist do livro, zero segredo, zero host/ARN/conta real; quatro arquivos com caminho absoluto da máquina do autor viraram `~/`.
