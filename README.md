@@ -117,3 +117,8 @@ cd samples/orders-sample && dotnet test Orders.slnx     # ≈ 9 s
 - Todo template tem dono e data de revisão (trimestral, e a cada modelo novo: remova um componente e veja o que ainda é load-bearing).
 - Lição de cliente → issue neste repo → template. Sem nome de cliente nos templates.
 - Release: bump `version` em `.claude-plugin/plugin.json` e `.cursor-plugin/plugin.json`; `claude plugin tag --push`.
+
+## Errata
+
+Correções a material já publicado em tags anteriores estão em [`ERRATA.md`](ERRATA.md) — o que estava lá, o que
+passou a valer e o que fazer se você clonou a versão antiga.

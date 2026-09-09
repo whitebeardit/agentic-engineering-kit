@@ -2,6 +2,10 @@
 
 ## Não lançado (main)
 
+- **`ERRATA.md` (09/09/2026)**: página de errata do kit, com a primeira entrada — o documento com dígitos válidos
+  na fixture do `trace-finder`, presente nas tags `kit--v0.4.0` a `kit--v0.5.1`. O histórico não foi reescrito; a
+  entrada diz o que fazer para quem clonou antes.
+
 - **Correção de exposição de dado (09/09/2026)**: `docs/observability-fixtures/runs/trace-finder.md` usava, como
   exemplo da guarda de LGPD, um número de onze dígitos que **passa** na validação de CPF — num repositório público.
   Trocado por `12345678901`, que reprova na validação: a guarda dispara por formato, então a demonstração continua
