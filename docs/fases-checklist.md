@@ -15,7 +15,7 @@ Detalhe no vault `agentes-ia/processo-engenharia-com-agentes.md`. Nada avança s
 - [ ] Agente builda e testa sozinho; `/context` < 10 %
 
 ## 2 · Mapa da empresa (sem. 3–5)
-- [ ] Grafo de dependências e inventário de endpoints/eventos **gerados** em CI
+- [x] Grafo de dependências e inventário de endpoints/eventos **gerados** em CI (laboratório, v0.5.2: `npm run generate`, `--check` no gate)
 - [ ] Repo Coordination Graph no vault (owners nomeados); C4 Contexto+Container em DSL; 5 ADRs
 - [ ] `impact-analyzer` acerta repos e ordem em 3 cards históricos
 

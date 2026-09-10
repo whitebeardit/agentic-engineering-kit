@@ -7,9 +7,10 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 - Instalar: `npm install` (≈ 30 s, uma vez; Node 22 — `.nvmrc`)
 - Gate: `npm run gate` = `tsc --noEmit && eslint . && jest --ci` (≈ 9 s; é o que o agente obedece)
 - Tipos: `npm run typecheck` (≈ 2 s) · Lint: `npm run lint` (≈ 4 s; `legacy/` emite warnings da rampa, nunca erro — ver Gotchas)
-- Testes: `npm test` (≈ 3 s; 44 testes: 29 regra RN_ENR_*, 3 arquitetura, 1 characterization, 11 integração)
+- Testes: `npm test` (≈ 3 s; 45 testes: 29 regra RN_ENR_*, 3 arquitetura, 1 characterization, 1 gerado (`--check`), 11 integração)
 - Ordem dos arquivos invertida (caça dependência de ordem): `npm run test:reverso`
 - Só a regra: `npm run test:regra` (`jest -t 'RN_ENR_'`) · Só arquitetura: `npm run test:arquitetura` · Unit/int: `npm run test:unit` / `npm run test:int`
+- Gerados: `npm run generate` escreve `docs/generated/{deps,endpoints,eventos}.md` (determinístico); `npm run generate:check` reprova gerado desatualizado — e roda dentro do `npm test`
 - Subir: `npm run dev` (build + `http://localhost:3000`: `POST /v1/eventos`, `GET /v1/clientes/{documento}`, `/health`)
 
 ## Definição de pronto
@@ -27,6 +28,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 
 ## Onde estão as regras
 
+- Impacto e inventário: `docs/generated/` — gerado por `tools/gerar-docs.cjs`; o hook bloqueia editar à mão
 - Regras de negócio: `docs/regras/enriquecimento.md` (IDs RN-ENR-*, com `Confiança:`) — procedimento: skill `regras-de-negocio`
 - Decisões: `docs/adr/` (0003 domínio puro, 0004 regra no domínio) — impostas por `src/__tests__/unit/arquitetura.unit.test.ts` via `.dependency-cruiser.cjs`; decisões leves em `.specs/STATE.md`
 - Specs, tasks, validação e lições: `.specs/` (tlc-spec-driven)

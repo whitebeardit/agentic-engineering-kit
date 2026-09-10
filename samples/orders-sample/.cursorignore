@@ -1,8 +1,8 @@
-# kit Whitebeard — segredos e gerados nunca entram no contexto do Cursor
+# kit Whitebeard — segredos nunca entram no contexto do Cursor. docs/generated/ fica
+# visível de propósito (o impact-analyzer lê); quem impede a edição é o hook preToolUse.
 .env
 .env.*
 **/appsettings.*.json
 **/secrets/**
-**/docs/generated/**
 bin/
 obj/
