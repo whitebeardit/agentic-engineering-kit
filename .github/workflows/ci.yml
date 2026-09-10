@@ -1,0 +1,52 @@
+# CI mínimo do kit (v0.5.2): o que o README promete, verificado a cada push e PR.
+#   kit           — rules → cursor/rules em dia; hooks fail-closed (matriz); nenhum documento válido em artefato de
+#                   exibição; validadores do tlc no estado documentado (smoke test contra mutantes).
+#   enrichment-lab — gate do laboratório (tipos, lint, testes) e docs/generated/ em dia.
+# Sem segredos, sem escrita: permissions só de leitura.
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  kit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tech-leads-club/agent-skills
+          ref: main
+          path: .tlc
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: rules → cursor/rules em dia
+        run: python3 tools/build-cursor.py --check
+      - name: hooks fail-closed (matriz Claude × Cursor)
+        run: bash tools/test-hooks.sh
+      - name: nenhum documento válido em artefato de exibição
+        run: python3 tools/check-documentos.py
+      - name: validadores do tlc no estado documentado
+        run: bash tools/test-validadores.sh
+        env:
+          TLC_DIR: .tlc/packages/skills-catalog/skills/(development)/tlc-spec-driven/scripts
+  enrichment-lab:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: samples/enrichment-lab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: samples/enrichment-lab/.nvmrc
+          cache: npm
+          cache-dependency-path: samples/enrichment-lab/package-lock.json
+      - run: npm ci
+      - name: gate (tsc + eslint + jest)
+        run: npm run gate
+      - name: docs/generated em dia
+        run: npm run generate:check
