@@ -50,7 +50,8 @@ git clone git@github.com:whitebeardit/agentic-engineering-kit.git ~/DEV/WHITEBEA
 `trace-finder` (o que aconteceu com um pedido, pelo id), `telemetry-cost-auditor` (o que emite, o que vira sinal, o que
 cortar) e `alert-auditor` (se disparar, alguém recebe?). Nenhum muda produção; todo número vem com o comando que o mediu.
 `templates/debug-prod.md` é o arquivo por serviço que eles leem primeiro. Exemplos de execução em
-`docs/observability-fixtures/runs/`.
+`docs/observability-fixtures/runs/`. "Só leem" pela **permissão do harness** (`deny` de escrita, conta de leitura), não
+pela lista de `tools`: todos declaram `Bash` para medir — a lista diz o que podem chamar, a permissão diz o que podem mudar.
 
 ## Dois laboratórios, dois perfis
 
@@ -116,6 +117,9 @@ cd samples/orders-sample && dotnet test Orders.slnx     # ≈ 9 s
 - `rules/*.md` é a fonte; `cursor/rules/*.mdc` é gerado (`tools/build-cursor.py --check` no CI).
 - Todo template tem dono e data de revisão (trimestral, e a cada modelo novo: remova um componente e veja o que ainda é load-bearing).
 - Lição de cliente → issue neste repo → template. Sem nome de cliente nos templates.
+- Nenhum artefato de exibição (fixture, captura, doc, e-book, teste que só precisa de um documento qualquer) usa CPF/CNPJ
+  que **passe** na validação; onde a validade é necessária, o valor mora em `src/__tests__/helpers/` e não sai de lá.
+  `tools/check-documentos.py` varre o repositório (CI). Motivo: `ERRATA.md`.
 - Release: bump `version` em `.claude-plugin/plugin.json` e `.cursor-plugin/plugin.json`; `claude plugin tag --push`.
 
 ## Referências
