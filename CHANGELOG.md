@@ -1,6 +1,37 @@
 # Changelog
 
-## Não lançado (main)
+## kit--v0.5.2 — 2026-09-09
+
+Esta versão **altera hooks, rule e skill existentes** — quem aplicou o kit por `apply.sh` recebe as mudanças por PR;
+quem usa o plugin, por `claude plugin update`. Nove issues, todas nascidas das revisões externas contra-verificadas
+do livro *Cercando a IA*, e um CI mínimo.
+
+- **#1 Hooks fail-closed nos dois harnesses.** `protect-paths.sh` e `guard-bash.sh` negam o que não entendem (JSON
+  inválido, vazio, sem `python3`); o Cursor bloqueia a escrita **antes** com `preToolUse` + `failClosed: true`
+  (doc lida em 09/09/2026); `afterFileEdit` vira defesa em profundidade; `case "/$f"` casa caminho relativo;
+  `tools/test-hooks.sh` prova a matriz (28 casos) e a sincronia das cópias nos samples.
+- **#2 Fonte na skill.** `regras-de-negocio` cita Böckeler (Thoughtworks, ago/2026) com a frase literal;
+  `docs/referencias.md` nasce no kit; definição única de `inferred`.
+- **#3 Casa GERADO produzida.** `npm run generate` escreve `docs/generated/{deps,endpoints,eventos}.md` no
+  laboratório (determinístico); `--check` dentro do gate reprova gerado desatualizado; `docs/generated` sai do
+  `.cursorignore` (o `impact-analyzer` lê; o hook impede a edição).
+- **#4 Contratos.** Ordem por tipo de mudança (acrescentar / retirar / exigir campo novo — expand/contract) na rule e
+  nos agentes; testes "campo a mais na resposta → 500" e evento `ClienteAtualizado` contra o AsyncAPI; `default:` →
+  `Erro` no `service.yaml`; `js-yaml` declarado.
+- **#5 Laboratório.** Rampa do ESLint com dono (papel) e marco absoluto; casos de limite do legado com oráculo
+  explícito (sem baseline novo); nota de onde o hook do baseline vale; nota da semente do Faker.
+- **#6 DoR com dono por campo.** O porteiro para só por campo do PO; campo do agente entra marcado `inferido`;
+  briefings com a coluna Dono; `Confirmed?` da spec do laboratório com quem e quando.
+- **#7 Smoke test dos validadores do tlc.** `tools/test-validadores.sh` fixa o estado documentado
+  (`docs/tlc-adaptacao.md`): o gate de spec não lê critério (upstream #162) e a dependência inexistente reprova.
+- **#8 Agentes.** "Só lê" pela permissão do harness, não pela lista de `tools`; base do diff como parâmetro;
+  `oasdiff --fail-on ERR`; 180 dias como padrão do kit.
+- **#9 Documento válido fora de artefato de exibição.** `tools/check-documentos.py` (CI) + regra no README e no
+  `AGENTS.md` do laboratório; `ERRATA.md` registra o histórico.
+- **CI** (`.github/workflows/ci.yml`): `build-cursor.py --check`, `test-hooks.sh`, `check-documentos.py`,
+  `test-validadores.sh` (com checkout do tlc) e o gate do laboratório com `generate:check`.
+
+### Antes da tag, já em `main`
 
 - **`ERRATA.md` (09/09/2026)**: página de errata do kit, com a primeira entrada — o documento com dígitos válidos
   na fixture do `trace-finder`, presente nas tags `kit--v0.4.0` a `kit--v0.5.1`. O histórico não foi reescrito; a

@@ -120,7 +120,9 @@ cd samples/orders-sample && dotnet test Orders.slnx     # ≈ 9 s
 - Nenhum artefato de exibição (fixture, captura, doc, e-book, teste que só precisa de um documento qualquer) usa CPF/CNPJ
   que **passe** na validação; onde a validade é necessária, o valor mora em `src/__tests__/helpers/` e não sai de lá.
   `tools/check-documentos.py` varre o repositório (CI). Motivo: `ERRATA.md`.
-- Release: bump `version` em `.claude-plugin/plugin.json` e `.cursor-plugin/plugin.json`; `claude plugin tag --push`.
+- Release: bump `version` em `.claude-plugin/plugin.json` e `.cursor-plugin/plugin.json`; entrada no `CHANGELOG.md`; tag
+  **anotada** `git tag -a kit--vX.Y.Z -m "…"` e `git push --follow-tags` (as tags do kit são anotadas desde a v0.5.1; o
+  `claude plugin tag` cria tag leve — não misturar os dois).
 
 ## Referências
 
