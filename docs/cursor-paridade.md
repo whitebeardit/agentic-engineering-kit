@@ -16,8 +16,8 @@ O que difere é o formato de rules e de hooks — e o que o Cursor não consegue
 | Allowlist de comandos (`permissions.allow`) | `.claude/settings.json` | sem equivalente | `beforeShellExecution` bloqueia a lista negra; o resto passa pelo prompt de aprovação do Cursor |
 | Formatar `.cs` tocado | `PostToolUse` | `afterFileEdit` | — |
 | Managed settings / hooks gerenciados (fase 5) | sim | Team/Enterprise hooks (cloud) | — |
-
 | Entrada que o hook não entende (JSON inválido, vazio, sem `python3`) | exit 2 (nega) | `"failClosed": true` no `hooks.json` → nega; sem ele o padrão do Cursor é **fail-open** | — |
+
 
 Regra prática: **os dois hooks negam antes de agir e negam o que não entendem** (fail-closed — `tools/test-hooks.sh` prova a
 matriz). O `afterFileEdit` que reverte ficou como defesa em profundidade, não como a regra: era o fallback enquanto o
