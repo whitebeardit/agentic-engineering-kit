@@ -38,6 +38,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Erro'
+        default:
+          description: Erro não previsto pelo contrato (o validador de resposta rejeita corpo fora do schema).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
   /v1/clientes/{documento}:
     get:
       operationId: consultarCliente
@@ -70,6 +76,12 @@ paths:
           description: Não modificado desde a versão informada.
         '404':
           description: Documento sem cadastro.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+        default:
+          description: Erro não previsto pelo contrato (o validador de resposta rejeita corpo fora do schema).
           content:
             application/json:
               schema:
