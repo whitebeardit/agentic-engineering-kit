@@ -1,9 +1,37 @@
 {
   "version": 1,
   "hooks": {
-    "beforeShellExecution": [ { "command": "./.cursor/hooks/guard-bash.sh", "timeout": 10 } ],
-    "beforeReadFile":       [ { "command": "./.cursor/hooks/protect-paths.sh", "timeout": 10 } ],
-    "afterFileEdit":        [ { "command": "./.cursor/hooks/protect-paths.sh", "timeout": 10 },
-                              { "command": "./.cursor/hooks/dotnet-format.sh", "timeout": 60 } ]
+    "preToolUse": [
+      {
+        "command": "./.cursor/hooks/protect-paths.sh",
+        "matcher": "Write|Edit|MultiEdit|StrReplace|Delete|Read",
+        "timeout": 10,
+        "failClosed": true
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "./.cursor/hooks/guard-bash.sh",
+        "timeout": 10,
+        "failClosed": true
+      }
+    ],
+    "beforeReadFile": [
+      {
+        "command": "./.cursor/hooks/protect-paths.sh",
+        "timeout": 10,
+        "failClosed": true
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "./.cursor/hooks/protect-paths.sh",
+        "timeout": 10
+      },
+      {
+        "command": "./.cursor/hooks/dotnet-format.sh",
+        "timeout": 60
+      }
+    ]
   }
 }
