@@ -64,11 +64,12 @@ export default tseslint.config(
     files: ['legacy/**/*.js'],
     languageOptions: { sourceType: 'commonjs', globals: globals.node },
     rules: {
-      'no-var': 'warn', // dono: <pessoa> · desde: 2026-08-30 · sobe em: sprint 2
-      'prefer-const': 'warn', // dono: <pessoa> · desde: 2026-08-30 · sobe em: sprint 2
-      eqeqeq: 'warn', // dono: <pessoa> · desde: 2026-08-30 · sobe em: sprint 3
+      // dono: tech lead do laboratório (papel, não nome — o kit não leva nomes)
+      'no-var': 'warn', // desde 2026-08-30 · vira error em 2026-10-01
+      'prefer-const': 'warn', // desde 2026-08-30 · vira error em 2026-10-01
+      eqeqeq: 'warn', // desde 2026-08-30 · vira error em 2026-11-02
       'no-redeclare': 'error', // subiu em 2026-08-30: zero ocorrências
-      'no-undef': 'error',
+      'no-undef': 'error', // sempre foi error: código que referencia o que não existe
     },
   },
 );

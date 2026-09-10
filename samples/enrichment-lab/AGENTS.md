@@ -7,7 +7,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 - Instalar: `npm install` (≈ 30 s, uma vez; Node 22 — `.nvmrc`)
 - Gate: `npm run gate` = `tsc --noEmit && eslint . && jest --ci` (≈ 9 s; é o que o agente obedece)
 - Tipos: `npm run typecheck` (≈ 2 s) · Lint: `npm run lint` (≈ 4 s; `legacy/` emite warnings da rampa, nunca erro — ver Gotchas)
-- Testes: `npm test` (≈ 3 s; 50 testes: 29 regra RN_ENR_*, 3 arquitetura, 1 characterization, 1 gerado (`--check`), 3 contrato de evento, 13 integração)
+- Testes: `npm test` (≈ 3 s; 51 testes: 29 regra RN_ENR_*, 3 arquitetura, 2 characterization (aleatório com semente + cortes à mão), 1 gerado (`--check`), 3 contrato de evento, 13 integração)
 - Ordem dos arquivos invertida (caça dependência de ordem): `npm run test:reverso`
 - Só a regra: `npm run test:regra` (`jest -t 'RN_ENR_'`) · Só arquitetura: `npm run test:arquitetura` · Unit/int: `npm run test:unit` / `npm run test:int`
 - Gerados: `npm run generate` escreve `docs/generated/{deps,endpoints,eventos}.md` (determinístico); `npm run generate:check` reprova gerado desatualizado — e roda dentro do `npm test`
@@ -20,7 +20,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 ## Gotchas
 
 - **`jest` verde não é build verde**: o ts-jest roda com `isolatedModules` e não tipa nada. Gate = `tsc --noEmit` (exit 0) **e** `jest --ci` (exit 0). Nunca julgue um gate só pelo jest.
-- Characterization test (`src/__tests__/unit/legacy/`): `npm test` roda com `--ci` — sem baseline ele **falha e não grava**. Só um humano aprova o baseline com `npm run baseline`, no terminal; o hook bloqueia `jest -u` e edições em `__snapshots__/`.
+- Characterization test (`src/__tests__/unit/legacy/`): `npm test` roda com `--ci` — sem baseline ele **falha e não grava**. Só um humano aprova o baseline com `npm run baseline`, no terminal. O hook que bloqueia `jest -u` e edições em `__snapshots__/` existe no **Claude Code** (`.claude/settings.json`) e no **Cursor** (`.cursor/hooks.json`); em Codex, Copilot e no shell **não há hook** — ali o PR é o gate, e o diff do `.snap` é o que o revisor lê.
 - `legacy/` não é type-checked (só `legacy/*.d.ts` entra no `tsc`); o lint dele é a rampa em `eslint.config.mjs` (`// Rampa`): severidade sobe por regra, com dono e data, nunca com `eslint-disable` no arquivo.
 - Contrato em duas camadas: `src/contracts/service.yaml` valida request **e** response (rota fora dele = 404; `/health` é registrado antes); o payload de `POST /v1/eventos` é validado pelo `evento-ingestao.schema.json` (Ajv 2020-12) antes de enfileirar — o validador OpenAPI não expressa esse schema.
 - A fila em memória reentrega na hora (sem visibility timeout): uma mensagem envenenada vai para a DLQ em cinco recebimentos numa passada só.
