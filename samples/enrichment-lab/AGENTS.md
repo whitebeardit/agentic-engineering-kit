@@ -7,7 +7,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 - Instalar: `npm install` (≈ 30 s, uma vez; Node 22 — `.nvmrc`)
 - Gate: `npm run gate` = `tsc --noEmit && eslint . && jest --ci` (≈ 9 s; é o que o agente obedece)
 - Tipos: `npm run typecheck` (≈ 2 s) · Lint: `npm run lint` (≈ 4 s; `legacy/` emite warnings da rampa, nunca erro — ver Gotchas)
-- Testes: `npm test` (≈ 3 s; 45 testes: 29 regra RN_ENR_*, 3 arquitetura, 1 characterization, 1 gerado (`--check`), 11 integração)
+- Testes: `npm test` (≈ 3 s; 50 testes: 29 regra RN_ENR_*, 3 arquitetura, 1 characterization, 1 gerado (`--check`), 3 contrato de evento, 13 integração)
 - Ordem dos arquivos invertida (caça dependência de ordem): `npm run test:reverso`
 - Só a regra: `npm run test:regra` (`jest -t 'RN_ENR_'`) · Só arquitetura: `npm run test:arquitetura` · Unit/int: `npm run test:unit` / `npm run test:int`
 - Gerados: `npm run generate` escreve `docs/generated/{deps,endpoints,eventos}.md` (determinístico); `npm run generate:check` reprova gerado desatualizado — e roda dentro do `npm test`

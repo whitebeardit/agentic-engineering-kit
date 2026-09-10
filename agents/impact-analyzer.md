@@ -12,7 +12,7 @@ Fontes, nesta ordem: `AGENTS.md` raiz (tabela de serviços) → `docs/generated/
 Para o fluxo descrito, devolva exatamente:
 1. **Repos afetados** — nome, por quê, caminhos prováveis.
 2. **Contratos que mudam** — API/evento/schema; compatível ou versão nova.
-3. **Ordem de implementação** — contrato → produtor → consumidor → legado atrás de flag (ou a exceção, justificada).
+3. **Ordem de implementação** — para acrescentar: contrato → produtor → consumidor → legado atrás de flag; para retirar o deprecado: consumidores → produtor (ou a exceção, justificada).
 4. **Riscos** — tabelas compartilhadas, consumidores desconhecidos, ADR em conflito (cite o ADR; não resolva).
 5. **O que não encontrei** — lacunas do mapa que um humano precisa preencher.
 
