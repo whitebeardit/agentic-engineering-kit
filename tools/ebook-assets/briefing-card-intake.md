@@ -1,16 +1,16 @@
 # card-intake · ORD-231 (fonte: texto colado — MCP atlassian não conectado nesta sessão)
 
 ## Definition of Ready
-| Campo | Presente? |
-|---|---|
-| Objetivo (o quê + por quê) | ✅ cancelar item de pedido não faturado; reduzir estornos manuais |
-| Critérios de aceite em EARS | ✅ 5 critérios (4 do Orders, 1 do ERP) |
-| Escopo dentro/fora | ✅ fora: reembolso automático; cancelamento total já existe |
-| Sistemas afetados | ✅ Orders (micro), ERP legado (estoque) |
-| Caminhos prováveis | ⚠️ ausente — inferidos: `src/Orders.Domain/Order.cs`, `Events/`, `Specifications/`, `src/Orders.Application/`, `tests/Orders.Tests/` |
-| Nunca modificar | ✅ schema de Payments; contrato v1 de OrderCreated |
-| Tier de risco | ✅ médio |
-| Como validar com o PO | ✅ pedido de teste com 2 itens em homologação |
+| Campo | Dono | Presente? |
+|---|---|---|
+| Objetivo (o quê + por quê) | PO | ✅ cancelar item de pedido não faturado; reduzir estornos manuais |
+| Critérios de aceite em EARS | PO | ✅ 5 critérios (4 do Orders, 1 do ERP) |
+| Escopo dentro/fora | PO | ✅ fora: reembolso automático; cancelamento total já existe |
+| Sistemas afetados | PO + tech lead | ✅ Orders (micro), ERP legado (estoque) |
+| Caminhos prováveis | agente (`inferido`) | ⚠️ ausente — inferidos: `src/Orders.Domain/Order.cs`, `Events/`, `Specifications/`, `src/Orders.Application/`, `tests/Orders.Tests/` |
+| Nunca modificar | PO + tech lead | ✅ schema de Payments; contrato v1 de OrderCreated |
+| Tier de risco | tech lead | ✅ médio |
+| Como validar com o PO | PO | ✅ pedido de teste com 2 itens em homologação |
 Resultado: **passa** (caminhos inferidos — informar ao PO, não bloqueia).
 
 ## Conflitos com regras/ADRs
