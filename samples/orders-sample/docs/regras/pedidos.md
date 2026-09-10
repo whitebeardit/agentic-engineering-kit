@@ -1,7 +1,7 @@
 # Regras de negócio — Pedidos (Orders.Domain)
 
 Fonte de verdade escrita. O card do Jira descreve a **mudança**; este arquivo descreve o **estado**. Toda regra tem ID, EARS,
-onde vive no código, qual teste a prova, **confiança** (`verified` = teste passa; `inferred` = lida do código, sem teste), dono e data. A skill `regras-de-negocio` é o procedimento para mudar isto.
+onde vive no código, qual teste a prova, **confiança** (`verified` / `inferred` — definição única na skill `regras-de-negocio`), dono e data. A skill `regras-de-negocio` é o procedimento para mudar isto.
 
 ## RN-ORD-001 — Valor monetário válido
 THE SYSTEM SHALL recusar valor negativo e moeda que não seja código ISO de 3 letras

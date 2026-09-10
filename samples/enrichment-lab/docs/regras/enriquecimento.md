@@ -1,8 +1,7 @@
 # Regras de negócio — Enriquecimento de cadastro (src/domain/cliente)
 
 Fonte de verdade escrita. O card descreve a **mudança**; este arquivo descreve o **estado**. Toda regra tem ID, EARS,
-onde vive no código, qual teste a prova, **confiança** (`verified` = teste passa; `inferred` = lida do código, sem teste
-completo), dono e data. A skill `regras-de-negocio` é o procedimento para mudar isto.
+onde vive no código, qual teste a prova, **confiança** (`verified` / `inferred` — definição única na skill `regras-de-negocio`), dono e data. A skill `regras-de-negocio` é o procedimento para mudar isto.
 
 Ordem fixa das guardas no worker: RN-ENR-002 → RN-ENR-001 → RN-ENR-003 → RN-ENR-006 (apto) → RN-ENR-004 (limiar e merge) → gravação (RN-ENR-005).
 

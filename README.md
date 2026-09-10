@@ -118,6 +118,11 @@ cd samples/orders-sample && dotnet test Orders.slnx     # ≈ 9 s
 - Lição de cliente → issue neste repo → template. Sem nome de cliente nos templates.
 - Release: bump `version` em `.claude-plugin/plugin.json` e `.cursor-plugin/plugin.json`; `claude plugin tag --push`.
 
+## Referências
+
+Claim de pesquisa que aparece numa skill, num agente ou no e-book tem ficha em [`docs/referencias.md`](docs/referencias.md)
+— o que a fonte sustenta e o que não sustenta, com data de acesso.
+
 ## Errata
 
 Correções a material já publicado em tags anteriores estão em [`ERRATA.md`](ERRATA.md) — o que estava lá, o que
