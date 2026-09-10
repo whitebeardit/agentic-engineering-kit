@@ -59,3 +59,4 @@ Gate Quick: `npm run test:regra` · Gate Full: `npm test` · Gate Build: `npm ru
 - Importar `src/infrastructure` de `src/domain`/`src/application` para "resolver" um erro (ADR-0003; o teste de arquitetura falha).
 - Lançar `DomainRuleViolation` fora de `src/domain` (ADR-0004; o teste de arquitetura falha).
 - Remover ou enfraquecer teste para passar · `git push --force` · `--no-verify`.
+- Documento (CPF/CNPJ) que passe na validação fora de `src/__tests__/helpers/` — fixture, doc e teste que só precisa de um documento qualquer usam um que reprova (`tools/check-documentos.py` no CI do kit).

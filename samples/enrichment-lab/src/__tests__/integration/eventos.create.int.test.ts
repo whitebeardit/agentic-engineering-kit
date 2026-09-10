@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 import { criarApp } from '../../interfaces/http/server';
-import { eventoValido } from '../helpers/eventos';
+import { CNPJ_VALIDO, eventoValido } from '../helpers/eventos';
 import { servicosDeTeste } from '../helpers/servicos';
 
 const s = servicosDeTeste();
@@ -31,7 +31,7 @@ describe('When we publish an ingestion event', () => {
   it('should answer 400 when a CNPJ comes as pessoa fisica (schema)', async () => {
     const r = await supertest(app)
       .post('/v1/eventos')
-      .send(eventoValido({ documento: '11444777000161' }));
+      .send(eventoValido({ documento: CNPJ_VALIDO }));
     expect(r.status).toBe(400);
     expect(r.body.erro).toBe('BadRequestError');
   });
