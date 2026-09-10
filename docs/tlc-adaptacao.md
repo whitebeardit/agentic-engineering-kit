@@ -40,3 +40,15 @@ duplicada (global + plugin).
 A spec de um card que cruza serviços vive no repo **dono do contrato** (o primeiro da ordem contrato → produtor →
 consumidor → legado). `tasks.md` mantém **1 task = 1 repo = 1 PR**; os outros repos recebem o link da spec e a task deles.
 O tlc não carrega duas specs ao mesmo tempo — respeite isso: uma feature, uma pasta, um repo dono.
+
+## O que os validadores do tlc conferem hoje (conferido em 2026-09-09; `tools/test-validadores.sh`)
+
+| Validador | Confere | **Não** confere (nesta data) |
+|---|---|---|
+| `validate_spec.py` | estrutura da spec (seções, tabela de rastreabilidade, IDs) | o **conteúdo** dos critérios: uma spec com o critério 1 trocado por "O sistema deve fazer a coisa certa quando der." passa com 0 erros — o cabeçalho `**Acceptance Criteria** (each line is one EARS pattern):` do próprio template não casa a regex do script (upstream `tech-leads-club/agent-skills#162`, aberta em 08/08/2026) |
+| `validate_tasks.py` | seções obrigatórias, campos `Tests`/`Gate`, dependências contra tarefas existentes (`Depends on: T99` reprova) | a checagem de fase fica muda no layout do template (todos os `### T*` vêm depois dos `### Phase N`) |
+
+`tools/test-validadores.sh` roda os dois contra a spec e as tasks do laboratório e contra esses mutantes, e reprova
+qualquer desvio **do que está documentado aqui** — inclusive o upstream corrigir o #162: aí a linha acima muda, com
+data. O kit não fixa a versão do tlc (rastreia `main`); registra o que ela faz.
+
