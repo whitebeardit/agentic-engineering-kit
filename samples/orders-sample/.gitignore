@@ -2,3 +2,6 @@ bin/
 obj/
 *.received.txt
 .vs/
+.env
+.env.*
+!.env.example

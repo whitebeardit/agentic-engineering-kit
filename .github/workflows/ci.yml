@@ -1,5 +1,6 @@
 # CI mínimo do kit (v0.5.2): o que o README promete, verificado a cada push e PR.
-#   kit           — rules → cursor/rules em dia; hooks fail-closed (matriz); nenhum documento válido em artefato de
+#   kit           — rules → cursor/rules em dia e todo .mdc com frontmatter na linha 1 (mutante); hooks fail-closed
+#                   (matriz); nenhum documento válido em artefato de
 #                   exibição; validadores do tlc no estado documentado (smoke test contra mutantes).
 #   enrichment-lab — gate do laboratório (tipos, lint, testes) e docs/generated/ em dia.
 # Sem segredos, sem escrita: permissions só de leitura.
@@ -23,8 +24,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: rules → cursor/rules em dia
+      - name: rules → cursor/rules em dia; todo .mdc abre com o frontmatter
         run: python3 tools/build-cursor.py --check
+      - name: mutante — .mdc com carimbo antes do frontmatter reprova
+        run: python3 tools/build-cursor.py --selftest
       - name: hooks fail-closed (matriz Claude × Cursor)
         run: bash tools/test-hooks.sh
       - name: nenhum documento válido em artefato de exibição

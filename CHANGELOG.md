@@ -1,5 +1,18 @@
 # Changelog
 
+## kit--v0.5.3 — 2026-09-13
+
+Correção pequena, antes das demais issues abertas, que passam para a v0.5.4: **as rules do Cursor voltam a carregar**. Quem usa
+o plugin do Cursor ou aplicou `apply.sh --cursor` recebe a mudança atualizando; no Claude Code nada muda.
+
+- **#24 Rules do Cursor.** `tools/build-cursor.py` punha o carimbo "gerado por" na linha 1, antes do `---`; o Cursor não
+  lia o frontmatter e ignorava as duas rules por caminho (`contracts`, `legacy`) — no plugin do Cursor, no
+  `apply.sh --cursor` e nos dois laboratórios. O carimbo vai para dentro do frontmatter como comentário YAML;
+  `--check` reprova qualquer `.mdc` que não abra com `---`, e `--selftest` prova a regra com um mutante no CI. Testado
+  no `cursor-agent` 2026.06.19: com o carimbo antes, a rule não carrega; na forma nova, carrega.
+- **#23 `.env` no `.gitignore`.** A raiz e `samples/orders-sample` passam a ignorar `.env` e `.env.*` (mantendo
+  `.env.example`), como o laboratório Node já fazia.
+
 ## kit--v0.5.2 — 2026-09-09
 
 Esta versão **altera hooks, rule e skill existentes** — quem aplicou o kit por `apply.sh` recebe as mudanças por PR;

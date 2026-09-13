@@ -32,3 +32,24 @@ invalidaria todos os clones existentes, e a exposição marginal não justifica.
 
 **Rastro**: issue #9 deste repositório (varredura e gate que impedem a reincidência) e o registro AD-036 no repositório
 do livro *Cercando a IA*, que achou o defeito ao contra-verificar a revisão externa do capítulo 12.
+
+## 2026-09-13 — rules do Cursor que o Cursor não carregava
+
+**Onde**: `cursor/rules/contracts.mdc` e `cursor/rules/legacy.mdc` (entregues pelo plugin do Cursor e pelo `apply.sh
+--cursor`), nas tags `kit--v0.2.0` a `kit--v0.5.2`; e as cópias em `samples/enrichment-lab/.cursor/rules/` (desde `kit--v0.3.0`) e
+`samples/orders-sample/.cursor/rules/` (desde `kit--v0.2.0`).
+
+**O que estava publicado**: o carimbo `<!-- gerado por tools/build-cursor.py … -->` na linha 1, antes do `---` do
+frontmatter. Com ele, o Cursor não lê o frontmatter e não aplica a rule — nem por `globs`, nem com `alwaysApply: true`.
+Testado no `cursor-agent` 2026.06.19, em repositórios temporários idênticos exceto por essa linha: com o carimbo, a rule
+não carregou em nenhuma das duas rodadas; sem ele, carregou nas duas.
+
+**O que passou a valer** (tag `kit--v0.5.3`): o carimbo é um comentário YAML dentro do frontmatter; `tools/build-cursor.py
+--check` reprova qualquer `.mdc` do repositório que não abra com `---`, e `--selftest` prova a regra com um mutante no CI.
+
+**Se você clonou uma tag anterior**: no Cursor, as duas rules por caminho não estavam ativas. Atualize o kit para a
+`kit--v0.5.3` (plugin ou `apply.sh --cursor`), ou mova a primeira linha de cada `.mdc` para dentro do frontmatter, como
+`# …`. No Claude Code nada muda: as rules dele são `rules/*.md` com `paths:`, sem o carimbo.
+
+**Rastro**: issue #24 deste repositório, apontada pelo check CTX-04 de um scanner de harness (`harness-score` 1.6.5) e
+confirmada no Cursor pelo repositório do livro *Cercando a IA* (AD-045).

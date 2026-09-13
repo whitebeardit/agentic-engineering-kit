@@ -1,5 +1,5 @@
-<!-- gerado por tools/build-cursor.py a partir de rules/contracts.md — não edite à mão -->
 ---
+# gerado por tools/build-cursor.py a partir de rules/contracts.md — não edite à mão
 description: Contratos (ativa ao tocar em API, eventos ou DTOs públicos)
 globs:
   - "**/openapi*.{yaml,yml,json}"

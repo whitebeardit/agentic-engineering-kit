@@ -1,5 +1,5 @@
-<!-- gerado por tools/build-cursor.py a partir de rules/legacy.md — não edite à mão -->
 ---
+# gerado por tools/build-cursor.py a partir de rules/legacy.md — não edite à mão
 description: Legado (ativa ao tocar no monolito)
 globs:
   - "**/erp-mono/**"
