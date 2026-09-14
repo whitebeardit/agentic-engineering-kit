@@ -1,5 +1,13 @@
 # Changelog
 
+## kit--v0.5.6 — 2026-09-14
+
+Correção de release: **os manifestos do plugin passam a dizer a versão da tag**. As tags `kit--v0.5.4` e `kit--v0.5.5`
+saíram com `"version": "0.5.3"` em `.claude-plugin/plugin.json` e `.cursor-plugin/plugin.json`, e `claude plugin details`
+mostrava 0.5.3 para quem instalava a versão nova; o conteúdo das duas tags é o do CHANGELOG delas. Novo gate no CI,
+`tools/check-versao.py` (com `--selftest`): a versão dos dois manifestos é a da primeira entrada deste CHANGELOG e, num
+run de tag, a da tag. Achado na revisão do bump do livro *Cercando a IA*.
+
 ## kit--v0.5.5 — 2026-09-13
 
 Correção da v0.5.4: **a saída do `apply.sh` volta a mostrar os caminhos como você os passou** (`kit → .` e
