@@ -58,5 +58,5 @@ Gate Quick: `npm run test:regra` · Gate Full: `npm test` · Gate Build: `npm ru
 - Editar `__snapshots__/*.snap`, `.env` (hook bloqueia) · rodar `jest -u` (hook bloqueia).
 - Importar `src/infrastructure` de `src/domain`/`src/application` para "resolver" um erro (ADR-0003; o teste de arquitetura falha).
 - Lançar `DomainRuleViolation` fora de `src/domain` (ADR-0004; o teste de arquitetura falha).
-- Remover ou enfraquecer teste para passar · `git push --force` · `--no-verify`.
-- Documento (CPF/CNPJ) que passe na validação fora de `src/__tests__/helpers/` — fixture, doc e teste que só precisa de um documento qualquer usam um que reprova (`tools/check-documentos.py` no CI do kit).
+- `git push --force` e `--no-verify` (o `guard-bash.sh` nega antes de executar; o `deny` do `.claude/settings.json` também cobre o `--force`) · remover ou enfraquecer teste para passar (declaração sem catraca: nenhum hook nem teste detecta — quem pega é a revisão).
+- Documento (CPF/CNPJ) que passe na validação fora de `src/__tests__/helpers/` — fixture, doc e teste que só precisa de um documento qualquer usam um que reprova (a catraca é `tools/check-documentos.py`, que roda no CI do kit, não no `npm run gate` deste laboratório; ao copiar o laboratório para o seu repositório, leve o script para o gate).

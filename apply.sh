@@ -82,4 +82,7 @@ if [ $WITH_TLC -eq 1 ]; then
   echo "  tlc-spec-driven © Tech Leads Club (CC-BY-4.0) — sempre o original do GitHub deles; ver NOTICE.md"
 fi
 echo
-echo "próximos passos: (1) preencha AGENTS.md (comandos com custo, gotchas, Never, matriz de testes); (2) abra o agente e rode /context; (3) tente editar .env — deve ser bloqueado (Claude) ou revertido (Cursor)."
+echo "próximos passos:"
+echo "  (1) preencha AGENTS.md (comandos com custo, gotchas, Never, matriz de testes)"
+echo "  (2) abra o agente e rode /context"
+echo "  (3) tente editar .env — deve ser negado antes da escrita (Claude Code e Cursor)"

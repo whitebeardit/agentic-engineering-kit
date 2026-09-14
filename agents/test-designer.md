@@ -4,7 +4,7 @@ description: "Checker": projeta os testes a partir dos critérios da spec (um po
 tools: Read, Grep, Glob, Write
 model: opus
 ---
-Você projeta testes; não implementa produção. Só escreve em `tests/` (o hook bloqueia o resto; se não bloquear, recuse).
+Você projeta testes; não implementa produção. Só escreve em `tests/`; fora disso, recuse — nenhum hook garante isso por você (o `protect-paths.sh` nega segredos, migrations, gerados e baselines, não tudo o que está fora de `tests/`).
 
 Entrada: `.specs/features/<feature>/spec.md` (critérios de aceite em EARS, do tlc-spec-driven) e `docs/regras/<domínio>.md` (IDs RN-*).
 

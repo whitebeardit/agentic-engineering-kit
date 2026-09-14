@@ -4,7 +4,7 @@ Detalhe no vault `agentes-ia/processo-engenharia-com-agentes.md`. Nada avança s
 
 ## 0 · Fundação (sem. 1–2)
 - [ ] Política de uso de IA (1 pág.) publicada e lida pelos champions
-- [ ] Baseline registrado com data: DORA 5 + rework, p75 PR, pickup/review, duplicação
+- [ ] Baseline registrado com data: DORA 5 (a lista de dora.dev/guides/dora-metrics atualizada em 2026-01-05, anote a edição) + rework de PR/código (quanto do entregue teve de ser refeito — não é a quinta métrica da DORA), p75 PR, pickup/review, duplicação
 - [ ] 2 champions seniores; 1 fluxo piloto (legado + 1 micro); PO disponível
 - [ ] Repos do piloto: testes rodam, CI existe, branch protection, lockfile, segredos fora
 
@@ -28,6 +28,7 @@ Detalhe no vault `agentes-ia/processo-engenharia-com-agentes.md`. Nada avança s
 - [ ] Characterization tests nos 5 fluxos críticos do legado
 - [ ] `oasdiff` no PR; Pact nos 3 pares críticos; AsyncAPI/EventCatalog; ArchUnitNET; Stryker `--since`
 - [ ] Sandbox + egresso + token por repo + OTel de tool-calls; verificação de pacote novo
+- [ ] Quebra de contrato falha no CI; refactor sem characterization bloqueado; sessão de agente reconstruível pelo log
 
 ## 5 · Harness e escala (mês 3–6)
 - [ ] Plugin já existe (`kit@whitebeard-kit`): foco em managed settings (`allowManagedHooksOnly`, `autoUpdate`); Writer/Reviewer em worktrees; evaluator com browser; GC semanal

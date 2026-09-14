@@ -49,5 +49,13 @@ for c in "$KIT"/samples/*/.claude/hooks "$KIT"/samples/*/.cursor/hooks; do
     if [ -f "$c/$h" ] && ! diff -q "$KIT/hooks/$h" "$c/$h" >/dev/null; then fail=$((fail+1)); echo "  ✗ cópia divergente: $c/$h"; else ok=$((ok+1)); fi
   done
 done
+# --- settings.json dos samples: os matchers de cada evento são os do template (#19: o matcher de edição mudou em três
+# arquivos). Compara só os matchers: o comando pode mudar por perfil (o .NET formata com dotnet-format.sh). ---
+for sj in "$KIT"/samples/*/.claude/settings.json; do
+  if python3 -c 'import json,sys
+m=lambda f: {ev: [h["matcher"] for h in hs] for ev, hs in json.load(open(f))["hooks"].items()}
+sys.exit(0 if m(sys.argv[1]) == m(sys.argv[2]) else 1)' "$KIT/templates/.claude/settings.json" "$sj"; then ok=$((ok+1)); else fail=$((fail+1)); echo "  ✗ matchers divergentes do template: $sj"; fi
+done
+if grep -q '"MultiEdit"\|Edit|Write|MultiEdit' "$KIT"/templates/.claude/settings.json "$KIT"/samples/*/.claude/settings.json; then fail=$((fail+1)); echo "  ✗ matcher com MultiEdit"; else ok=$((ok+1)); fi
 echo "test-hooks: $ok ok, $fail falha(s)"
 [ "$fail" -eq 0 ]

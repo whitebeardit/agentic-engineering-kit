@@ -23,7 +23,7 @@ que um humano abre às 3 da manhã. Só coordenadas, movimentos e verdades opera
 | Latência do fluxo caro | traces do fluxo raro (sempre amostrado); span do provedor | — |
 
 ## Trace sob demanda
-`traceparent: 00-<traceid>-<spanid>-01` numa requisição única força a exportação de ponta a ponta (aceite → fila → consumidor → guardas → escrita). **Nunca ligar `-01` por padrão em produção** — é ferramenta de uma requisição. Fonte de payload para replay: DLQ ou sistema de origem; **nunca os logs** (documento mascarado).
+`traceparent: 00-<traceid>-<spanid>-01` numa requisição única **pede** a exportação de ponta a ponta, e a obtém numa cadeia instrumentada que respeita a flag (W3C Trace Context: com o bit ligado, o chamador *pode* ter gravado; cada componente *deveria* respeitar). Teste a cadeia do seu serviço antes de contar com isso: aceite → fila → consumidor → guardas → escrita. **Nunca ligar `-01` por padrão em produção** — é ferramenta de uma requisição. Fonte de payload para replay: DLQ ou sistema de origem; **nunca os logs** (documento mascarado).
 
 ## Verdades operacionais (preencha as suas; estas vieram de um serviço real)
 1. `trace_flags: "00"` no log é o primeiro check quando um id não resolve — não é retenção nem exportador quebrado.

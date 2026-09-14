@@ -1,4 +1,4 @@
-# CI mínimo do kit (v0.5.2): o que o README promete, verificado a cada push e PR.
+# CI mínimo do kit (v0.5.2; instalador desde a v0.5.4): o que o README promete, verificado a cada push e PR.
 #   kit           — rules → cursor/rules em dia e todo .mdc com frontmatter na linha 1 (mutante); hooks fail-closed
 #                   (matriz); nenhum documento válido em artefato de
 #                   exibição; validadores do tlc no estado documentado (smoke test contra mutantes).
@@ -30,6 +30,8 @@ jobs:
         run: python3 tools/build-cursor.py --selftest
       - name: hooks fail-closed (matriz Claude × Cursor)
         run: bash tools/test-hooks.sh
+      - name: instalador (apply.sh em diretório temporário)
+        run: bash tools/test-apply.sh
       - name: nenhum documento válido em artefato de exibição
         run: python3 tools/check-documentos.py
       - name: validadores do tlc no estado documentado

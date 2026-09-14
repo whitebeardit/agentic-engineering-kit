@@ -5,7 +5,11 @@ Uso: tools/build-cursor.py [--check] [--selftest]
   --selftest  prova a segunda regra com um mutante (carimbo antes do frontmatter) e um controle (a saída do gerador)
 
 O carimbo "gerado por" vai DENTRO do frontmatter, como comentário YAML. Até a v0.5.2 ele ia na linha 1, antes do
-`---`, e o Cursor ignorava a rule inteira, `globs` e `alwaysApply` incluídos (issue #24, testado no cursor-agent)."""
+`---`, e o Cursor ignorava a rule inteira, `globs` e `alwaysApply` incluídos (issue #24, testado no cursor-agent).
+
+Rule sem `paths` vira `alwaysApply: true`, sem `globs` — o equivalente do Claude Code, onde "rules without a `paths`
+field are loaded unconditionally". Até a v0.5.3 toda rule saía com `alwaysApply: false`, e uma rule sem `paths` sairia
+com a lista de globs vazia, isto é, nunca aplicada (issue #16)."""
 import re, subprocess, sys, pathlib, tempfile
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC, DST = ROOT / "rules", ROOT / "cursor" / "rules"
@@ -19,9 +23,9 @@ def gerar(src):
     globs = re.findall(r'^\s*-\s*"?([^"\n]+?)"?\s*$', fm, re.M)
     title = re.search(r"^#\s+(.+)$", body, re.M)
     desc = (title.group(1).strip() if title else src.stem)
+    alvo = ("globs:\n" + "".join(f"  - \"{g}\"\n" for g in globs) + "alwaysApply: false\n") if globs else "alwaysApply: true\n"
     return ("---\n# gerado por tools/build-cursor.py a partir de rules/%s — não edite à mão\n" % src.name
-            + f"description: {desc}\n" + "globs:\n" + "".join(f"  - \"{g}\"\n" for g in globs)
-            + "alwaysApply: false\n---\n" + body.lstrip("\n"))
+            + f"description: {desc}\n" + alvo + "---\n" + body.lstrip("\n"))
 
 
 def sem_frontmatter(paths):
@@ -39,7 +43,13 @@ if "--selftest" in sys.argv:
         ruins = sem_frontmatter([controle, mutante])
         ok = ruins == [mutante]
         print("selftest:", "mutante reprovado, controle aprovado" if ok else f"FALHOU (reprovados: {[p.name for p in ruins]})")
-        sys.exit(0 if ok else 1)
+        # rule sem `paths` sai com alwaysApply: true e sem globs; com `paths`, alwaysApply: false (issue #16)
+        sempre = pathlib.Path(d, "sempre.md"); sempre.write_text("# Sempre\ncorpo\n", encoding="utf-8")
+        g_sempre, g_ctrl = gerar(sempre), controle.read_text(encoding="utf-8")
+        ok2 = ("alwaysApply: true" in g_sempre and "globs:" not in g_sempre
+               and "alwaysApply: false" in g_ctrl and "globs:" in g_ctrl)
+        print("selftest:", "rule sem paths → alwaysApply: true" if ok2 else "FALHOU (rule sem paths não sai com alwaysApply: true)")
+        sys.exit(0 if ok and ok2 else 1)
 
 DST.mkdir(parents=True, exist_ok=True)
 diff = []
