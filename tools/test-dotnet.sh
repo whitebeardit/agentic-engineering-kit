@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Prova o perfil .NET no exemplo samples/orders-sample: restore bloqueado pelo lockfile, build, testes, e a rampa por
-# projeto — o legado com o conjunto Minimum e o domínio com o Recommended (issues #25 e #26).
+# Prova o perfil .NET no exemplo samples/orders-sample: restore bloqueado pelo lockfile, formatação conferida (#28), build,
+# testes, e a rampa por projeto — o legado com o conjunto Minimum e o domínio com o Recommended (issues #25 e #26).
+# Até a v0.5.6 nada conferia a formatação: o hook dotnet-format.sh é melhor esforço e sai 0 quando falha.
 # Até a v0.5.3 os pacotes de teste flutuavam ("*", "2.*"), não havia lockfile nem global.json, e o AnalysisLevel composto
 # (latest-Recommended) anulava o AnalysisMode=Minimum do legado sem nenhum teste acusar.
 # Uso: bash tools/test-dotnet.sh [--sem-testes]   (exit 0 = tudo ok; precisa do SDK do global.json)
@@ -9,6 +10,7 @@ KIT=$(cd "$(dirname "$0")/.." && pwd); S="$KIT/samples/orders-sample"
 ok=0; fail=0; passa() { ok=$((ok+1)); }; falha() { fail=$((fail+1)); echo "  ✗ $1"; }
 cd "$S"
 dotnet restore Orders.slnx --locked-mode >/tmp/test-dotnet-restore.log 2>&1 && passa || { falha "restore --locked-mode (lockfile ausente ou desatualizado)"; tail -5 /tmp/test-dotnet-restore.log; }
+dotnet format Orders.slnx --verify-no-changes --no-restore -v:quiet >/tmp/test-dotnet-format.log 2>&1 && passa || { falha "#28: formatação (dotnet format --verify-no-changes)"; tail -5 /tmp/test-dotnet-format.log; }
 if [ "${1:-}" != "--sem-testes" ]; then
   dotnet build Orders.slnx --no-restore -v:quiet >/tmp/test-dotnet-build.log 2>&1 && passa || { falha "build"; tail -15 /tmp/test-dotnet-build.log; }
   dotnet test Orders.slnx --no-build -v:quiet >/tmp/test-dotnet-test.log 2>&1 && passa || { falha "testes"; tail -15 /tmp/test-dotnet-test.log; }

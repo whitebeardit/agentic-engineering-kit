@@ -6,16 +6,17 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 - Build: `dotnet build Orders.slnx` (≈ 2 s; warnings de análise são ERRO — o build é o que o agente obedece)
 - Testes: `dotnet test Orders.slnx` (≈ 9 s com build; 14 testes: 10 regra RN_ORD_012, 3 arquitetura, 1 characterization)
 - Só a regra: `dotnet test --filter "FullyQualifiedName~RN_ORD_012"` · Só arquitetura: `dotnet test --filter ArchitectureTests`
-- Formatar: `dotnet format Orders.slnx` (hook roda no arquivo tocado) · Usings: `dotnet format --diagnostics IDE0005`
+- Formatar: `dotnet format Orders.slnx` (o hook formata o arquivo tocado, em melhor esforço) · Conferir: `dotnet format Orders.slnx --verify-no-changes` · Usings: `dotnet format --diagnostics IDE0005`
 
 ## Definição de pronto
-Build sem erro + `dotnet test` verde + `.verified.txt` inalterado (ou mudança explicada no PR) + `.specs/features/<f>/validation.md` com PASS + output colado no PR.
+Build sem erro + `dotnet format --verify-no-changes` limpo + `dotnet test` verde + `.verified.txt` inalterado (ou mudança explicada no PR) + `.specs/features/<f>/validation.md` com PASS + output colado no PR.
 
 ## Gotchas
 - `Erp.Legacy` compila em `AnalysisMode=Minimum` (rampa); o resto em `Recommended` com warnings-as-errors.
 - Characterization test: 1ª execução cria `*.received.txt` e FALHA; humano compara e renomeia para `.verified.txt`. Nunca aprove no automático.
 - `DiffEngine_Disabled=true` no CI, senão o Verify tenta abrir um diff tool.
 - **Nunca julgue um gate com `dotnet test --no-build`**: ele roda o binário anterior e "passa" com o build quebrado. Gate = `dotnet build` (exit 0) + `dotnet test` (exit 0), sempre com build fresco.
+- O hook `dotnet-format.sh` é **melhor esforço**: sai 0 mesmo quando o formatador falha (a falha vai para o stderr); quem confere a formatação é o gate. E o `dotnet format` pode restaurar, compilar e rodar analisadores do projeto: rode-o, e deixe o hook ligado, só em código confiável.
 - `nuget.config` isola o feed: o NuGet.config global desta máquina aponta para feeds de outros clientes.
 - Só existe repositório in-memory; não há API nem catálogo AsyncAPI (fora do exemplo).
 
@@ -40,7 +41,7 @@ Build sem erro + `dotnet test` verde + `.verified.txt` inalterado (ou mudança e
 | Legado (`Erp.Legacy`) | characterization (Verify + Bogus, seed 20260827) | baseline `.verified.txt` inalterado | `tests/Orders.Tests/Legacy/` | `dotnet test --filter Legacy` |
 | Infrastructure / config | none | build gate | — | `dotnet build` |
 
-Gate Quick: `dotnet test --filter "FullyQualifiedName~RN_"` · Gate Full: `dotnet test Orders.slnx` · Gate Build: `dotnet build Orders.slnx && dotnet test Orders.slnx`.
+Gate Quick: `dotnet test --filter "FullyQualifiedName~RN_"` · Gate Full: `dotnet test Orders.slnx` · Gate Build: `dotnet build Orders.slnx && dotnet format Orders.slnx --verify-no-changes --no-restore && dotnet test Orders.slnx`.
 
 ## Never
 - Editar `*.verified.txt`, `Migrations/`, `.env` (hook bloqueia).

@@ -29,15 +29,20 @@ case "${CLAUDE_PLUGIN_ROOT:-}" in */plugins/cache/*/kit/*) catalogo=$(printf '%s
 if [ -z "$catalogo" ]; then for f in "${found[@]}"; do case "$f" in */plugins/cache/*/tlc/*) catalogo=$(printf '%s' "$f" | sed -E 's#.*/plugins/cache/([^/]+)/tlc/.*#\1#'); break;; esac; done; fi
 cat_txt=${catalogo:-"<o catálogo por onde você instalou o kit>"}
 
-# 3) upstream (1x por 24h, 3s de timeout). Sem rede, sem curl ou com timeout: "não verificado", com a data do cache.
+# 3) upstream (1x por 24h, 3s de timeout). Sem rede, sem curl, timeout ou HTTP que não seja 200/404: "não verificado",
+#    com a data do cache.
 upstream=""; verificado=""; nao_verificado=""
 cache_data() { date -r "$CACHE" '+%Y-%m-%d %H:%M' 2>/dev/null; }
 if [ -f "$CACHE" ] && [ -z "$(find "$CACHE" -mmin +$TTL_MIN 2>/dev/null)" ]; then upstream=$(cat "$CACHE"); verificado=$(cache_data)
 elif command -v curl >/dev/null 2>&1; then
-  body=$(curl -fsSL -m 3 "$UP" 2>/dev/null); rc=$?
-  if [ $rc -eq 0 ]; then upstream=$(printf '%s' "$body" | grep -m1 -E '^\s*version:' | sed -E 's/^\s*version:\s*//; s/["'"'"']//g; s/\s.*$//'); printf '%s' "$upstream" > "$CACHE"; verificado=$(cache_data)
-  elif [ $rc -eq 22 ]; then upstream="404"
-  else nao_verificado="sem resposta do upstream (curl $rc)"; fi
+  # Sem -f: o código HTTP vem na última linha (-w). Só 404 quer dizer "caminho mudou"; 403 (limite), 429 e 5xx são "não
+  # verificado". Até a v0.5.6, com -f, qualquer HTTP >= 400 saía como rc 22 e virava "mudou o path" (issue #30).
+  out=$(curl -sSL -m 3 -w '\n%{http_code}' "$UP" 2>/dev/null); rc=$?
+  code=${out##*$'\n'}; body=${out%$'\n'*}
+  if [ $rc -ne 0 ]; then nao_verificado="sem resposta do upstream (curl $rc)"
+  elif [ "$code" = "200" ]; then upstream=$(printf '%s' "$body" | grep -m1 -E '^\s*version:' | sed -E 's/^\s*version:\s*//; s/["'"'"']//g; s/\s.*$//'); printf '%s' "$upstream" > "$CACHE"; verificado=$(cache_data)
+  elif [ "$code" = "404" ]; then upstream="404"
+  else nao_verificado="o upstream respondeu HTTP $code"; fi
 else nao_verificado="curl não encontrado"; fi
 if [ -n "$nao_verificado" ] && [ -f "$CACHE" ]; then upstream=$(cat "$CACHE"); verificado="$(cache_data), cache vencido"; fi
 

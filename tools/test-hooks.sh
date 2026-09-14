@@ -45,8 +45,11 @@ if [ "$st" -eq 0 ]; then ok=$((ok+1)); else fail=$((fail+1)); echo "  ✗ afterF
 rm -rf "$T"
 # --- cópias sincronizadas ---
 for c in "$KIT"/samples/*/.claude/hooks "$KIT"/samples/*/.cursor/hooks; do
-  for h in protect-paths.sh guard-bash.sh; do
-    if [ -f "$c/$h" ] && ! diff -q "$KIT/hooks/$h" "$c/$h" >/dev/null; then fail=$((fail+1)); echo "  ✗ cópia divergente: $c/$h"; else ok=$((ok+1)); fi
+  # todo hook copiado que tem par em hooks/ (até a v0.5.6 só protect-paths e guard-bash eram comparados, e as cópias do
+  # dotnet-format.sh e do tlc-version.sh no orders-sample tinham ficado para trás sem nenhum teste acusar)
+  for f in "$c"/*.sh; do
+    h=$(basename "$f"); [ -f "$KIT/hooks/$h" ] || continue
+    if ! diff -q "$KIT/hooks/$h" "$f" >/dev/null; then fail=$((fail+1)); echo "  ✗ cópia divergente: ${f#$KIT/}"; else ok=$((ok+1)); fi
   done
 done
 # --- settings.json dos samples: os matchers de cada evento são os do template (#19: o matcher de edição mudou em três

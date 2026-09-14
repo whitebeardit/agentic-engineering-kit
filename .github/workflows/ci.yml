@@ -3,7 +3,7 @@
 #                   (matriz); nenhum documento válido em artefato de
 #                   exibição; validadores do tlc no estado documentado (smoke test contra mutantes).
 #   enrichment-lab — gate do laboratório (tipos, lint, testes) e docs/generated/ em dia.
-#   orders-sample  — restore bloqueado pelo lockfile, build, testes e a rampa por projeto (v0.5.4, #25 e #26).
+#   orders-sample  — restore bloqueado pelo lockfile, formatação (#28), build, testes e a rampa por projeto (#25 e #26).
 # Sem segredos, sem escrita: permissions só de leitura.
 name: ci
 on:
@@ -34,6 +34,8 @@ jobs:
         run: python3 tools/build-cursor.py --selftest
       - name: hooks fail-closed (matriz Claude × Cursor)
         run: bash tools/test-hooks.sh
+      - name: agentes não prometem fonte fora do alcance; ordem entre serviços nos dois sentidos
+        run: python3 tools/check-agentes.py && python3 tools/check-agentes.py --selftest
       - name: hook de versão do tlc (hermético, com HOME, cache e curl simulados)
         run: bash tools/test-tlc-version.sh
       - name: instalador (apply.sh em diretório temporário)
@@ -68,5 +70,5 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: samples/orders-sample/global.json
-      - name: restore bloqueado, build, testes e rampa por projeto
+      - name: restore bloqueado, formatação, build, testes e rampa por projeto
         run: bash tools/test-dotnet.sh

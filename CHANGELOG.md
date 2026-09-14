@@ -1,5 +1,32 @@
 # Changelog
 
+## kit--v0.5.7 — 2026-09-14
+
+Fecha as cinco issues que ficaram abertas depois da Onda 1 das revisões do livro *Cercando a IA*. Esta versão **altera um
+hook, dois agentes, o template raiz e o exemplo .NET** — quem aplicou o kit por `apply.sh` confere com
+`apply.sh <repo> --check` e leva por PR; quem usa o plugin, por `claude plugin update`.
+
+- **#30 Hook de versão do tlc.** Só HTTP 404 vira "o caminho do upstream mudou"; 403 (limite do GitHub), 429 e 5xx viram
+  "não verificado", com a data da última verificação. Até a v0.5.6 o `curl -f` transformava qualquer HTTP ≥ 400 em
+  "mudou o path". `tools/test-tlc-version.sh` com 18 casos; o hook da v0.5.6 reprova 3.
+- **#13 `impact-analyzer` sem fonte fora do alcance.** O mapa transversal entra no pedido: o agente não tem ferramenta de
+  MCP nem acesso ao vault, e o mapa que não veio vai para "O que não encontrei". Para cruzar repositórios, a sessão começa
+  com `--add-dir` para cada irmão. O `contract-reviewer` e o `templates/AGENTS.root.md` deixam de mandar consultar o vault.
+- **#14 Ordem entre serviços nos dois sentidos.** `templates/AGENTS.root.md` separa a ordem de acrescentar (contrato →
+  produtor → consumidor → legado) da inversa (retirar, ou consumidor novo que lê dado antigo: consumidores primeiro), com a
+  regra "sobe primeiro quem pode mudar sem quebrar quem ainda não mudou" e a exceção do legado fonte de verdade. Na
+  Etiqueta, a evidência colada libera o próximo repositório a **começar**; **implantar** depende do check verde. Gate novo
+  `tools/check-agentes.py` para #13 e #14 (com `--selftest`; os arquivos da v0.5.6 dão 12 erros): confere o que os
+  arquivos declaram e prometem, não o comportamento do modelo.
+- **#28 Formatação .NET conferida.** `hooks/dotnet-format.sh` diz que é melhor esforço e escreve a falha no stderr
+  (continua saindo 0); o gate do `orders-sample` e o `tools/test-dotnet.sh` rodam `dotnet format --verify-no-changes`
+  (um `.cs` desindentado reprova); o `AGENTS.md` do exemplo escreve a fronteira de confiança do `dotnet format`.
+  `tools/test-hooks.sh` compara todas as cópias de hooks dos samples com `hooks/` — antes, só duas; as cópias do
+  `dotnet-format.sh` e do `tlc-version.sh` no `orders-sample` estavam desatualizadas e foram sincronizadas.
+- **#29 Contrato .NET sem gate, dito na tabela.** A célula .NET de "Contrato como código" em `docs/perfil-node-ts.md` diz
+  "política, sem gate"; o comentário do `.editorconfig` que afirmava, sem fonte, que mascaramento de erro "é o que mais
+  cresce com IA" passa a dizer só o que o grupo cobre.
+
 ## kit--v0.5.6 — 2026-09-14
 
 Correção de release: **os manifestos do plugin passam a dizer a versão da tag**. As tags `kit--v0.5.4` e `kit--v0.5.5`

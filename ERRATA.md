@@ -79,3 +79,34 @@ alvo tinha algum link simbólico em `.claude/`, `.cursor/` ou `docs/`, confira s
 
 **Rastro**: issues #10, #19, #25 e #27 deste repositório; AD-046 e AD-047 no repositório do livro *Cercando a IA*.
 
+## 2026-09-14 — alcance dos agentes, ordem entre serviços e mensagens corrigidos na v0.5.7
+
+**Onde e o que estava publicado**:
+
+- **Fonte que o agente não alcança** — `agents/impact-analyzer.md` (tags `kit--v0.2.0` a `kit--v0.5.6`) e `templates/AGENTS.root.md` (tags
+  `kit--v0.2.0` a `kit--v0.5.6`): o agente listava "mapa transversal no vault (via MCP, se disponível)" com `tools: Read, Grep, Glob`, que não
+  inclui ferramenta de MCP, e o template mandava consultar o vault via MCP. A fonte nunca era consultada, e o agente
+  seguia sem dizer. Issue #13.
+- **Ordem entre serviços de um sentido só** — `templates/AGENTS.root.md`, tags `kit--v0.2.0` a `kit--v0.5.6`: dava contrato → produtor →
+  consumidor → legado como a ordem padrão, e ela só vale para acrescentar; para retirar, ou quando o consumidor novo lê
+  dado antigo, a ordem inverte. Issue #14.
+- **"O caminho mudou" para qualquer erro HTTP** — `hooks/tlc-version.sh`, tags `kit--v0.2.0` a `kit--v0.5.6`: com `curl -f`, um 403 de limite do
+  GitHub, um 429 ou um 5xx passageiro recebia a mensagem de que o repositório Tech Leads Club tinha mudado o caminho.
+  Issue #30.
+- **Formatação .NET que falhava em silêncio** — `hooks/dotnet-format.sh`, tags `kit--v0.2.0` a `kit--v0.5.6`: a falha do `dotnet format` era
+  descartada, e nenhum gate conferia a formatação. No `orders-sample`, a cópia `.claude/hooks/dotnet-format.sh` era a do
+  primeiro commit do kit (comentário com `MultiEdit`), e a `.cursor/hooks/tlc-version.sh` tinha ficado como no commit da v0.2
+  (`c486c61`), comparando versão como texto — ela não está registrada no `.cursor/hooks.json` do exemplo e não rodava. Issue #28.
+- **Afirmação sem fonte** — `dotnet/.editorconfig` e `samples/orders-sample/.editorconfig`, tags `kit--v0.2.0` a `kit--v0.5.6`: o comentário
+  "Mascaramento de erro — o que mais cresce com IA", sem medição que o sustente. Issue #29.
+
+**O que passou a valer** (tag `kit--v0.5.7`): ver o CHANGELOG; #13, #14, #28 e #30 com gate no CI.
+
+**Se você aplicou uma tag anterior**: no `AGENTS.md` raiz, troque a seção "Ordem padrão entre serviços" e a linha do mapa
+transversal pelas do template novo; no perfil .NET, rode `apply.sh <repo> --dotnet --check` para ver o `dotnet-format.sh`
+que difere e acrescente `dotnet format <sln> --verify-no-changes` ao gate. Quem usa o plugin recebe os agentes e o hook
+de versão com `claude plugin update`. Nos pedidos ao `impact-analyzer`, cole o trecho do mapa transversal e inicie a
+sessão com `--add-dir` para os repositórios irmãos.
+
+**Rastro**: issues #13, #14, #28, #29 e #30 deste repositório; revisões do livro *Cercando a IA* (cap. 14, apêndice F e
+bump de 14/09/2026).

@@ -23,7 +23,7 @@ dotnet_style_qualification_for_field = false:warning
 dotnet_diagnostic.IDE0005.severity = warning   # using desnecessário (exige GenerateDocumentationFile no props)
 dotnet_diagnostic.CS1591.severity = none       # xml-doc ausente: não exigimos doc em todo membro público. Dono: kit · 2026-08-28
 
-# Mascaramento de erro — o que mais cresce com IA
+# Exceções, ConfigureAwait e argumentos públicos
 dotnet_diagnostic.CA1031.severity = warning    # catch de exceção genérica
 dotnet_diagnostic.CA2007.severity = none       # ConfigureAwait: não em apps
 dotnet_diagnostic.CA1062.severity = suggestion # validar argumentos públicos (Nullable já cobre)

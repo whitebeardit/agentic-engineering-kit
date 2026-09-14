@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Testes herméticos de hooks/tlc-version.sh (issues #11 e #21): HOME, cache e curl simulados; nada toca a rede.
+# Testes herméticos de hooks/tlc-version.sh (issues #11, #21 e #30): HOME, cache e curl simulados; nada toca a rede.
 # Uso: bash tools/test-tlc-version.sh   (exit 0 = tudo ok)
 set -u
 KIT=$(cd "$(dirname "$0")/.." && pwd); H="${TLC_VERSION_HOOK:-$KIT/hooks/tlc-version.sh}"
@@ -8,10 +8,18 @@ T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
 mkdir -p "$T/bin" "$T/nocurl"
 for b in bash sh grep sed sort tail head find date cat mkdir printf python3 dirname tr touch env; do p=$(command -v "$b") && ln -sf "$p" "$T/nocurl/$b"; done
 cp -r "$T/nocurl/." "$T/bin/" 2>/dev/null
+# curl simulado nas opções que o hook usa: -f (HTTP >= 400 → rc 22, sem corpo, como o curl real) e -w com %{http_code}.
+# STUB_RC ≠ 0 = sem resposta; STUB_HTTP = código da resposta (padrão 200); STUB_BODY = corpo.
 cat > "$T/bin/curl" <<'C'
 #!/bin/sh
+f=0; w=""
+while [ $# -gt 0 ]; do case "$1" in --*) ;; -w) w="$2"; shift;; -*f*) f=1;; esac; shift; done
+[ "${STUB_RC:-0}" -ne 0 ] && exit "$STUB_RC"
+code=${STUB_HTTP:-200}
+[ "$f" = 1 ] && [ "$code" -ge 400 ] && exit 22
 [ -n "${STUB_BODY:-}" ] && printf '%s\n' "$STUB_BODY"
-exit "${STUB_RC:-0}"
+[ -n "$w" ] && printf "$(printf '%s' "$w" | sed "s/%{http_code}/$code/")"
+exit 0
 C
 chmod +x "$T/bin/curl"
 skill() { mkdir -p "$(dirname "$1")"; printf -- '---\nname: tlc-spec-driven\nmetadata:\n  version: %s\n---\n' "$2" > "$1"; }
@@ -44,7 +52,12 @@ PRE="skill $C1 3.3.0"; caso "timeout → não verificado" 'curl 28' STUB_RC=28
 PRE="skill $C1 3.3.0"; caso "curl ausente → não verificado" 'curl não encontrado' NOCURL=1
 PRE="skill $C1 3.3.0; printf 3.3.0 > \$CLAUDE_PLUGIN_DATA/tlc-upstream-version; touch -d '3 days ago' \$CLAUDE_PLUGIN_DATA/tlc-upstream-version"
 caso "cache vencido + sem rede → não verificado com a data" 'última verificação em [0-9]{4}-[0-9]{2}-[0-9]{2}.*cache vencido' STUB_RC=6
-PRE="skill $C1 3.3.0"; caso "upstream 404 → caminho mudou" 'mudou o path' STUB_RC=22
+PRE="skill $C1 3.3.0"; caso "upstream 404 → caminho mudou" 'mudou o path' STUB_HTTP=404
+# #30: só 404 é "caminho mudou"; limite do GitHub, 429 e 5xx são "não verificado" (a v0.5.6 dizia "mudou o path")
+PRE="skill $C1 3.3.0"; caso "upstream 403 (limite) → não verificado, sem 'mudou o path'" 'não verificado: o upstream respondeu HTTP 403 e nenhum cache anterior' STUB_HTTP=403
+PRE="skill $C1 3.3.0"; caso "upstream 429 → não verificado" 'respondeu HTTP 429' STUB_HTTP=429
+PRE="skill $C1 3.3.0; printf 3.3.0 > \$CLAUDE_PLUGIN_DATA/tlc-upstream-version; touch -d '3 days ago' \$CLAUDE_PLUGIN_DATA/tlc-upstream-version"
+caso "upstream 503 + cache vencido → não verificado com a data" 'HTTP 503.*última verificação em [0-9]{4}-[0-9]{2}-[0-9]{2}.*cache vencido' STUB_HTTP=503
 PRE="skill $C1 abc"; caso "versão não comparável" 'não comparável' STUB_BODY="version: 3.3.0"
 PRE="mkdir -p .cursor/skills/tlc-spec-driven; skill .cursor/skills/tlc-spec-driven/SKILL.md 3.2.0"; caso "Cursor desatualizado → JSON additional_context" '^\{"additional_context": ".*desatualizado' STUB_BODY="version: 3.3.0" CURSOR=1
 echo "test-tlc-version: $ok ok, $fail falha(s)"
