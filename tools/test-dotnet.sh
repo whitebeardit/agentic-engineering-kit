@@ -8,6 +8,10 @@
 set -uo pipefail
 KIT=$(cd "$(dirname "$0")/.." && pwd); S="$KIT/samples/orders-sample"
 ok=0; fail=0; passa() { ok=$((ok+1)); }; falha() { fail=$((fail+1)); echo "  ✗ $1"; }
+# v0.5.8: a linha "Gate" da tabela de tradução e o gate do AGENTS.md do exemplo dizem o mesmo — na v0.5.7 a tabela
+# mostrava `dotnet build && dotnet test` e, na linha seguinte, "quem confere a formatação é o gate".
+gate_formata() { grep -Eq '^\| Gate \|.*dotnet format --verify-no-changes' "$1" && grep -q 'Gate Build:.*--verify-no-changes' "$2"; }
+gate_formata "$KIT/docs/perfil-node-ts.md" "$S/AGENTS.md" && passa || falha "#28: a tabela ou o AGENTS.md do exemplo sem dotnet format --verify-no-changes no gate"
 cd "$S"
 dotnet restore Orders.slnx --locked-mode >/tmp/test-dotnet-restore.log 2>&1 && passa || { falha "restore --locked-mode (lockfile ausente ou desatualizado)"; tail -5 /tmp/test-dotnet-restore.log; }
 dotnet format Orders.slnx --verify-no-changes --no-restore -v:quiet >/tmp/test-dotnet-format.log 2>&1 && passa || { falha "#28: formatação (dotnet format --verify-no-changes)"; tail -5 /tmp/test-dotnet-format.log; }

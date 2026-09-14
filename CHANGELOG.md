@@ -1,5 +1,12 @@
 # Changelog
 
+## kit--v0.5.8 — 2026-09-14
+
+Correção da v0.5.7 (#28): a linha **Gate** da tabela de tradução (`docs/perfil-node-ts.md`) passa a mostrar, em .NET, o
+`dotnet format --verify-no-changes` que a linha de formatação e o `AGENTS.md` do exemplo já exigiam — na v0.5.7 a tabela
+dizia `dotnet build && dotnet test` numa linha e "quem confere é o gate" na seguinte. `tools/test-dotnet.sh` confere que a
+tabela e o exemplo dizem o mesmo gate; a tabela da v0.5.7 reprova. Achado na revisão do bump do livro *Cercando a IA*.
+
 ## kit--v0.5.7 — 2026-09-14
 
 Fecha as cinco issues que ficaram abertas depois da Onda 1 das revisões do livro *Cercando a IA*. Esta versão **altera um

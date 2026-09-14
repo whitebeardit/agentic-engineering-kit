@@ -110,3 +110,12 @@ sessão com `--add-dir` para os repositórios irmãos.
 
 **Rastro**: issues #13, #14, #28, #29 e #30 deste repositório; revisões do livro *Cercando a IA* (cap. 14, apêndice F e
 bump de 14/09/2026).
+
+## 2026-09-14 — linha "Gate" da tabela .NET sem a conferência de formatação
+
+**Onde**: `docs/perfil-node-ts.md`, tag `kit--v0.5.7`. **O que estava publicado**: a coluna .NET da linha "Gate" dizia
+`dotnet build && dotnet test`, e a linha seguinte, "Formatação no hook", dizia que quem confere a formatação é o gate.
+**O que passou a valer** (tag `kit--v0.5.8`): a linha "Gate" traz `dotnet format --verify-no-changes`, como o `AGENTS.md`
+do `orders-sample`; `tools/test-dotnet.sh` confere as duas. **Se você copiou a tabela da v0.5.7**: acrescente
+`dotnet format <sln> --verify-no-changes` ao gate do seu `AGENTS.md`. **Rastro**: #28 e a revisão do bump do livro
+*Cercando a IA* para a v0.5.7.
