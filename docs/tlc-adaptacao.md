@@ -10,7 +10,7 @@ ele fornece o que o tlc espera encontrar no repo e liga o que o tlc produz aos l
 | Plataforma | Instalação | Atualização |
 |---|---|---|
 | Claude Code | `claude plugin marketplace add git@github.com:whitebeardit/agentic-engineering-kit.git` → `claude plugin install kit@whitebeard-kit` (instala `tlc@whitebeard-kit` junto; entrada `git-subdir` rastreando `main` do repo Tech Leads Club) | `claude plugin update tlc@whitebeard-kit` (ative auto-update em `/plugin › Marketplaces`) |
-| Cursor e outros | `npx -y @tech-leads-club/agent-skills install -s tlc-spec-driven -a cursor -g` | `npx -y @tech-leads-club/agent-skills update -s tlc-spec-driven` |
+| Cursor e outros | `npx -y @tech-leads-club/agent-skills@1.4.10 install -s tlc-spec-driven -a cursor -g` | `npx -y @tech-leads-club/agent-skills@1.4.10 update -s tlc-spec-driven` |
 
 Nunca copie a skill para o repo. O hook `SessionStart` do kit avisa quando a cópia local está desatualizada, ausente ou
 duplicada (global + plugin).

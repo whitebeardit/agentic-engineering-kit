@@ -77,9 +77,11 @@ if [ $WITH_TLC -eq 1 ]; then
     echo "  atualizar: claude plugin update tlc@whitebeard-kit   (ative auto-update em /plugin › Marketplaces)"
   fi
   if [ $CURSOR -eq 1 ]; then
-    if command -v npx >/dev/null 2>&1; then npx -y @tech-leads-club/agent-skills install -s tlc-spec-driven -a cursor -g || echo "  ! falhou; rode: npx -y @tech-leads-club/agent-skills install -s tlc-spec-driven -a cursor -g"
-    else echo "  ! npx não encontrado. Depois: npx -y @tech-leads-club/agent-skills install -s tlc-spec-driven -a cursor -g"; fi
-    echo "  atualizar: npx -y @tech-leads-club/agent-skills update -s tlc-spec-driven"
+    # CLI do Tech Leads Club com versão fixa (issue #12): sem versão, o npx instalava a que estivesse no registro no dia.
+    # Integridade: o npm confere o hash do pacote contra o registro; atualizar a versão aqui é um commit deliberado.
+    if command -v npx >/dev/null 2>&1; then npx -y @tech-leads-club/agent-skills@1.4.10 install -s tlc-spec-driven -a cursor -g || echo "  ! falhou; rode: npx -y @tech-leads-club/agent-skills@1.4.10 install -s tlc-spec-driven -a cursor -g"
+    else echo "  ! npx não encontrado. Depois: npx -y @tech-leads-club/agent-skills@1.4.10 install -s tlc-spec-driven -a cursor -g"; fi
+    echo "  atualizar: npx -y @tech-leads-club/agent-skills@1.4.10 update -s tlc-spec-driven"
   fi
   echo "  tlc-spec-driven © Tech Leads Club (CC-BY-4.0) — sempre o original do GitHub deles; ver NOTICE.md"
 fi

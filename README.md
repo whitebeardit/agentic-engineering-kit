@@ -36,7 +36,7 @@ claude plugin install kit@cercando-a-ia
 ```
 **Cursor** (plugin neste repo; tlc pela CLI oficial do Tech Leads Club):
 ```bash
-npx -y @tech-leads-club/agent-skills install -s tlc-spec-driven -a cursor -g
+npx -y @tech-leads-club/agent-skills@1.4.10 install -s tlc-spec-driven -a cursor -g
 ```
 **No repositório** (enforcement: contexto canônico, permissões, hooks, rules, perfil Node/TS ou .NET):
 ```bash

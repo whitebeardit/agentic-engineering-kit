@@ -44,5 +44,8 @@ ok = (d["permissions"]["allow"] == esperado and d["permissions"]["deny"] == g["p
       and s["permissions"]["allow"] == esperado)
 sys.exit(0 if ok else 1)
 PY
+# --- #12: a CLI do Tech Leads Club sempre com versão fixa (no apply.sh e nas mensagens do hook de versão) ---
+soltas=$(grep -ho '@tech-leads-club/agent-skills[^ `]*' "$KIT/apply.sh" "$KIT/hooks/tlc-version.sh" "$KIT/README.md" "$KIT"/docs/*.md | grep -vc '@tech-leads-club/agent-skills@[0-9]' || true)
+[ "$soltas" -eq 0 ] && passa || falha "#12: $soltas chamada(s) da CLI do Tech Leads Club sem versão"
 echo "test-apply: $ok ok, $fail falha(s)"
 [ "$fail" -eq 0 ]

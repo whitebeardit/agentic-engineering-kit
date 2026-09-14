@@ -9,7 +9,7 @@ O que difere é o formato de rules e de hooks — e o que o Cursor não consegue
 | Skills (`card-intake`, `run-and-test`, `regras-de-negocio`) | plugin `/kit:…` ou `.claude/skills` | plugin ou `.cursor/skills` (Agent Skills, `paths`) | — |
 | Agentes | `agents/*.md` (subagentes) | `agents/*.md` | comportamento de delegação pode diferir; conteúdo é o mesmo |
 | Rules por caminho | `rules/*.md` (`paths:`) | `cursor/rules/*.mdc` (`globs:`), geradas por `tools/build-cursor.py` | — |
-| tlc-spec-driven | plugin `tlc@whitebeard-kit` (git-subdir → repo TLC) | `npx -y @tech-leads-club/agent-skills install -s tlc-spec-driven -a cursor -g` | — |
+| tlc-spec-driven | plugin `tlc@whitebeard-kit` (git-subdir → repo TLC) | `npx -y @tech-leads-club/agent-skills@1.4.10 install -s tlc-spec-driven -a cursor -g` | — |
 | Aviso de versão do tlc | hook `SessionStart` | hook `sessionStart` (mesmo script) | — |
 | Bloquear comando perigoso | `PreToolUse` Bash → exit 2 | `beforeShellExecution` → `{"permission":"deny"}` | — |
 | Bloquear **escrita** em segredo/migration/baseline | `PreToolUse` Edit\|Write\|NotebookEdit → exit 2 (antes de escrever) | `preToolUse` (matcher `Write\|Edit\|…`) → `{"permission":"deny"}`, **antes** de escrever — doc do Cursor lida em 2026-09-09 (o evento genérico `preToolUse` não existia na leitura de 30/08) | `afterFileEdit` reverte e registra (defesa em profundidade, não mais o único mecanismo) |
