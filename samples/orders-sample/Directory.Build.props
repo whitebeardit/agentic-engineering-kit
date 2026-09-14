@@ -5,8 +5,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
+    <!-- Restore reproduzível: packages.lock.json versionado; no CI, o restore roda em modo bloqueado (locked mode) e falha se o lockfile não bater (issue #26). -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    <!-- AnalysisLevel sem modo ("latest", não "latest-Recommended"): o valor composto tem precedência sobre AnalysisMode
+         ("if you specify both properties, AnalysisLevel takes precedence over AnalysisMode", doc msbuild-props) e
+         anulava a rampa por projeto — um csproj com AnalysisMode=Minimum compilava em Recommended (issue #25). O modo
+         vem da linha AnalysisMode abaixo, e o projeto legado o sobrescreve. -->
+    <AnalysisLevel>latest</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <!-- IDE0005 (using desnecessário) só roda no build com doc file. CS1591 (falta xml-doc) é silenciado no .editorconfig, como toda severidade. -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

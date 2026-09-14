@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Testes do instalador (bash puro, em diretórios temporários): o que o apply.sh entrega e o que ele imprime.
 # Nasceu na v0.5.4 com #16 (as lições do método entregues como rule sem `paths`) e #17 (próximos passos em linhas curtas);
-# as issues do instalador (#10, #27) acrescentam casos aqui.
+# #27 acrescentou o settings.json por perfil; #10 acrescenta os casos de escrita segura.
 # Uso: bash tools/test-apply.sh   (exit 0 = tudo ok)
 set -u
 KIT=$(cd "$(dirname "$0")/.." && pwd)
@@ -26,5 +26,23 @@ printf '%s\n' "$fim" | grep -q "negado antes da escrita (Claude Code e Cursor)" 
 longas=$(printf '%s\n' "$out" | awk 'length > 100' | grep -c . || true)
 [ "$longas" -eq 0 ] && passa || falha "#17: $longas linha(s) da saída com mais de 100 colunas"
 
+# --- #27: o perfil .NET recebe o settings.json sem npm/npx; o genérico continua com eles ---
+mkdir -p "$T/dotnet" "$T/generico"
+bash "$KIT/apply.sh" "$T/dotnet" --claude --dotnet >/dev/null 2>&1
+bash "$KIT/apply.sh" "$T/generico" --claude >/dev/null 2>&1
+eco() { python3 -c 'import json,sys; a=json.load(open(sys.argv[1]))["permissions"]["allow"]; print(sum(x.startswith(("Bash(npm","Bash(npx")) for x in a))' "$1" 2>/dev/null || echo erro; }
+[ "$(eco "$T/dotnet/.claude/settings.json")" = "0" ] && passa || falha "#27: apply.sh --dotnet entregou permissões npm/npx"
+[ "$(eco "$T/generico/.claude/settings.json")" != "0" ] && passa || falha "#27: o settings.json genérico perdeu as permissões npm/npx"
+# o template .NET não deriva: é o genérico sem npm/npx, e é o que o exemplo .NET usa
+python3 - "$KIT" <<'PY' && passa || falha "#27: templates/.claude/settings.dotnet.json derivou do genérico ou do exemplo .NET"
+import json, sys
+k = sys.argv[1]
+g = json.load(open(f"{k}/templates/.claude/settings.json")); d = json.load(open(f"{k}/templates/.claude/settings.dotnet.json"))
+s = json.load(open(f"{k}/samples/orders-sample/.claude/settings.json"))
+esperado = [a for a in g["permissions"]["allow"] if not a.startswith(("Bash(npm", "Bash(npx"))]
+ok = (d["permissions"]["allow"] == esperado and d["permissions"]["deny"] == g["permissions"]["deny"] and d["hooks"] == g["hooks"]
+      and s["permissions"]["allow"] == esperado)
+sys.exit(0 if ok else 1)
+PY
 echo "test-apply: $ok ok, $fail falha(s)"
 [ "$fail" -eq 0 ]

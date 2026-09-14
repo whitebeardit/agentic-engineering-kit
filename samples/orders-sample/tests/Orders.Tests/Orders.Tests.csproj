@@ -5,12 +5,12 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
-    <PackageReference Include="xunit" Version="2.*" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="*" />
-    <PackageReference Include="TngTech.ArchUnitNET.xUnit" Version="*" />
-    <PackageReference Include="Verify.Xunit" Version="*" />
-    <PackageReference Include="Bogus" Version="*" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0" />
+    <PackageReference Include="TngTech.ArchUnitNET.xUnit" Version="0.13.4" />
+    <PackageReference Include="Verify.Xunit" Version="31.12.5" />
+    <PackageReference Include="Bogus" Version="35.6.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Orders.Domain/Orders.Domain.csproj" />

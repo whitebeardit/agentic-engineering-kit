@@ -30,7 +30,9 @@ copy "$KIT/templates/debug-prod.md" "$TARGET/docs/debug-prod.md"
 
 if [ $CLAUDE -eq 1 ]; then
   copy "$KIT/templates/CLAUDE.md" "$TARGET/CLAUDE.md"
-  copy "$KIT/templates/.claude/settings.json" "$TARGET/.claude/settings.json"
+  # perfil .NET sem Node: o settings.json sem as permissões npm/npx que o projeto não usa (issue #27)
+  SETTINGS="$KIT/templates/.claude/settings.json"; [ $DOTNET -eq 1 ] && [ $NODETS -eq 0 ] && SETTINGS="$KIT/templates/.claude/settings.dotnet.json"
+  copy "$SETTINGS" "$TARGET/.claude/settings.json"
   for f in protect-paths.sh guard-bash.sh format.sh dotnet-format.sh; do copy "$KIT/hooks/$f" "$TARGET/.claude/hooks/$f"; done
   for f in "$KIT"/rules/*.md; do copy "$f" "$TARGET/.claude/rules/$(basename "$f")"; done
   chmod +x "$TARGET"/.claude/hooks/*.sh

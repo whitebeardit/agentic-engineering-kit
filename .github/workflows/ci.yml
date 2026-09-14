@@ -3,6 +3,7 @@
 #                   (matriz); nenhum documento válido em artefato de
 #                   exibição; validadores do tlc no estado documentado (smoke test contra mutantes).
 #   enrichment-lab — gate do laboratório (tipos, lint, testes) e docs/generated/ em dia.
+#   orders-sample  — restore bloqueado pelo lockfile, build, testes e a rampa por projeto (v0.5.4, #25 e #26).
 # Sem segredos, sem escrita: permissions só de leitura.
 name: ci
 on:
@@ -55,3 +56,12 @@ jobs:
         run: npm run gate
       - name: docs/generated em dia
         run: npm run generate:check
+  orders-sample:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: samples/orders-sample/global.json
+      - name: restore bloqueado, build, testes e rampa por projeto
+        run: bash tools/test-dotnet.sh

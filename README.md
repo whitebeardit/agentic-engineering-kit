@@ -82,7 +82,7 @@ agents/                           impact-analyzer · legacy-navigator · test-de
 hooks/                            hooks.json (SessionStart: aviso de versão do tlc) · protect-paths · guard-bash · dotnet-format · tlc-version
 rules/                            contracts.md · legacy.md (Claude, paths:)     cursor/rules/*.mdc (gerados por tools/build-cursor.py)
 .mcp.json                         atlassian + clickup (OAuth por usuário)
-templates/                        AGENTS.md · AGENTS.root.md · CLAUDE.md (@AGENTS.md) · .claude/settings.json · .cursor/hooks.json · .cursorignore
+templates/                        AGENTS.md · AGENTS.root.md · CLAUDE.md (@AGENTS.md) · .claude/settings.json (+ settings.dotnet.json, sem npm/npx) · .cursor/hooks.json · .cursorignore
 dotnet/                           Directory.Build.props (rampa para legado) · .editorconfig · nuget.config · ArchitectureTests.example.cs
 docs/                             definition-of-ready · tlc-adaptacao · cursor-paridade · fases-checklist · adr/0000-template
 samples/orders-sample/            exemplo .NET compilado e testado, com .specs/ gerado pelo tlc (ver abaixo)

@@ -1,6 +1,6 @@
 // Whitebeard · Agentic Engineering Kit — regra de arquitetura como teste (ArchUnitNET).
 // Mensagem escrita para o agente: cita o ADR e o passo de correção.
-// dotnet add package TngTech.ArchUnitNET.xUnit
+// dotnet add package TngTech.ArchUnitNET.xUnit --version 0.13.4   (a testada no exemplo; fixe a versão, não use *)
 using ArchUnitNET.Domain;
 using ArchUnitNET.Loader;
 using ArchUnitNET.xUnit;
