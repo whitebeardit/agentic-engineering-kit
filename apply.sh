@@ -27,7 +27,11 @@ for a in "$@"; do case "$a" in
   *) echo "flag desconhecida: $a" >&2; exit 1;; esac; done
 [ $CLAUDE -eq 0 ] && [ $CURSOR -eq 0 ] && CLAUDE=1
 [ -d "$TARGET" ] || { echo "diretório não existe: $TARGET" >&2; exit 1; }
+# As conferências usam o caminho resolvido; a saída mostra o caminho como foi passado (`./AGENTS.md` para `.`). A v0.5.4
+# imprimia o absoluto resolvido — efeito colateral da conferência de links (#10) que tornava a saída diferente em cada máquina.
+TARGET_ARG="${TARGET%/}"; [ -n "$TARGET_ARG" ] || TARGET_ARG="/"
 TARGET="$(cd "$TARGET" && pwd -P)"
+mostra() { printf '%s' "$TARGET_ARG${1#"$TARGET"}"; }
 SRCS=(); DSTS=()
 copy() { SRCS+=("$1"); DSTS+=("$2"); }   # planeja; a escrita vem depois do preflight
 # destino seguro: nem ele nem um ancestral dentro do alvo é link simbólico
@@ -46,9 +50,9 @@ executar() {
   if [ $CHECK -eq 1 ]; then
     local novo=0 igual=0 div=0
     for ((i=0; i<n; i++)); do src=${SRCS[$i]}; dst=${DSTS[$i]}
-      if [ ! -e "$dst" ] && [ ! -L "$dst" ]; then echo "  novo        $dst"; novo=$((novo+1))
-      elif cmp -s "$src" "$dst"; then echo "  igual       $dst"; igual=$((igual+1))
-      else echo "  divergente  $dst"; div=$((div+1)); [ $DIFF -eq 1 ] && diff -u "$dst" "$src" | sed 's/^/      /'; fi
+      if [ ! -e "$dst" ] && [ ! -L "$dst" ]; then echo "  novo        $(mostra "$dst")"; novo=$((novo+1))
+      elif cmp -s "$src" "$dst"; then echo "  igual       $(mostra "$dst")"; igual=$((igual+1))
+      else echo "  divergente  $(mostra "$dst")"; div=$((div+1)); [ $DIFF -eq 1 ] && diff -u "$dst" "$src" | sed 's/^/      /'; fi
     done
     echo "check: $novo novo(s), $igual igual(is), $div divergente(s) — nada foi escrito"
     exit 0
@@ -60,14 +64,14 @@ executar() {
   trap 'echo "falhou no meio; criados até aqui: ${criados[*]:-nenhum}" >&2' ERR
   for ((i=0; i<n; i++)); do src=${SRCS[$i]}; dst=${DSTS[$i]}
     if [ -e "$dst" ]; then
-      if cmp -s "$src" "$dst"; then echo "  = mantido   $dst"; else echo "  = mantido   $dst  (difere do kit: apply.sh --check)"; fi
-    else mkdir -p "$(dirname "$dst")"; cp "$src" "$dst"; criados+=("$dst"); echo "  + criado    $dst"; fi
+      if cmp -s "$src" "$dst"; then echo "  = mantido   $(mostra "$dst")"; else echo "  = mantido   $(mostra "$dst")  (difere do kit: apply.sh --check)"; fi
+    else mkdir -p "$(dirname "$dst")"; cp "$src" "$dst"; criados+=("$dst"); echo "  + criado    $(mostra "$dst")"; fi
   done
   trap - ERR
   for dst in "${criados[@]}"; do case "$dst" in */.claude/hooks/*.sh|*/.cursor/hooks/*.sh) chmod +x "$dst";; esac; done
 }
 
-echo "kit → $TARGET"
+echo "kit → $TARGET_ARG"
 # comum: contexto canônico + docs
 if [ $ROOT -eq 1 ]; then copy "$KIT/templates/AGENTS.root.md" "$TARGET/AGENTS.md"; else copy "$KIT/templates/AGENTS.md" "$TARGET/AGENTS.md"; fi
 copy "$KIT/docs/definition-of-ready.md" "$TARGET/docs/definition-of-ready.md"

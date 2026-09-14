@@ -75,5 +75,9 @@ printf '%s' "$out2" | grep 'AGENTS.md' | grep -q 'difere' && falha "#10: arquivo
 mkdir -p "$T/check"; outc=$(bash "$APPLY" "$T/check" --claude --check 2>&1)
 [ -z "$(ls -A "$T/check")" ] && passa || falha "#10e: --check escreveu no alvo"
 printf '%s' "$outc" | grep -Eq 'check: [1-9][0-9]* novo\(s\), 0 igual\(is\), 0 divergente\(s\)' && passa || falha "#10e: resumo do --check inesperado"
+# --- v0.5.5: a saída mostra o caminho como foi passado (a v0.5.4 imprimia o absoluto resolvido) ---
+mkdir -p "$T/rel"; outr=$(cd "$T/rel" && bash "$APPLY" . --claude 2>&1)
+printf '%s\n' "$outr" | grep -qx 'kit → \.' && printf '%s\n' "$outr" | grep -qx '  + criado    \./AGENTS\.md' && passa || falha "v0.5.5: com '.', a saída não mostra 'kit → .' e './AGENTS.md'"
+printf '%s' "$outr" | grep -qF "$T" && falha "v0.5.5: a saída vazou o caminho absoluto resolvido" || passa
 echo "test-apply: $ok ok, $fail falha(s)"
 [ "$fail" -eq 0 ]

@@ -1,5 +1,13 @@
 # Changelog
 
+## kit--v0.5.5 — 2026-09-13
+
+Correção da v0.5.4: **a saída do `apply.sh` volta a mostrar os caminhos como você os passou** (`kit → .` e
+`+ criado    ./AGENTS.md` para `apply.sh .`). A v0.5.4 resolvia o alvo para conferir links simbólicos (#10) e passou a
+imprimir o caminho absoluto resolvido, diferente em cada máquina; as conferências continuam no caminho resolvido.
+`tools/test-apply.sh` confere a forma da saída, e o `apply.sh` da v0.5.4 reprova o caso novo. Achado pela recaptura da
+árvore de referência do livro *Cercando a IA*, cuja asserção comparou o que o instalador disse ter criado com a listagem.
+
 ## kit--v0.5.4 — 2026-09-13
 
 Fecha a Onda 1 das revisões externas contra-verificadas do livro *Cercando a IA*: catorze issues. Esta versão **altera o
