@@ -53,3 +53,29 @@ não carregou em nenhuma das duas rodadas; sem ele, carregou nas duas.
 
 **Rastro**: issue #24 deste repositório, apontada pelo check CTX-04 de um scanner de harness (`harness-score` 1.6.5) e
 confirmada no Cursor pelo repositório do livro *Cercando a IA* (AD-045).
+
+## 2026-09-13 — quatro defeitos de comportamento corrigidos na v0.5.4
+
+**Onde e o que estava publicado** (medido com `git show <tag>:<arquivo>` em cada tag):
+
+- **Rampa .NET que não acontecia** — `dotnet/Directory.Build.props` e `samples/orders-sample/Directory.Build.props`, tags
+  `kit--v0.2.0` a `kit--v0.5.3`: `AnalysisLevel=latest-Recommended` tem precedência sobre `AnalysisMode` ("if you specify
+  both properties, AnalysisLevel takes precedence over AnalysisMode", doc `msbuild-props`); um projeto com
+  `AnalysisMode=Minimum` compilava com o conjunto Recommended (SDK 10.0.103, `dotnet build -v:diag`). Issue #25.
+- **`NotebookEdit` fora da proteção de caminhos** — `templates/.claude/settings.json` e as cópias dos samples, tags
+  `kit--v0.2.0` a `kit--v0.5.3`: o matcher `Edit|Write|MultiEdit` casa nomes exatos, e o `NotebookEdit` escreve arquivo.
+  Issue #19.
+- **Instalador que escrevia por link simbólico** — `apply.sh`, tags `kit--v0.2.0` a `kit--v0.5.3`: com `.claude` simbólico
+  para fora do alvo, escrevia fora dele; mudava o modo de hooks alheios; falhava no meio sem dizer o que criou. Issue #10.
+- **Permissões npm/npx no perfil .NET** — `apply.sh --dotnet`, tags `kit--v0.3.0` a `kit--v0.5.3`: entregava o
+  `settings.json` genérico, com sete permissões de Node que um projeto .NET não usa. Issue #27.
+
+**O que passou a valer** (tag `kit--v0.5.4`): ver o CHANGELOG; cada conserto tem teste no CI.
+
+**Se você aplicou uma tag anterior**: rode `apply.sh <repo> --dotnet --check` (ou com os perfis que usou) para ver o que
+difere e leve por PR: no `Directory.Build.props`, troque `latest-Recommended` por `latest`; no `.claude/settings.json`,
+troque `MultiEdit` por `NotebookEdit` nos dois matchers e, num projeto só .NET, retire as permissões `npm`/`npx`. Se o
+alvo tinha algum link simbólico em `.claude/`, `.cursor/` ou `docs/`, confira se arquivos do kit foram parar fora dele.
+
+**Rastro**: issues #10, #19, #25 e #27 deste repositório; AD-046 e AD-047 no repositório do livro *Cercando a IA*.
+

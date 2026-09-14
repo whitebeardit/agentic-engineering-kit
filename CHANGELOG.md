@@ -1,5 +1,37 @@
 # Changelog
 
+## kit--v0.5.4 — 2026-09-13
+
+Fecha a Onda 1 das revisões externas contra-verificadas do livro *Cercando a IA*: catorze issues. Esta versão **altera o
+instalador, hooks, uma rule e o perfil .NET** — quem aplicou o kit por `apply.sh` confere as mudanças com
+`apply.sh <repo> --check` (novidade desta versão) e as leva por PR; quem usa o plugin, por `claude plugin update`.
+
+- **#10 Instalador que confere antes de escrever.** `apply.sh` planeja todos os destinos e recusa link simbólico no
+  destino ou num ancestral dentro do alvo — e aí não escreve nada; `chmod +x` só nos hooks que criou; o que existe é
+  mantido, com aviso quando difere do kit; em falha no meio, lista o que criou. `--check` e `--diff` são novos.
+- **#11 e #21 Hook de versão do tlc.** Versões ordenadas por campo (3.10.0 > 3.9.0; local mais nova fica quieta);
+  estados ausente, duplicado, desatualizado, não comparável e não verificado (sem rede, timeout, sem `curl`), com a data
+  da última verificação; o comando de conserto cita o catálogo por onde o kit foi instalado, não `@whitebeard-kit` fixo.
+- **#12 CLI do Tech Leads Club com versão fixa** (`@tech-leads-club/agent-skills@1.4.10`) no instalador, no hook e nos docs.
+- **#15 Roteiro.** A fase 4 ganha critério de saída; "DORA 5 + rework" diz a edição das métricas e qual retrabalho.
+- **#16 Lições do método em toda sessão.** `rules/licoes-do-metodo.md`, sem `paths`, carrega sempre no Claude Code;
+  `tools/build-cursor.py` gera `alwaysApply: true` para rule sem `paths`.
+- **#17 Próximos passos do instalador** em linhas curtas: "negado antes da escrita (Claude Code e Cursor)".
+- **#18 `debug-prod.md`**: o `-01` do `traceparent` **pede** a exportação; a cadeia instrumentada que respeita a flag a obtém.
+- **#19 Matcher de edição** `Edit|Write|NotebookEdit` no template e nos samples (o `MultiEdit` não consta na referência de
+  hooks, e o `NotebookEdit` ficava fora da proteção de caminhos); `cursor-paridade` diz o que passa por `Bash`.
+- **#20 `test-designer`** não promete hook que não existe.
+- **#22 `AGENTS.md` do laboratório Node**: o *Never* cita as catracas reais e onde roda o `check-documentos`.
+- **#25 Rampa .NET.** `AnalysisLevel=latest` nos dois `Directory.Build.props`: o valor composto `latest-Recommended` tinha
+  precedência sobre `AnalysisMode` e o legado compilava em Recommended.
+- **#26 Exemplo .NET reproduzível**: versões exatas, `packages.lock.json` versionado, `global.json` (SDK 10.0.103,
+  `latestPatch`), versão no exemplo de ArchUnitNET e job .NET no CI.
+- **#27 Permissões por perfil**: `apply.sh --dotnet` entrega `settings.dotnet.json`, sem npm/npx.
+- **Testes novos no CI**: `tools/test-apply.sh` (instalador, 23 casos), `tools/test-tlc-version.sh` (hook de versão, 15
+  casos herméticos) e `tools/test-dotnet.sh` (restore bloqueado, build, testes, globalconfig efetivo por projeto); cada um
+  provado com mutante — o `apply.sh` da v0.5.3 reprova 13 casos, o hook da v0.5.3 reprova 11, e o `latest-Recommended`
+  reprova a rampa.
+
 ## kit--v0.5.3 — 2026-09-13
 
 Correção pequena, antes das demais issues abertas, que passam para a v0.5.4: **as rules do Cursor voltam a carregar**. Quem usa

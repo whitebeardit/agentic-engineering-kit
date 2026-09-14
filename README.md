@@ -44,6 +44,9 @@ git clone git@github.com:whitebeardit/agentic-engineering-kit.git ~/DEV/WHITEBEA
 ~/DEV/WHITEBEARD/agentic-engineering-kit/apply.sh /caminho/do/repo --claude --cursor --with-tlc --node-ts   # ou --dotnet
 ```
 `--standalone` copia skills e agentes para `.claude/`/`.cursor/` de quem não usa marketplace (nomes sem o prefixo `kit:`).
+`--check` compara cada arquivo com o do kit (novo · igual · divergente) sem escrever nada; `--diff` mostra a diferença.
+O instalador nunca sobrescreve e confere todos os destinos antes da primeira escrita: recusa link simbólico no destino
+ou num ancestral dentro do alvo, e nesse caso não escreve nada (v0.5.4).
 
 ## Produção: três agentes que só leem
 
