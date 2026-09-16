@@ -61,7 +61,7 @@ pela lista de `tools`: todos declaram `Bash` para medir — a lista diz o que po
 | Laboratório | Stack | Onde é usado | Rodar |
 |---|---|---|---|
 | `samples/enrichment-lab` | Node 22 / TypeScript — serviço de enriquecimento de cadastro em miniatura (contract-first, fila, worker com guardas, merge por unidade, legado com characterization) | livro *Cercando a IA* | `npm install && npm run gate` |
-| `samples/orders-sample` | .NET 10 — serviço de pedidos (regra RN-ORD-012, ArchUnitNET, Verify+Bogus, rampa de analyzers) | e-book *Engenharia com Agentes em .NET* (`tools/gen-ebook.py`) | `dotnet build Orders.slnx && dotnet test Orders.slnx` |
+| `samples/orders-sample` | .NET 10 — serviço de pedidos (regra RN-ORD-012, ArchUnitNET, Verify+Bogus, rampa de analyzers) | e-book *Engenharia com Agentes em .NET* (`tools/gen-ebook.py`) | `dotnet build Orders.slnx && dotnet format Orders.slnx --verify-no-changes && dotnet test Orders.slnx` |
 
 Os cinco mecanismos são os mesmos; a tabela ferramenta a ferramenta está em `docs/perfil-node-ts.md`.
 

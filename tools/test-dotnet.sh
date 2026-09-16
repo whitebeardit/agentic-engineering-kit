@@ -8,10 +8,19 @@
 set -uo pipefail
 KIT=$(cd "$(dirname "$0")/.." && pwd); S="$KIT/samples/orders-sample"
 ok=0; fail=0; passa() { ok=$((ok+1)); }; falha() { fail=$((fail+1)); echo "  ✗ $1"; }
-# v0.5.8: a linha "Gate" da tabela de tradução e o gate do AGENTS.md do exemplo dizem o mesmo — na v0.5.7 a tabela
-# mostrava `dotnet build && dotnet test` e, na linha seguinte, "quem confere a formatação é o gate".
-gate_formata() { grep -Eq '^\| Gate \|.*dotnet format --verify-no-changes' "$1" && grep -q 'Gate Build:.*--verify-no-changes' "$2"; }
-gate_formata "$KIT/docs/perfil-node-ts.md" "$S/AGENTS.md" && passa || falha "#28: a tabela ou o AGENTS.md do exemplo sem dotnet format --verify-no-changes no gate"
+# v0.5.9 (#31): toda linha que escreve o gate inteiro (dotnet build … dotnet test) nos arquivos que o DEFINEM — a tabela de
+# tradução, o perfil que o leitor cola no AGENTS.md, o AGENTS.md do exemplo e o README — traz o dotnet format
+# --verify-no-changes. A v0.5.8 só conferia a linha "Gate" da tabela e a "Gate Build" do exemplo; o perfil, o gotcha do
+# exemplo e o README ainda diziam o gate sem o format. Arquivo sem nenhuma linha de gate também reprova.
+gate_formata() {
+  local f ruim=0
+  for f in "$@"; do
+    grep -qE 'dotnet build.*dotnet test' "$f" || { echo "  ✗ #31: $f sem linha de gate (dotnet build … dotnet test)"; ruim=1; }
+    if grep -nE 'dotnet build.*dotnet test' "$f" | grep -vE 'dotnet format.*--verify-no-changes' | sed "s|^|  ✗ #31: gate sem dotnet format --verify-no-changes em ${f#$KIT/}:|" | grep .; then ruim=1; fi
+  done
+  [ $ruim -eq 0 ]
+}
+gate_formata "$KIT/docs/perfil-node-ts.md" "$KIT/templates/profiles/dotnet.md" "$S/AGENTS.md" "$KIT/README.md" && passa || falha "#31: o gate .NET sem a conferência de formatação em algum lugar que o define (linhas acima)"
 cd "$S"
 dotnet restore Orders.slnx --locked-mode >/tmp/test-dotnet-restore.log 2>&1 && passa || { falha "restore --locked-mode (lockfile ausente ou desatualizado)"; tail -5 /tmp/test-dotnet-restore.log; }
 dotnet format Orders.slnx --verify-no-changes --no-restore -v:quiet >/tmp/test-dotnet-format.log 2>&1 && passa || { falha "#28: formatação (dotnet format --verify-no-changes)"; tail -5 /tmp/test-dotnet-format.log; }

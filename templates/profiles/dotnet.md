@@ -42,7 +42,7 @@ Sem output, não está pronto.
 | Contrato público | oasdiff / AsyncAPI | sem breaking; consumidores listados | `docs/openapi.yaml` | `oasdiff breaking` |
 | Config / migrations | none | build gate; migração por humano | — | `dotnet build` |
 
-Gate Quick: `dotnet test --filter "Category!=Integration"` · Gate Full: `dotnet test` · Gate Build: `dotnet build && dotnet test`.
+Gate Quick: `dotnet test --filter "Category!=Integration"` · Gate Full: `dotnet test` · Gate Build: `dotnet build && dotnet format --verify-no-changes && dotnet test`.
 
 ## Never
 - Editar `.env`, `appsettings.*.json`, `Migrations/`, `docs/generated/`, `*.verified.txt` (hook bloqueia; peça a um humano).

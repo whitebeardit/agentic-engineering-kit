@@ -119,3 +119,21 @@ bump de 14/09/2026).
 do `orders-sample`; `tools/test-dotnet.sh` confere as duas. **Se você copiou a tabela da v0.5.7**: acrescente
 `dotnet format <sln> --verify-no-changes` ao gate do seu `AGENTS.md`. **Rastro**: #28 e a revisão do bump do livro
 *Cercando a IA* para a v0.5.7.
+
+## 2026-09-16 — o gate .NET sem a conferência de formatação em três lugares que o definem
+
+**Onde e o que estava publicado**: `templates/profiles/dotnet.md` (tags `kit--v0.3.0` a `kit--v0.5.8`), o gotcha do `--no-build` em
+`samples/orders-sample/AGENTS.md` (tags `kit--v0.2.0` a `kit--v0.5.8`) e a coluna de gate da tabela de exemplos do `README.md` (tags
+`kit--v0.3.0` a `kit--v0.5.8`) escreviam o gate como `dotnet build && dotnet test`, sem o `dotnet format --verify-no-changes` que a v0.5.7
+pôs na "Definição de pronto" e na linha "Gate Build" do exemplo e a v0.5.8 pôs na tabela de tradução. Quem colou o perfil
+no seu `AGENTS.md` recebeu um gate que não confere a formatação — o que o hook `dotnet-format.sh` só tenta.
+
+**O que passou a valer** (tag `kit--v0.5.9`): os três lugares trazem o `dotnet format --verify-no-changes`, e
+`tools/test-dotnet.sh` confere toda linha que escreve o gate inteiro nos quatro arquivos que o definem.
+
+**Se você colou o perfil de uma tag anterior**: acrescente `dotnet format <sln> --verify-no-changes` ao "Gate Build" do
+seu `AGENTS.md`, entre o build e os testes.
+
+**Rastro**: issue #31 (achada na reverificação do bump do livro *Cercando a IA* para a v0.5.8); lição L-055 do livro —
+conserto de uma afirmação varre todos os lugares que dizem a mesma coisa, não só o que a issue cita.
+

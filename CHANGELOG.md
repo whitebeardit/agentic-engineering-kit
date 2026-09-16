@@ -1,5 +1,15 @@
 # Changelog
 
+## kit--v0.5.9 — 2026-09-16
+
+Correção da v0.5.8 (#31): **os três lugares que ainda definiam o gate .NET sem a conferência de formatação passam a
+trazê-la** — `templates/profiles/dotnet.md` (o perfil que você cola no seu `AGENTS.md`), o gotcha do `--no-build` no
+`AGENTS.md` do `orders-sample` e a coluna de gate da tabela de exemplos do README. A v0.5.7 e a v0.5.8 tinham corrigido só
+as linhas que a issue #28 citava. `tools/test-dotnet.sh` passa a conferir, nesses arquivos e na tabela de tradução, toda
+linha que escreve o gate inteiro (`dotnet build … dotnet test`): os arquivos da v0.5.8 reprovam em três linhas. Os
+registros de execução em `samples/orders-sample/.specs/` ficam como estavam: são atas de rodadas de 29/08/2026, com o
+gate que valia na época.
+
 ## kit--v0.5.8 — 2026-09-14
 
 Correção da v0.5.7 (#28): a linha **Gate** da tabela de tradução (`docs/perfil-node-ts.md`) passa a mostrar, em .NET, o
