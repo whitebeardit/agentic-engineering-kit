@@ -41,6 +41,34 @@ A spec de um card que cruza serviços vive no repo **dono do contrato** (o prime
 consumidor → legado). `tasks.md` mantém **1 task = 1 repo = 1 PR**; os outros repos recebem o link da spec e a task deles.
 O tlc não carrega duas specs ao mesmo tempo — respeite isso: uma feature, uma pasta, um repo dono.
 
+## Como se chama o método (conferido em 2026-11-21, tlc 3.3.0; `tools/test-validadores.sh`)
+
+O tlc é uma skill e não tem comando próprio. Com ela instalada, você escreve o pedido na sessão e a skill reconhece a
+fase pelas primeiras palavras. Os gatilhos estão em inglês no `SKILL.md` dela:
+
+| Fase | O que se escreve na sessão | O que sai |
+|---|---|---|
+| Specify | `specify feature <card>-<slug>` | `.specs/features/<card>-<slug>/spec.md` |
+| Design | `design feature` | `design.md`, quando o tamanho pede |
+| Tasks | `break into tasks` | `tasks.md`, quando o tamanho pede |
+| Execute | `implement task` | código, testes e um commit por tarefa |
+| Entre sessões | `pause work` e `resume work` | `STATE.md › Handoff` |
+
+Os validadores são scripts da skill e ficam no diretório dela, fora do seu repositório. A skill os roda antes de cada
+gate; para rodar à mão no Claude Code, com o tlc instalado como plugin:
+
+```bash
+TLC=$(ls -d ~/.claude/plugins/cache/*/tlc/*/scripts | head -1)
+python3 "$TLC/validate_spec.py"  .specs/features/<feature>  # antes do gate 1
+python3 "$TLC/validate_tasks.py" .specs/features/<feature>  # antes do gate 2
+python3 "$TLC/check_commit.py" --message "<mensagem>"       # a cada commit
+python3 "$TLC/validate_state.py" <feature>                  # antes de dar por pronta
+```
+
+O Verifier não se chama. Depois do commit da última tarefa a skill abre sozinha um sub-agente novo, que não escreveu
+o código, e ele grava `.specs/features/<feature>/validation.md`. Num harness que não abre sub-agente, o tlc manda o
+próprio agente fazer essa passada relendo a spec e o diff do zero. Para pedir a verificação de novo, escreva `verify`.
+
 ## O que os validadores do tlc conferem hoje (conferido em 2026-09-09; `tools/test-validadores.sh`)
 
 | Validador | Confere | **Não** confere (nesta data) |

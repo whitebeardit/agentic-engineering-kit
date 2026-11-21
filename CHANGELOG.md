@@ -1,5 +1,13 @@
 # Changelog
 
+## kit--v0.5.10 — 2026-11-21
+
+`docs/tlc-adaptacao.md` ganha a seção **"Como se chama o método"**: o que se escreve na sessão para cada fase do tlc,
+como rodar à mão os quatro validadores da skill e por que o Verifier não se chama. Até a v0.5.9 o kit dizia o que os
+validadores conferem e não dizia o que se digita; o leitor-teste do capítulo 9 do livro *Cercando a IA* não conseguiu
+repetir os passos por isso. `tools/test-validadores.sh` passa a conferir que os quatro scripts e os gatilhos citados
+existem no tlc do dia (12 casos novos). Nenhum hook, agente, rule ou template muda.
+
 ## kit--v0.5.9 — 2026-09-16
 
 Correção da v0.5.8 (#31): **os três lugares que ainda definiam o gate .NET sem a conferência de formatação passam a

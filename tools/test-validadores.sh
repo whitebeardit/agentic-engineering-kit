@@ -46,5 +46,14 @@ assert n == 1, "não achei onde inserir a dependência"
 open(sys.argv[2], "w", encoding="utf-8").write(m)
 PY
 python3 "$dir/validate_tasks.py" "$T/tasks-mutante.md" >/dev/null 2>&1; esperado "tasks com dependência inexistente → reprova" nonzero $?
+# "Como se chama o método" (docs/tlc-adaptacao.md): os quatro scripts e os gatilhos citados existem no tlc de hoje.
+for f in validate_spec.py validate_tasks.py check_commit.py validate_state.py; do
+  [ -f "$dir/$f" ]; esperado "script $f existe" 0 $?
+done
+SKILL="$dir/../SKILL.md"
+for g in "Specify feature" "Design feature" "Break into tasks" "Implement task" "Pause work" "Resume work" \
+         "Verifier always runs automatically" "Validate, verify"; do
+  grep -qF "$g" "$SKILL" 2>/dev/null; esperado "gatilho no SKILL.md: $g" 0 $?
+done
 echo "test-validadores: $ok ok, $fail falha(s) · scripts: $dir"
 [ "$fail" -eq 0 ]
