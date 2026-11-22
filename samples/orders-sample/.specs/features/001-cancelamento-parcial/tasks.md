@@ -252,7 +252,7 @@ Proof: run regra | Passed RN_ORD_012_WHEN_handler_recebe_comando_SHALL_orquestra
 The feature's live state, written as it happens - a compaction gives no warning.
 
 **Settled mid-build:** none
-**Dispatched:** none yet
+**Dispatched:** Verifier (sub-agente, contexto limpo), 2026-11-22, com o pedido de mutação de `docs/tlc-adaptacao.md` do kit
 **Walked:** n/a - a feature não tem tela; o Independent Test da spec é coberto pelos testes de C1 a C7
 
 **Migração (2026-11-21):** o código e os testes desta feature foram construídos com o tlc-spec-driven 3.3.0 (relatório antigo em `validation.md`, no histórico do git até `kit--v0.5.9`). Este arquivo foi levado ao formato da 4.1.0 nesta data: saiu o campo `Tools`, entraram `Approved`, `Build`, `Run` e os Checks. As tarefas não foram reexecutadas; `proofs.md` e `verification.md` nascem de execução nova sobre o código que já existia.
