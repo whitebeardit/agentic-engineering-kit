@@ -205,6 +205,34 @@ describe('RN-ENR-004 — Aplicar evento ao cadastro: merge por unidade', () => {
       origem: 'cliente:app',
     });
   });
+  it('RN_ENR_004_IF_provedor_traz_valor_igual_THEN_SHALL_nao_reanotar', () => {
+    const uf = (origin: 'provedor:biro' | 'provedor:outro' | 'cliente:app', at: string) =>
+      eventoValido({ origin, updatedAt: at, data: { endereco: { uf: 'SP' } } });
+    // sobre unidade de provedor
+    const c = Cliente.novo(CPF_VALIDO, 'F');
+    c.aplicar(uf('provedor:biro', T12), N);
+    expect(c.aplicar(uf('provedor:outro', T13), N)).toEqual({
+      changed: false,
+      eventos: [],
+    });
+    expect(unidade(c, 'endereco.uf')).toEqual({
+      valor: 'SP',
+      instante: T12,
+      origem: 'provedor:biro',
+    });
+    // sobre unidade de cliente
+    const d = Cliente.novo(CPF_VALIDO, 'F');
+    d.aplicar(uf('cliente:app', T12), N);
+    expect(d.aplicar(uf('provedor:biro', T13), N)).toEqual({
+      changed: false,
+      eventos: [],
+    });
+    expect(unidade(d, 'endereco.uf')).toEqual({
+      valor: 'SP',
+      instante: T12,
+      origem: 'cliente:app',
+    });
+  });
   it('RN_ENR_004_WHEN_cadastro_muda_SHALL_emitir_um_ClienteAtualizado_v1', () => {
     const c = Cliente.reidratar(CPF_VALIDO, 'F', 3, new Map());
     const r = c.aplicar(eventoValido({ updatedAt: T12 }), N);

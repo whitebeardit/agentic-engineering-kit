@@ -199,7 +199,7 @@ T6 → T7
 - [x] Teste de unidade `RN_ENR_004_WHEN_cliente_reafirma_valor_de_provedor_SHALL_anotar_cliente_sem_emitir` e teste de integração da reafirmação verdes; os dois ficam vermelhos sem a correção (conferido estragando `merge.ts` e `worker.ts`, um por vez)
 - [x] Build gate passes: `npm run gate` exit 0
 
-**Tests**: unit (1 novo), integration (1 novo)
+**Tests**: unit (2 novos), integration (1 novo)
 **Gate**: build
 **Status**: ✅ Done
 
@@ -236,6 +236,7 @@ Proof: run int | ✓ should publish one ClienteAtualizado v1 per real change, no
 
 **C8** - Evento de origem `cliente:*` com valor igual ao de uma unidade de origem `provedor:*` passa a anotação para o cliente, grava com versão nova e não emite evento; provedor mais novo deixa de sobrescrever (ING-08, AC 8)
 Proof: run unit | ✓ RN_ENR_004_WHEN_cliente_reafirma_valor_de_provedor_SHALL_anotar_cliente_sem_emitir
+Proof: run unit | ✓ RN_ENR_004_IF_provedor_traz_valor_igual_THEN_SHALL_nao_reanotar
 Proof: run int | ✓ should store a client reaffirmation with a new version and publish nothing
 
 ---
