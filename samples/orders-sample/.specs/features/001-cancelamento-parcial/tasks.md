@@ -241,6 +241,7 @@ Proof: run regra | Passed RN_ORD_012_IF_item_nao_pertence_ao_pedido_THEN_SHALL_r
 **C6** - Pedido Aberto é elegível para cancelamento de item; pedido Faturado ou Cancelado não é (CANC-06, AC 6)
 Proof: run regra | Passed RN_ORD_012_WHILE_pedido_Aberto_SHALL_ser_elegivel_para_cancelamento_de_item
 Proof: run regra | Passed RN_ORD_012_WHILE_pedido_Faturado_SHALL_nao_ser_elegivel_para_cancelamento_de_item
+Proof: run regra | Passed RN_ORD_012_WHILE_pedido_Cancelado_SHALL_nao_ser_elegivel_para_cancelamento_de_item
 
 **C7** - O handler carrega o pedido, delega a decisão ao domínio, persiste e devolve o novo total e os eventos emitidos (CANC-07, AC 7)
 Proof: run regra | Passed RN_ORD_012_WHEN_handler_recebe_comando_SHALL_orquestrar_persistir_e_devolver_novo_total_e_eventos

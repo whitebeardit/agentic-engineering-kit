@@ -43,6 +43,18 @@ public class RN_ORD_012_CancelamentoParcialTests
         Assert.False(elegivel);
     }
 
+    [Fact]
+    public void RN_ORD_012_WHILE_pedido_Cancelado_SHALL_nao_ser_elegivel_para_cancelamento_de_item()
+    {
+        var order = PedidoAbertoComDoisItens(out _, out _);
+        // Não existe Order.Cancel() neste repositório: o estado é posto por reflexão, só para a regra ter prova.
+        typeof(Order).GetProperty(nameof(Order.Status))!.SetValue(order, OrderStatus.Cancelado);
+
+        var elegivel = new PedidoElegivelParaCancelamento().IsSatisfiedBy(order);
+
+        Assert.False(elegivel);
+    }
+
     // ----- CANC-01 · WHEN cancela item de pedido Aberto, SHALL marcar cancelado e recalcular o total -----
 
     [Fact]
@@ -134,17 +146,34 @@ public class RN_ORD_012_CancelamentoParcialTests
     [Fact]
     public async Task RN_ORD_012_WHEN_handler_recebe_comando_SHALL_orquestrar_persistir_e_devolver_novo_total_e_eventos()
     {
-        var repo = new InMemoryOrderRepository();
         var order = PedidoAbertoComDoisItens(out var a, out _);
-        await repo.SaveAsync(order, CancellationToken.None);
+        var repo = new RepositorioQueRegistra(order);
         var handler = new CancelOrderItemHandler(repo);
 
         var result = await handler.HandleAsync(new CancelOrderItemCommand(order.Id, a.Id), CancellationToken.None);
 
         Assert.Equal(Money.Brl(30), result.NewTotal);
-        Assert.Single(result.Events);
-        var persisted = await repo.GetAsync(order.Id, CancellationToken.None);
-        Assert.True(persisted!.Items.Single(i => i.Id == a.Id).Cancelled);
+        var evento = Assert.Single(result.Events);
+        Assert.Equal(order.Id, evento.OrderId);
+        Assert.Equal(a.Id, evento.ItemId);
+        Assert.Equal(Money.Brl(30), evento.NewTotal);
+        Assert.Same(order, Assert.Single(repo.Salvos)); // persistiu uma vez, depois de decidir
+        Assert.True(repo.Salvos[0].Items.Single(i => i.Id == a.Id).Cancelled);
+    }
+
+    /// <summary>Repositório de teste que registra cada SaveAsync: sem isso o teste passa com o handler sem persistir.</summary>
+    private sealed class RepositorioQueRegistra(Order semeado) : IOrderRepository
+    {
+        public List<Order> Salvos { get; } = [];
+
+        public Task<Order?> GetAsync(Guid id, CancellationToken cancellationToken) =>
+            Task.FromResult(id == semeado.Id ? semeado : null);
+
+        public Task SaveAsync(Order order, CancellationToken cancellationToken)
+        {
+            Salvos.Add(order);
+            return Task.CompletedTask;
+        }
     }
 
     [Fact]
