@@ -1,5 +1,7 @@
 # Aplicar evento ao cadastro com limiar de completude (ENR-042) Specification
 
+**Approved**: [written when the user approves - YYYY-MM-DD - user: "their words"]
+
 **Card**: ENR-042 · **Tier de risco**: alto (dados pessoais) · **Tamanho (auto-sizing)**: Complex — tier alto e contrato público novo (`ClienteAtualizado` v1)
 **Repo dono do contrato**: enrichment-lab. O consumidor no CRM é feature separada no repo do CRM.
 
@@ -120,5 +122,5 @@ Each requirement gets a unique ID for tracking across design, tasks, and validat
 How we know the feature is successful:
 
 - [ ] `npm run gate` verde com os testes `RN_ENR_004_*` cobrindo ING-01..07 (1:1, nomes com o ID da regra).
-- [ ] Verifier do tlc: validation.md PASS, mutantes injetados mortos.
+- [ ] `check_proofs.py` verde em `HEAD` e Verifier do tlc com `verification.md` PASS; as mutações que o kit pede a mais ao Verifier (`docs/tlc-adaptacao.md` do kit) morrem todas.
 - [ ] `docs/regras/enriquecimento.md` com o bloco RN-ENR-004 apontando código, teste e `Confiança: verified`; `Cliente.substituir` removido.

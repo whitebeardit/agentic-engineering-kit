@@ -2,14 +2,18 @@
 
 ## Execution Protocol (MANDATORY -- do not skip)
 
-Implement these tasks with the `tlc-spec-driven` skill: **activate it by name and follow its Execute flow and Critical Rules.** Do not search for skill files by filesystem path. The skill is the source of truth for how to execute.
+Implement these tasks with the `tlc-spec-driven` skill: **activate it by name and follow its Execute flow and Critical Rules.** Do not search for skill files by filesystem path. The skill is the source of truth for the full flow (per-task cycle, sub-agent delegation, the walk, check_proofs, the Verifier and the screens sub-agent).
 
 **If the skill cannot be activated, STOP and tell the user - do not proceed without it.**
 
 ---
 
 **Design**: `.specs/features/001-merge-por-unidade/design.md`
-**Status**: Done — aguardando Verifier
+**Status**: Draft
+**Approved**: [written when the user approves - YYYY-MM-DD - user: "their words"]
+**Build**: `npm run gate`
+**Run unit**: `npx jest --ci --verbose --reporters=default --selectProjects unit -t 'RN_ENR_004'`
+**Run int**: `npx jest --ci --verbose --reporters=default --selectProjects int`
 
 ---
 
@@ -67,16 +71,15 @@ T4 → T5 → T6
 **Depends on**: None
 **Reuses**: formato dos blocos RN-ENR-001..006
 **Requirement**: ING-01, ING-02, ING-03, ING-04, ING-05, ING-06, ING-07
-**Tools**:
 
-- MCP: NONE
-- Skill: `regras-de-negocio`
-  **Done when**:
+**Done when**:
+
 - [x] Bloco com as cláusulas WHEN/IF da spec, `Código:` e `Teste:` apontando para os arquivos que T2–T5 criarão, `Confiança: inferred`
 - [x] Build gate passes: `npm run gate` exit 0
-      **Tests**: none
-      **Gate**: build
-      **Status**: ✅ Done
+
+**Tests**: none
+**Gate**: build
+**Status**: ✅ Done
 
 ---
 
@@ -87,15 +90,15 @@ T4 → T5 → T6
 **Depends on**: T1
 **Reuses**: `FilaMemoria` como modelo de adaptador em memória; `rules/contracts.md`
 **Requirement**: ING-07
-**Tools**:
 
-- MCP: NONE
-  **Done when**:
+**Done when**:
+
 - [x] Evento e porta compilam; adaptador guarda os eventos e tem `limpar()`
 - [x] Build gate passes: `npm run gate` exit 0
-      **Tests**: none (coberto por T4/T5)
-      **Gate**: build
-      **Status**: ✅ Done
+
+**Tests**: none (coberto por T4/T5)
+**Gate**: build
+**Status**: ✅ Done
 
 ---
 
@@ -106,15 +109,15 @@ T4 → T5 → T6
 **Depends on**: T2
 **Reuses**: `ehProvedor`, `achatar`, `Cliente.quantidadeDeCampos`
 **Requirement**: ING-05
-**Tools**:
 
-- MCP: NONE
-  **Done when**:
+**Done when**:
+
 - [x] 3 testes verdes com o ID da regra no nome
 - [x] Quick gate passes: `npm run test:regra` exit 0
-      **Tests**: unit (3)
-      **Gate**: quick
-      **Status**: ✅ Done
+
+**Tests**: unit (3)
+**Gate**: quick
+**Status**: ✅ Done
 
 ---
 
@@ -125,15 +128,15 @@ T4 → T5 → T6
 **Depends on**: T3
 **Reuses**: `Unidade`, `achatar`, `ehProvedor`, `criarClienteAtualizadoV1`
 **Requirement**: ING-01, ING-02, ING-03, ING-04, ING-06, ING-07
-**Tools**:
 
-- MCP: NONE
-  **Done when**:
+**Done when**:
+
 - [x] `substituir` não existe mais; os testes RN_ENR_005 que o usavam passam a usar `aplicar`
 - [x] Quick gate passes: `npm run test:regra` exit 0 (≥ 12 testes RN_ENR_004)
-      **Tests**: unit (9 novos)
-      **Gate**: quick
-      **Status**: ✅ Done
+
+**Tests**: unit (9 novos)
+**Gate**: quick
+**Status**: ✅ Done
 
 ---
 
@@ -144,15 +147,15 @@ T4 → T5 → T6
 **Depends on**: T4
 **Reuses**: `PublicadorMemoria`, `servicosDeTeste`
 **Requirement**: ING-07
-**Tools**:
 
-- MCP: NONE
-  **Done when**:
+**Done when**:
+
 - [x] Worker sem regra de negócio (só orquestra); teste de integração observa 2 eventos publicados e o `sem-mudanca`
 - [x] Full gate passes: `npm test` exit 0
-      **Tests**: integration (2 novos)
-      **Gate**: full
-      **Status**: ✅ Done
+
+**Tests**: integration (2 novos)
+**Gate**: full
+**Status**: ✅ Done
 
 ---
 
@@ -163,12 +166,54 @@ T4 → T5 → T6
 **Depends on**: T5
 **Reuses**: —
 **Requirement**: ING-01, ING-02, ING-03, ING-04, ING-05, ING-06, ING-07
-**Tools**:
 
-- MCP: NONE
-  **Done when**:
+**Done when**:
+
 - [x] Bloco `verified`; contagens batem com `npm test`
 - [x] Build gate passes: `npm run gate` exit 0
-      **Tests**: none
-      **Gate**: build
-      **Status**: ✅ Done
+
+**Tests**: none
+**Gate**: build
+**Status**: ✅ Done
+
+---
+
+## Checks
+
+**C1** - Evento de documento sem cadastro cria o cadastro com todas as unidades do evento, cada uma com `updatedAt` e `origin`, na versão 1 (ING-01, AC 1)
+Proof: run unit | ✓ RN_ENR_004_WHEN_documento_sem_cadastro_SHALL_criar_com_todas_as_unidades
+
+**C2** - Unidade que o cadastro não tem é preenchida mesmo quando o evento é mais antigo que as unidades gravadas (ING-02, AC 2)
+Proof: run unit | ✓ RN_ENR_004_WHEN_unidade_ausente_SHALL_preencher_mesmo_de_evento_antigo
+
+**C3** - Unidade que o cadastro já tem só é sobrescrita por evento estritamente mais novo; em empate ou evento anterior fica o gravado (ING-03, AC 3)
+Proof: run unit | ✓ RN_ENR_004_WHEN_evento_estritamente_mais_novo_SHALL_sobrescrever
+Proof: run unit | ✓ RN_ENR_004_IF_empate_ou_evento_anterior_THEN_SHALL_manter_o_gravado
+
+**C4** - Evento de origem `provedor:*` preenche lacuna e sobrescreve unidade de provedor, e nunca sobrescreve unidade de origem `cliente:*`, mesmo mais novo (ING-04, AC 4)
+Proof: run unit | ✓ RN_ENR_004_IF_origem_provedor_THEN_SHALL_nao_sobrescrever_cliente
+Proof: run unit | ✓ RN_ENR_004_IF_origem_provedor_THEN_SHALL_preencher_lacuna_e_provedor
+
+**C5** - Cadastro com N ou mais unidades recusa evento com menos de N com `DomainRuleViolation` de `ruleId` `RN-ENR-004` e `motivo` `descartado-limiar`; com exatamente N aceita; evento de provedor não é recusado por isso (ING-05, AC 5)
+Proof: run unit | ✓ RN_ENR_004_IF_cadastro_completo_e_evento_incompleto_THEN_SHALL_lancar
+Proof: run unit | ✓ RN_ENR_004_WHEN_evento_traz_exatamente_N_SHALL_aceitar
+Proof: run unit | ✓ RN_ENR_004_IF_origem_provedor_THEN_limiar_nao_se_aplica
+
+**C6** - Merge que resulta no mesmo estado devolve `changed = false`, não avança a versão e não emite evento (ING-06, AC 6)
+Proof: run unit | ✓ RN_ENR_004_IF_estado_identico_THEN_SHALL_nao_mudar_nem_emitir
+
+**C7** - Cada mudança do cadastro emite exatamente um `ClienteAtualizado` v1 com `documento`, `versao` nova e `occurredAt`, e o worker publica um por mudança e nenhum quando nada muda (ING-07, AC 7)
+Proof: run unit | ✓ RN_ENR_004_WHEN_cadastro_muda_SHALL_emitir_um_ClienteAtualizado_v1
+Proof: run int | ✓ should publish one ClienteAtualizado v1 per real change, none otherwise
+
+---
+
+## Handoff
+
+The feature's live state, written as it happens - a compaction gives no warning.
+
+**Settled mid-build:** none
+**Dispatched:** none yet
+**Walked:** n/a - a feature não tem tela; o Independent Test da spec é o teste de integração de C7
+
+**Migração (2026-11-21):** o código e os testes desta feature foram construídos em 2026-08/09 com o tlc-spec-driven 3.3.0 (um commit por tarefa; relatório antigo em `validation.md`, no histórico do git até `kit--v0.5.9`). Este arquivo foi levado ao formato da 4.1.0 nesta data: saiu o campo `Tools`, entraram `Approved`, `Build`, `Run` e os Checks. As tarefas não foram reexecutadas; `proofs.md` e `verification.md` nascem de execução nova sobre o código que já existia.
