@@ -1,5 +1,8 @@
 # Cancelamento parcial de pedido (ORD-231) Validation
 
+> Relatório do Verifier do tlc-spec-driven 3.3.0, mantido como histórico. Desde a 4.1.0 a evidência desta feature
+> está em `proofs.md` e `verification.md`, na mesma pasta.
+
 **Date**: 2026-08-29
 **Spec**: `.specs/features/001-cancelamento-parcial/spec.md`
 **Diff range**: `545d58a..HEAD` (branch `tlc/001`; commits `fa4eff9`, `42f1edc`, `c298625`, `b64ced9`, `d7f2314`, `5293152`, `bcdf056`)

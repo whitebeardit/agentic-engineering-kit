@@ -1,5 +1,8 @@
 # Aplicar evento ao cadastro com limiar de completude (ENR-042) Validation
 
+> Relatório do Verifier do tlc-spec-driven 3.3.0, mantido como histórico. Desde a 4.1.0 a evidência desta feature
+> está em `proofs.md` e `verification.md`, na mesma pasta.
+
 **Date**: 2026-08-30
 **Spec**: `.specs/features/001-merge-por-unidade/spec.md`
 **Diff range**: `b08fe3f..c7de133` (branch `kit/v0.3`; commits `316c34a` T1, `2fb99d0` T2, `2cb0b89` T3, `f30876f` T4, `4ad0de0` T5, `cefd3c8`+`c7de133` T6)

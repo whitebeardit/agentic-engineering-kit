@@ -21,7 +21,7 @@
 ## Handoff
 
 - **Feature**: 001-cancelamento-parcial / `.specs/features/001-cancelamento-parcial`
-- **Phase / Task**: Done — Verifier PASS (validation.md: 7/7 ACs, gate 14/14, sensor 3/3 mortos); validate_state.py exit 0
+- **Phase / Task**: Done — migrada para o tlc 4.1.0 em 2026-11-22: `check_proofs.py` 12/12, Verifier FAIL com 2 achados de teste (8 mutações pedidas pelo kit, 2 vivas), fechados em `961b0ae`; `validate_verification.py` exit 0. Antes, na 3.3.0: Verifier PASS (`validation.md`: 7/7 ACs, gate 14/14, sensor 3/3 mortos)
 - **Completed**: T1, T2, T3, T4, T5, T6
 - **In-progress** (file:line): none
 - **Next step**: Merge de tlc/001 em main; próxima feature: 002 — consumidor do evento no repo do ERP (fora deste repo), ou `Order.Cancel()` com o teste WHILE_pedido_Cancelado

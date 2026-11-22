@@ -9,7 +9,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 - Formatar: `dotnet format Orders.slnx` (o hook formata o arquivo tocado, em melhor esforço) · Conferir: `dotnet format Orders.slnx --verify-no-changes` · Usings: `dotnet format --diagnostics IDE0005`
 
 ## Definição de pronto
-Build sem erro + `dotnet format --verify-no-changes` limpo + `dotnet test` verde + `.verified.txt` inalterado (ou mudança explicada no PR) + `.specs/features/<f>/validation.md` com PASS + output colado no PR.
+Build sem erro + `dotnet format --verify-no-changes` limpo + `dotnet test` verde + `.verified.txt` inalterado (ou mudança explicada no PR) + `.specs/features/<f>/proofs.md` verde no `HEAD` e `verification.md` com todo achado fechado (`validate_verification.py` exit 0) + output colado no PR.
 
 ## Gotchas
 - `Erp.Legacy` compila em `AnalysisMode=Minimum` (rampa); o resto em `Recommended` com warnings-as-errors.

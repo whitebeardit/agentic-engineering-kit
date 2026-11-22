@@ -15,7 +15,7 @@ Contexto canônico deste repositório, lido por qualquer agente (Claude Code, Cu
 
 ## Definição de pronto
 
-`npm run gate` exit 0 + snapshot de characterization inalterado (ou mudança explicada no PR) + `.specs/features/<f>/validation.md` com PASS + saída do gate colada no PR.
+`npm run gate` exit 0 + snapshot de characterization inalterado (ou mudança explicada no PR) + `.specs/features/<f>/proofs.md` verde no `HEAD` e `verification.md` com todo achado fechado (`validate_verification.py` exit 0) + saída do gate colada no PR.
 
 ## Gotchas
 
