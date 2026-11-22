@@ -25,7 +25,7 @@ IF o pedido já foi faturado (ou está Cancelado) THEN THE SYSTEM SHALL recusar 
 IF o item não pertence ao pedido THEN THE SYSTEM SHALL recusar com `DomainRuleViolationException(RN-ORD-012)` sem alterar o pedido
 THE SYSTEM SHALL CONTINUE TO ser idempotente: cancelar o mesmo item duas vezes emite um único evento e mantém o total
 Código: `src/Orders.Domain/Order.cs → CancelItem` · predicado em `Specifications/PedidoElegivelParaCancelamento.cs` · handler `src/Orders.Application/CancelOrderItem/CancelOrderItemHandler.cs`
-Teste: `tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs` (10 testes, um por cláusula EARS + edge + handler)  Confiança: verified
+Teste: `tests/Orders.Tests/RN_ORD_012_CancelamentoParcialTests.cs` (11 testes, um por cláusula EARS + edge + handler)  Confiança: verified
 Contrato afetado: evento `OrderItemCancelled` v1 (público — `rules/contracts.md`; AD-001)
 Dono: <pessoa>  Desde: ADR-0003/0004, spec `.specs/features/001-cancelamento-parcial/` (CANC-01..07)  Última revisão: 2026-08-29
 

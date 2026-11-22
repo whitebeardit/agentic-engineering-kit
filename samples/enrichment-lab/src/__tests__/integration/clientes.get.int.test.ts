@@ -58,6 +58,38 @@ describe('When we read a consolidated customer', () => {
     await expect(s.worker.processarPendentes()).resolves.toEqual(['sem-mudanca']);
     expect(s.publicador.publicados).toHaveLength(3);
   });
+  it('should store a client reaffirmation with a new version and publish nothing', async () => {
+    const antes = s.publicador.publicados.length;
+    const empresa = { documento: CNPJ_VALIDO, tipoPessoa: 'J' as const };
+    const doProvedor = eventoValido({
+      ...empresa,
+      origin: 'provedor:biro',
+      updatedAt: '2026-08-30T13:00:00Z',
+      data: { endereco: { uf: 'SP' } },
+    });
+    const reafirma = eventoValido({
+      ...empresa,
+      updatedAt: '2026-08-30T14:00:00Z',
+      data: { endereco: { uf: 'SP' } },
+    });
+    const provedorDepois = eventoValido({
+      ...empresa,
+      origin: 'provedor:biro',
+      updatedAt: '2026-08-30T15:00:00Z',
+      data: { endereco: { uf: 'RJ' } },
+    });
+    for (const e of [doProvedor, reafirma, provedorDepois])
+      await supertest(app).post('/v1/eventos').send(e).expect(202);
+    await expect(s.worker.processarPendentes()).resolves.toEqual([
+      'gravado',
+      'gravado',
+      'sem-mudanca',
+    ]);
+    const r = await supertest(app).get(`/v1/clientes/${CNPJ_VALIDO}`);
+    expect(r.headers.etag).toBe('"v4"');
+    expect(r.body.data.endereco.uf).toBe('SP');
+    expect(s.publicador.publicados).toHaveLength(antes + 1); // só o preenchimento da uf
+  });
   it('should answer 304 when If-None-Match carries the current version', async () => {
     const r = await supertest(app)
       .get(`/v1/clientes/${CPF_VALIDO}`)

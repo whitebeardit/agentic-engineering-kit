@@ -12,7 +12,7 @@ Os comandos concretos de cada stack estão em `templates/profiles/` do kit (`nod
 - Formatar: `<formatador>` (hook roda no arquivo tocado) · Contrato: `oasdiff breaking docs/openapi.yaml <novo>` sem ERR
 
 ## Definição de pronto
-Build sem erro + testes verdes + contrato sem breaking + `.specs/features/<f>/validation.md` com PASS + output colado no PR.
+Build sem erro + testes verdes + contrato sem breaking + `.specs/features/<f>/proofs.md` verde no `HEAD` e `verification.md` com todo achado fechado (`validate_verification.py` exit 0) + output colado no PR.
 Sem output, não está pronto.
 
 ## Gotchas (o que o agente não adivinha)

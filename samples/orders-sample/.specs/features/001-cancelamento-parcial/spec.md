@@ -1,5 +1,7 @@
 # Cancelamento parcial de pedido (ORD-231) Specification
 
+**Approved**: 2026-11-22 - user: "Aprovo conforme sugerido."
+
 **Card**: ORD-231 · **Tier de risco**: médio · **Tamanho (auto-sizing)**: Large — cruza serviços (Orders → ERP) e cria contrato público novo
 **Repo dono do contrato**: orders-sample (Orders). O consumidor do ERP é feature separada no repo do ERP.
 
@@ -113,5 +115,5 @@ Each requirement gets a unique ID for tracking across design, tasks, and validat
 
 How we know the feature is successful:
 - [ ] `dotnet test Orders.slnx` verde com os testes RN_ORD_012 cobrindo CANC-01..07 (1:1, nomes com o ID da regra).
-- [ ] Verifier do tlc: validation.md PASS, mutantes injetados mortos.
+- [ ] `check_proofs.py` verde em `HEAD` e Verifier do tlc com `verification.md` PASS; as mutações que o kit pede a mais ao Verifier (`docs/tlc-adaptacao.md` do kit) morrem todas.
 - [ ] `docs/regras/pedidos.md` com o bloco RN-ORD-012 apontando código, teste e `Confiança: verified`.

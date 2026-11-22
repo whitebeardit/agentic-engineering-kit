@@ -33,10 +33,11 @@ IF a origem é `provedor:*` THEN THE SYSTEM SHALL só preencher lacunas ou sobre
 IF o cadastro tem N ou mais unidades e o evento traz menos de N THEN THE SYSTEM SHALL recusar com `DomainRuleViolation(RN-ENR-004, descartado-limiar)` sem alterar nada (nunca para origem provedor; N = `LIMIAR_N`, default 11)
 IF o estado resultante é idêntico ao gravado THEN THE SYSTEM SHALL devolver `changed = false`, não gravar, não avançar a versão e não emitir evento
 WHEN o cadastro muda THE SYSTEM SHALL emitir exatamente um `ClienteAtualizado` v1 (documento, versão nova, instante); `apto` é uma unidade como as outras
+WHEN um evento `cliente:*` traz valor igual ao de uma unidade de origem provedor THE SYSTEM SHALL passar a anotação para o cliente, gravar avançando a versão e não emitir evento
 Código: `src/domain/cliente/cliente.entity.ts → aplicar` · merge em `src/domain/cliente/service/merge.ts` · predicado em `src/domain/cliente/specifications/evento-elegivel-para-merge.ts` · worker `src/infrastructure/messaging/worker.ts` (só orquestra)
-Teste: `src/__tests__/unit/RN_ENR_004.merge-por-unidade.unit.test.ts` (13 testes: 3 do limiar + 10 do merge, um por cláusula EARS + boundaries) · integração `src/__tests__/integration/clientes.get.int.test.ts` (publicação) Confiança: verified
+Teste: `src/__tests__/unit/RN_ENR_004.merge-por-unidade.unit.test.ts` (16 testes: 4 do limiar + 12 do merge, um por cláusula EARS + boundaries) · integração `src/__tests__/integration/clientes.get.int.test.ts` (publicação) Confiança: verified
 Contrato afetado: evento `ClienteAtualizado` v1 (público — `src/contracts/asyncapi.yaml`; `rules/contracts.md`; AD-001)
-Dono: <pessoa> Desde: spec `.specs/features/001-merge-por-unidade/` (ING-01..07) Última revisão: 2026-08-30
+Dono: <pessoa> Desde: spec `.specs/features/001-merge-por-unidade/` (ING-01..08) Última revisão: 2026-11-22
 
 ## RN-ENR-005 — Gravação condicional por versão
 

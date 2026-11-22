@@ -2,14 +2,17 @@
 
 ## Execution Protocol (MANDATORY -- do not skip)
 
-Implement these tasks with the `tlc-spec-driven` skill: **activate it by name and follow its Execute flow and Critical Rules.** Do not search for skill files by filesystem path. The skill is the source of truth for how a task is executed, gated, and committed.
+Implement these tasks with the `tlc-spec-driven` skill: **activate it by name and follow its Execute flow and Critical Rules.** Do not search for skill files by filesystem path. The skill is the source of truth for the full flow (per-task cycle, sub-agent delegation, the walk, check_proofs, the Verifier and the screens sub-agent).
 
 **If the skill cannot be activated, STOP and tell the user - do not proceed without it.**
 
 ---
 
 **Design**: `.specs/features/001-cancelamento-parcial/design.md`
-**Status**: Done — aguardando Verifier
+**Status**: Done
+**Approved**: 2026-11-22 - user: "Aprovo conforme sugerido."
+**Build**: `dotnet build Orders.slnx`; `dotnet format Orders.slnx --verify-no-changes`
+**Run regra**: `dotnet test Orders.slnx --filter "FullyQualifiedName~RN_ORD_012" --logger "console;verbosity=normal"`
 
 ---
 
@@ -67,12 +70,12 @@ T4 → T5 → T6
 **Depends on**: None
 **Reuses**: formato dos blocos RN-ORD-001..004 e modelo da skill `regras-de-negocio`
 **Requirement**: CANC-01, CANC-02, CANC-03, CANC-04, CANC-05, CANC-06
-**Tools**:
-- MCP: NONE
-- Skill: `regras-de-negocio`
+
 **Done when**:
+
 - [x] Bloco com as cláusulas WHEN/IF/SHALL CONTINUE TO da spec, `Código:` e `Teste:` apontando para os arquivos que T2–T5 criarão, `Confiança: inferred`
 - [x] Build gate passes: `dotnet build Orders.slnx && dotnet test Orders.slnx` — 4 passed, 0 failed (2026-08-29)
+
 **Tests**: none
 **Gate**: build
 **Status**: ✅ Done
@@ -86,12 +89,12 @@ T4 → T5 → T6
 **Depends on**: T1
 **Reuses**: `src/Orders.Domain/Events/IDomainEvent.cs`, `src/Orders.Domain/Money.cs`
 **Requirement**: CANC-02
-**Tools**:
-- MCP: NONE
-- Skill: NONE
+
 **Done when**:
+
 - [x] Record com os quatro campos; comentário XML dizendo que é contrato público (mudar = versionar)
 - [x] Build gate passes: `dotnet build Orders.slnx && dotnet test Orders.slnx` — 4 passed (2026-08-29)
+
 **Tests**: none
 **Gate**: build
 **Status**: ✅ Done
@@ -105,13 +108,13 @@ T4 → T5 → T6
 **Depends on**: T2
 **Reuses**: `src/Orders.Domain/Specifications/ISpecification.cs`, `OrderStatus`
 **Requirement**: CANC-06
-**Tools**:
-- MCP: NONE
-- Skill: NONE
+
 **Done when**:
+
 - [x] `IsSatisfiedBy(pedido Aberto) == true`; `IsSatisfiedBy(Faturado) == false` — cada um com teste nomeado `RN_ORD_012_…`. `Cancelado` não é alcançável neste repo (sem `Order.Cancel()`): coberto por construção, registrado como assumption na spec
 - [x] Gate check passes: `dotnet test Orders.slnx --filter "FullyQualifiedName~RN_"` — 2 passed (2026-08-29)
 - [x] Test count: 2 testes RN_ORD_012 (total da suíte 6)
+
 **Tests**: unit
 **Gate**: quick
 **Status**: ✅ Done
@@ -133,14 +136,14 @@ Check C: os 2 testes mapeiam para CANC-06; nenhum teste sem requisito. Veredito:
 **Depends on**: T3
 **Reuses**: `OrderItem.Cancel()` (internal), `Order.Total`, `_events`
 **Requirement**: CANC-01, CANC-02, CANC-03, CANC-04, CANC-05
-**Tools**:
-- MCP: NONE
-- Skill: NONE
+
 **Done when**:
+
 - [x] Testes 1:1: total recalculado (CANC-01); evento único com OrderId/ItemId/NewTotal (CANC-02); faturado recusa com RuleId RN-ORD-012 e nada muda (CANC-03); duas chamadas → um evento, mesmo total (CANC-04); item inexistente recusa sem alterar (CANC-05); último item cancelado → total 0,00 BRL (edge)
 - [x] Gate check passes: `dotnet test Orders.slnx --filter "FullyQualifiedName~RN_"` — 8 passed (2026-08-29)
 - [x] Test count: 8 testes RN_ORD_012 (total da suíte 12); nenhum teste anterior removido
 - [x] Build gate passes (último da fase): `dotnet build Orders.slnx && dotnet test Orders.slnx` — 0 warnings, 12 passed
+
 **Tests**: unit
 **Gate**: build
 **Status**: ✅ Done
@@ -165,14 +168,14 @@ Check B: nenhuma asserção tautológica; estado (Total, Cancelled, Events) é a
 **Depends on**: T4
 **Reuses**: `IOrderRepository`, `InMemoryOrderRepository` (teste), `AssemblyMarker`
 **Requirement**: CANC-07
-**Tools**:
-- MCP: NONE
-- Skill: NONE
+
 **Done when**:
+
 - [x] Handler devolve `NewTotal` 30,00 BRL e 1 evento para o pedido de dois itens; pedido inexistente → `KeyNotFoundException`
 - [x] `ArchitectureTests` continuam verdes (Application não lança `DomainRuleViolationException`) — 3 passed
 - [x] Gate check passes: `dotnet test Orders.slnx` — 14 passed (2026-08-29, **após fix**: o 1º commit de T5 tinha build quebrado — `using Orders.Infrastructure;` ausente — e o gate registrado veio de `--no-build` sobre o binário anterior; corrigido em `fix(orders)`, lição L-001 registrada)
 - [x] Test count: 10 RN_ORD_012 (total 14); nenhum teste anterior removido
+
 **Tests**: integration
 **Gate**: full
 **Status**: ✅ Done (com fix)
@@ -193,12 +196,12 @@ Check B: estado persistido é asserido (não só a chamada). Check C: 2 testes �
 **Depends on**: T5
 **Reuses**: -
 **Requirement**: CANC-01, CANC-02, CANC-03, CANC-04, CANC-05, CANC-06, CANC-07
-**Tools**:
-- MCP: NONE
-- Skill: `regras-de-negocio`
+
 **Done when**:
+
 - [x] Bloco aponta arquivo:método reais e o arquivo de teste; `Confiança: verified`
 - [x] Build gate passes: `dotnet build Orders.slnx && dotnet test Orders.slnx` — 14 passed (2026-08-29)
+
 **Tests**: none
 **Gate**: build
 **Status**: ✅ Done
@@ -214,3 +217,43 @@ Phase 2:  T5 ------→ T6
 ```
 
 Execution is strictly sequential - 6 tasks cabem em um batch (≤ ~8): execução inline, sem sub-agentes de batch. O Verifier roda automaticamente após T6.
+
+---
+
+## Checks
+
+**C1** - Cancelar um item de pedido Aberto marca o item como cancelado e o total passa a ser a soma dos subtotais dos itens não cancelados; cancelado o último item, o total é zero (CANC-01, AC 1)
+Proof: run regra | Passed RN_ORD_012_WHEN_cliente_cancela_item_de_pedido_Aberto_SHALL_marcar_cancelado_e_recalcular_total
+Proof: run regra | Passed RN_ORD_012_WHEN_ultimo_item_e_cancelado_SHALL_recalcular_total_para_zero
+
+**C2** - O cancelamento emite exatamente um `OrderItemCancelled` com `OrderId`, `ItemId` e `NewTotal` igual ao total recalculado (CANC-02, AC 2)
+Proof: run regra | Passed RN_ORD_012_WHEN_cliente_cancela_item_SHALL_emitir_um_OrderItemCancelled_com_OrderId_ItemId_e_NewTotal
+
+**C3** - Pedido faturado recusa com `DomainRuleViolationException` de `RuleId` `RN-ORD-012`, sem alterar total, itens nem eventos (CANC-03, AC 3)
+Proof: run regra | Passed RN_ORD_012_IF_pedido_faturado_THEN_SHALL_recusar_com_RuleId_RN_ORD_012_sem_alterar_o_pedido
+
+**C4** - Cancelar o mesmo item duas vezes produz um único `OrderItemCancelled` e o mesmo total (CANC-04, AC 4)
+Proof: run regra | Passed RN_ORD_012_SHALL_ser_idempotente_ao_cancelar_o_mesmo_item_duas_vezes
+
+**C5** - Item que não pertence ao pedido recusa com `DomainRuleViolationException` de `RuleId` `RN-ORD-012`, sem alterar o pedido (CANC-05, AC 5)
+Proof: run regra | Passed RN_ORD_012_IF_item_nao_pertence_ao_pedido_THEN_SHALL_recusar_sem_alterar_o_pedido
+
+**C6** - Pedido Aberto é elegível para cancelamento de item; pedido Faturado ou Cancelado não é (CANC-06, AC 6)
+Proof: run regra | Passed RN_ORD_012_WHILE_pedido_Aberto_SHALL_ser_elegivel_para_cancelamento_de_item
+Proof: run regra | Passed RN_ORD_012_WHILE_pedido_Faturado_SHALL_nao_ser_elegivel_para_cancelamento_de_item
+Proof: run regra | Passed RN_ORD_012_WHILE_pedido_Cancelado_SHALL_nao_ser_elegivel_para_cancelamento_de_item
+
+**C7** - O handler carrega o pedido, delega a decisão ao domínio, persiste e devolve o novo total e os eventos emitidos (CANC-07, AC 7)
+Proof: run regra | Passed RN_ORD_012_WHEN_handler_recebe_comando_SHALL_orquestrar_persistir_e_devolver_novo_total_e_eventos
+
+---
+
+## Handoff
+
+The feature's live state, written as it happens - a compaction gives no warning.
+
+**Settled mid-build:** none
+**Dispatched:** Verifier (sub-agente, contexto limpo), 2026-11-22, com o pedido de mutação de `docs/tlc-adaptacao.md` do kit - returned (FAIL, 2 achados, fechados em `961b0ae`); `check_proofs.py` 12 de 12 em `95019de` e `validate_verification.py` com 0 erros antes do commit que grava o `proofs.md`
+**Walked:** n/a - a feature não tem tela; o Independent Test da spec é coberto pelos testes de C1 a C7
+
+**Migração (2026-11-21):** o código e os testes desta feature foram construídos com o tlc-spec-driven 3.3.0 (relatório antigo em `validation.md`, no histórico do git até `kit--v0.5.9`). Este arquivo foi levado ao formato da 4.1.0 nesta data: saiu o campo `Tools`, entraram `Approved`, `Build`, `Run` e os Checks. As tarefas não foram reexecutadas; `proofs.md` e `verification.md` nascem de execução nova sobre o código que já existia.

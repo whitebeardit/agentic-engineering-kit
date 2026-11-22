@@ -37,6 +37,25 @@ describe('RN-ENR-004 — limiar de completude (ING-05)', () => {
     expect(
       EventoElegivelParaMerge.estaSatisfeitaPor(clienteComUnidades(N - 1), evento, N),
     ).toEqual({ ok: true });
+    const comNMenos1 = {
+      ...evento,
+      data: Object.fromEntries(
+        [...Array(N - 1).keys()].map((i) => [`g${i}`, { v: i }]),
+      ),
+    };
+    expect(EventoElegivelParaMerge.estaSatisfeitaPor(cliente, comNMenos1, N)).toEqual({
+      ok: false,
+      motivo: 'descartado-limiar',
+    });
+  });
+  it('RN_ENR_004_WHEN_cadastro_tem_apto_SHALL_nao_contar_apto_no_limiar', () => {
+    const unidades = new Map(clienteComUnidades(N - 1).unidades);
+    unidades.set('apto', { valor: true, instante: T12, origem: 'cliente:app' });
+    const c = Cliente.reidratar(CPF_VALIDO, 'F', 1, unidades);
+    expect(c.quantidadeDeCampos).toBe(N - 1);
+    expect(
+      EventoElegivelParaMerge.estaSatisfeitaPor(c, eventoValido({ data: dados(1) }), N),
+    ).toEqual({ ok: true });
   });
 });
 
@@ -60,6 +79,10 @@ describe('RN-ENR-004 — Aplicar evento ao cadastro: merge por unidade', () => {
       instante: T12,
       origem: 'cliente:app',
     });
+    for (const u of c.unidades.values())
+      expect(u).toMatchObject({ instante: T12, origem: 'cliente:app' });
+    expect(r.eventos).toHaveLength(1);
+    expect(r.eventos[0]?.versao).toBe(1);
   });
   it('RN_ENR_004_WHEN_unidade_ausente_SHALL_preencher_mesmo_de_evento_antigo', () => {
     const c = Cliente.novo(CPF_VALIDO, 'F');
@@ -137,9 +160,14 @@ describe('RN-ENR-004 — Aplicar evento ao cadastro: merge por unidade', () => {
   it('RN_ENR_004_IF_cadastro_completo_e_evento_incompleto_THEN_SHALL_lancar', () => {
     const c = clienteComUnidades(N);
     const antes = c.versao;
-    expect(() => c.aplicar(eventoValido({ data: dados(1) }), N)).toThrow(
-      DomainRuleViolation,
-    );
+    let erro: unknown;
+    try {
+      c.aplicar(eventoValido({ data: dados(1) }), N);
+    } catch (e) {
+      erro = e;
+    }
+    expect(erro).toBeInstanceOf(DomainRuleViolation);
+    expect(erro).toMatchObject({ ruleId: 'RN-ENR-004', motivo: 'descartado-limiar' });
     expect(c.versao).toBe(antes);
     expect(c.quantidadeDeCampos).toBe(N);
   });
@@ -151,6 +179,60 @@ describe('RN-ENR-004 — Aplicar evento ao cadastro: merge por unidade', () => {
     expect(r).toEqual({ changed: false, eventos: [] });
     expect(unidade(c, 'cadastro.nome')?.instante).toBe(T12); // anotação não renova
   });
+  it('RN_ENR_004_WHEN_cliente_reafirma_valor_de_provedor_SHALL_anotar_cliente_sem_emitir', () => {
+    const c = Cliente.novo(CPF_VALIDO, 'F');
+    const uf = (origin: 'provedor:biro' | 'cliente:app', updatedAt: string, v: string) =>
+      eventoValido({ origin, updatedAt, data: { endereco: { uf: v } } });
+    c.aplicar(uf('provedor:biro', T12, 'SP'), N);
+    const r = c.aplicar(uf('cliente:app', T13, 'SP'), N);
+    expect(r).toEqual({ changed: false, eventos: [], reanotado: true });
+    expect(unidade(c, 'endereco.uf')).toEqual({
+      valor: 'SP',
+      instante: T13,
+      origem: 'cliente:app',
+    });
+    // provedor mais novo já não sobrescreve
+    const T14 = '2026-08-30T14:00:00Z';
+    expect(c.aplicar(uf('provedor:biro', T14, 'RJ'), N).changed).toBe(false);
+    expect(unidade(c, 'endereco.uf')?.valor).toBe('SP');
+    // reafirmação mais antiga que o gravado: a origem passa, o instante fica
+    const d = Cliente.novo(CPF_VALIDO, 'F');
+    d.aplicar(uf('provedor:biro', T12, 'SP'), N);
+    d.aplicar(uf('cliente:app', T11, 'SP'), N);
+    expect(unidade(d, 'endereco.uf')).toEqual({
+      valor: 'SP',
+      instante: T12,
+      origem: 'cliente:app',
+    });
+  });
+  it('RN_ENR_004_IF_provedor_traz_valor_igual_THEN_SHALL_nao_reanotar', () => {
+    const uf = (origin: 'provedor:biro' | 'provedor:outro' | 'cliente:app', at: string) =>
+      eventoValido({ origin, updatedAt: at, data: { endereco: { uf: 'SP' } } });
+    // sobre unidade de provedor
+    const c = Cliente.novo(CPF_VALIDO, 'F');
+    c.aplicar(uf('provedor:biro', T12), N);
+    expect(c.aplicar(uf('provedor:outro', T13), N)).toEqual({
+      changed: false,
+      eventos: [],
+    });
+    expect(unidade(c, 'endereco.uf')).toEqual({
+      valor: 'SP',
+      instante: T12,
+      origem: 'provedor:biro',
+    });
+    // sobre unidade de cliente
+    const d = Cliente.novo(CPF_VALIDO, 'F');
+    d.aplicar(uf('cliente:app', T12), N);
+    expect(d.aplicar(uf('provedor:biro', T13), N)).toEqual({
+      changed: false,
+      eventos: [],
+    });
+    expect(unidade(d, 'endereco.uf')).toEqual({
+      valor: 'SP',
+      instante: T12,
+      origem: 'cliente:app',
+    });
+  });
   it('RN_ENR_004_WHEN_cadastro_muda_SHALL_emitir_um_ClienteAtualizado_v1', () => {
     const c = Cliente.reidratar(CPF_VALIDO, 'F', 3, new Map());
     const r = c.aplicar(eventoValido({ updatedAt: T12 }), N);
@@ -161,6 +243,8 @@ describe('RN-ENR-004 — Aplicar evento ao cadastro: merge por unidade', () => {
       documento: CPF_VALIDO,
       versao: 4,
     });
+    const occurredAt = r.eventos[0]?.occurredAt ?? '';
+    expect(occurredAt).toBe(new Date(occurredAt).toISOString());
   });
   it('RN_ENR_004_WHEN_so_apto_muda_SHALL_tratar_como_unidade_e_emitir', () => {
     const c = Cliente.novo(CPF_VALIDO, 'F');

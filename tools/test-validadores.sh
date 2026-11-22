@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 # Smoke test dos validadores do tlc-spec-driven que o kit instala como dependência (AD-032 do livro: não fixar,
-# registrar). Roda validate_spec.py e validate_tasks.py contra a spec e as tasks do laboratório e contra mutantes
+# registrar; estado conferido com a 4.1.0 em 2026-11-22). Roda validate_spec.py e validate_tasks.py contra a spec e as tasks do laboratório e contra mutantes
 # deliberados, e compara com o ESTADO DOCUMENTADO em docs/tlc-adaptacao.md:
 #   - spec íntegra → 0                                  (esperado)
 #   - spec com critério 1 trocado por prosa vaga → 0     (esperado HOJE: o gate não lê critério — upstream #162 aberta)
 #   - tasks íntegras → 0                                 (esperado)
 #   - tasks com "Depends on: T99" → ≠ 0                  (esperado: a checagem de dependência funciona)
+#   - tasks sem a linha **Approved**, com --execute → ≠ 0 (4.1.0: a aprovação gravada é gate)
+#   - tasks com um check sem Proof → ≠ 0                 (4.1.0: todo check nomeia a prova)
+#   - validate_verification.py num laboratório já commitado → ≠ 0 (o proofs.md guarda o HEAD em que rodou; o commit
+#     que o grava muda o HEAD, então o gate só dá 0 antes desse commit)
+#   - check_proofs.py e validate_verification.py existem; validate_state.py não existe mais (saiu na 4.x)
 # Qualquer desvio do documentado sai 1 — inclusive o upstream corrigir o #162: aí é hora de atualizar a doc.
 # Onde estão os scripts: $TLC_DIR, ou o cache de plugins do Claude Code, ou um checkout em .tlc/ (CI).
 set -u
@@ -46,5 +51,23 @@ assert n == 1, "não achei onde inserir a dependência"
 open(sys.argv[2], "w", encoding="utf-8").write(m)
 PY
 python3 "$dir/validate_tasks.py" "$T/tasks-mutante.md" >/dev/null 2>&1; esperado "tasks com dependência inexistente → reprova" nonzero $?
+FEAT=$(dirname "$TASKS")
+mkdir -p "$T/sem-aprovacao" "$T/sem-prova"
+cp "$FEAT/spec.md" "$T/sem-aprovacao/"; grep -v '^\*\*Approved\*\*' "$TASKS" > "$T/sem-aprovacao/tasks.md"
+python3 "$dir/validate_tasks.py" "$T/sem-aprovacao" --execute >/dev/null 2>&1; esperado "tasks sem Approved com --execute → reprova" nonzero $?
+cp "$FEAT/spec.md" "$T/sem-prova/"
+python3 - "$TASKS" "$T/sem-prova/tasks.md" <<'PY'
+import re, sys
+s = open(sys.argv[1], encoding="utf-8").read()
+m, n = re.subn(r"(\*\*C1\*\*[^\n]*\n)Proof:[^\n]*\n", r"\1", s, count=1)
+assert n == 1, "não achei a prova do C1"
+open(sys.argv[2], "w", encoding="utf-8").write(m)
+PY
+python3 "$dir/validate_tasks.py" "$T/sem-prova" >/dev/null 2>&1; esperado "check sem Proof → reprova" nonzero $?
+ORD="$KIT/samples/orders-sample"
+python3 "$dir/validate_verification.py" 001-cancelamento-parcial --root "$ORD" >/dev/null 2>&1
+esperado "gate final em laboratório já commitado — documentado: reprova pelo HEAD do proofs.md" nonzero $?
+for f in check_proofs.py validate_verification.py; do [ -f "$dir/$f" ]; esperado "$f existe" 0 $?; done
+[ -f "$dir/validate_state.py" ]; esperado "validate_state.py saiu na 4.x" nonzero $?
 echo "test-validadores: $ok ok, $fail falha(s) · scripts: $dir"
 [ "$fail" -eq 0 ]

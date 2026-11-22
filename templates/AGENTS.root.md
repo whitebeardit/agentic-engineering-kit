@@ -20,12 +20,12 @@ Exceção: o dado nasce no legado (legado é fonte de verdade) → o legado vai 
 
 ## Fluxo por card (tlc-spec-driven · © Tech Leads Club, CC-BY-4.0)
 `card-intake` (DoR) → `specify feature` → gate 1 (PO) → `impact-analyzer` → design → gate 2 (tech lead) → tasks (1 task = 1 repo = 1 PR)
-→ execute (sessão nova por task) → Verifier do tlc (≠ autor) → PR draft com intenção + `validation.md` + risco → humano por tier → UAT com PO → nota no vault.
+→ execute (sessão nova por task) → Verifier do tlc (≠ autor) → PR draft com intenção + `proofs.md` e `verification.md` + risco → humano por tier → UAT com PO → nota no vault.
 
 ## Etiqueta
 - Branch `feat/<card>-<slug>` a partir de `main`; commits atômicos (um por task); PR sempre draft; ≤ 400 linhas.
 - Conventional commits; PR cita o card e a spec (`.specs/features/<f>/`).
-- "Pronto" = comando com exit 0 e `validation.md` com PASS colados no PR. Isso libera o próximo repositório a **começar**;
+- "Pronto" = comando com exit 0, `proofs.md` verde e `verification.md` sem achado aberto colados no PR. Isso libera o próximo repositório a **começar**;
   **implantar** segue a ordem acima e depende do check verde daquele commit, não do texto colado.
 
 ## Never

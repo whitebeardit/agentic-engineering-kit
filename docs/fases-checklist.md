@@ -21,7 +21,7 @@ Detalhe no vault `agentes-ia/processo-engenharia-com-agentes.md`. Nada avança s
 
 ## 3 · Card → spec → PR (sem. 5–8)
 - [ ] Definition of Ready em uso via `card-intake`; specs pelo tlc-spec-driven (`.specs/`) com 2 gates humanos
-- [ ] Verifier do tlc (≠ autor) com `validation.md`; AI review antes do humano; PR draft ≤ 400 linhas; CODEOWNERS; tiers de risco
+- [ ] Verifier do tlc (≠ autor) com `proofs.md` e `verification.md`; AI review antes do humano; PR draft ≤ 400 linhas; CODEOWNERS; tiers de risco
 - [ ] 5 cards fim a fim; nota por card no vault; p75 e rework vs baseline
 
 ## 4 · Sensores e segurança (sem. 8–12)

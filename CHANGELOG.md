@@ -1,5 +1,35 @@
 # Changelog
 
+## kit--v0.6.0 — 2026-11-22
+
+O kit passa a acompanhar o **tlc-spec-driven 4.1.0**. A 4.x trocou o relatório único do Verifier (`validation.md`) por
+dois arquivos, `proofs.md` (o que o `check_proofs.py` rodou, em qual `HEAD`) e `verification.md` (o que o Verifier
+leu e achou), retirou o `validate_state.py` e deixou de pedir mutação ao Verifier. Esta versão **altera os modelos de
+`AGENTS.md`, a checklist de fases, o documento de adaptação e os dois laboratórios**; hooks e agentes não mudam. Quem
+aplicou o kit por `apply.sh` confere com `apply.sh <repo> --check` e leva por PR.
+
+- **Documento de adaptação (`docs/tlc-adaptacao.md`) reescrito para a 4.1.0.** Como se chama o método, a tabela do que
+  cada um dos quatro scripts confere, e o que rodar a versão nova nos laboratórios mostrou: o Jest 30 esconde a linha
+  por teste quando detecta um agente (as provas precisam de `--reporters=default`), projeto em subpasta enxerga como
+  sujeira o arquivo não commitado do vizinho, `proofs.md` guarda o `HEAD` em que rodou e o commit dele move o `HEAD`,
+  e o `dotnet test` só imprime uma linha por teste com `--logger "console;verbosity=normal"`. O gate final não lê o
+  veredito do Verifier: relatório com FAIL e achados fechados por commit passa.
+- **Mutação pedida pelo kit.** O método parou de mutar sozinho; o kit pede a mutação no papel que entrega ao Verifier
+  (cópia fora da árvore, uma por rodada, tabela `## Mutations` no relatório, sobrevivente vira achado).
+- **Laboratórios no formato novo, com execução de verdade.** O código não foi refeito; `proofs.md` e
+  `verification.md` nasceram de rodadas novas. No `enrichment-lab`, o Verifier da 3.3.0 tinha dado PASS com três
+  mutações mortas; o da 4.1.0 fez treze no mesmo código e quatro sobreviveram, todas por teste que afirmava menos que
+  o critério. No `orders-sample` sobreviveram duas de oito. Os testes foram fortalecidos sem tocar o código de
+  produção, e as seis mutações agora morrem.
+- **ING-08 no `enrichment-lab`.** O mesmo Verifier mostrou um caso que a spec não decidia: o cliente reafirmava um
+  valor que tinha vindo de provedor, a anotação continuava do provedor, e um provedor mais novo sobrescrevia. Por
+  decisão do PO, a reafirmação passa a anotação para o cliente, grava e avança a versão, sem emitir evento. Critério
+  novo na spec, sem editar os aprovados.
+- **`tools/test-validadores.sh` com 10 casos** (eram 4). Passa na 4.1.0 e reprova na 3.3.0.
+- **Os `validation.md` dos laboratórios ficam**, com nota de histórico no topo: o livro *Cercando a IA* ainda injeta
+  trechos deles, e quem injeta para de injetar antes de o kit retirar. `tools/gen-ebook.py` também fica como está: é o
+  registro datado de uma execução de 29/08/2026 com a 3.3.0.
+
 ## kit--v0.5.9 — 2026-09-16
 
 Correção da v0.5.8 (#31): **os três lugares que ainda definiam o gate .NET sem a conferência de formatação passam a
