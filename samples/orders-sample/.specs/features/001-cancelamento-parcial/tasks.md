@@ -9,8 +9,8 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 ---
 
 **Design**: `.specs/features/001-cancelamento-parcial/design.md`
-**Status**: Draft
-**Approved**: [written when the user approves - YYYY-MM-DD - user: "their words"]
+**Status**: Approved
+**Approved**: 2026-11-22 - user: "Aprovo conforme sugerido."
 **Build**: `dotnet build Orders.slnx`; `dotnet format Orders.slnx --verify-no-changes`
 **Run regra**: `dotnet test Orders.slnx --filter "FullyQualifiedName~RN_ORD_012" --logger "console;verbosity=normal"`
 

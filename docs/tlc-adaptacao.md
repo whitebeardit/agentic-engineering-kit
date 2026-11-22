@@ -41,6 +41,23 @@ A spec de um card que cruza serviços vive no repo **dono do contrato** (o prime
 consumidor → legado). `tasks.md` mantém **1 task = 1 repo = 1 PR**; os outros repos recebem o link da spec e a task deles.
 O tlc não carrega duas specs ao mesmo tempo — respeite isso: uma feature, uma pasta, um repo dono.
 
+## O que o kit pede a mais ao Verifier: mutação (desde 2026-11-22, tlc 4.1.0)
+
+Até a 3.3.0 o Verifier do tlc estragava o código de propósito e via se algum teste reclamava. A 4.1.0 trocou isso por
+leitura: ele abre o teste de cada check e julga se o teste falharia caso a afirmação fosse falsa. O kit mantém a
+mutação como pedido explícito, escrito no papel que o orquestrador entrega ao Verifier, depois do que o método já manda:
+
+1. Trabalhe numa cópia fora da árvore (`git worktree add` num diretório temporário, ou cópia da pasta). Nada do que
+   for estragado é commitado, e a árvore do repositório termina limpa.
+2. Para pelo menos três regras da spec, estrague uma decisão do código por vez: tire uma condição, inverta uma
+   comparação, troque um valor devolvido. Uma mutação por rodada.
+3. Rode os comandos `Run` do `tasks.md` na cópia. Mutação morta é a que deixa pelo menos um teste vermelho.
+4. Escreva em `verification.md` a seção `## Mutations`, com uma linha por mutação: o que foi estragado, arquivo e
+   linha, o comando rodado e o teste que morreu. Mutação que sobrevive vira linha em `## Findings`, como qualquer outro
+   achado.
+
+O gate `validate_verification.py` não lê essa seção; quem confere é o humano que lê o relatório.
+
 ## O que os validadores do tlc conferem hoje (conferido em 2026-09-09; `tools/test-validadores.sh`)
 
 | Validador | Confere | **Não** confere (nesta data) |

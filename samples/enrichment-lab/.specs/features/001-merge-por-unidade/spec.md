@@ -1,6 +1,6 @@
 # Aplicar evento ao cadastro com limiar de completude (ENR-042) Specification
 
-**Approved**: [written when the user approves - YYYY-MM-DD - user: "their words"]
+**Approved**: 2026-11-22 - user: "Aprovo conforme sugerido."
 
 **Card**: ENR-042 · **Tier de risco**: alto (dados pessoais) · **Tamanho (auto-sizing)**: Complex — tier alto e contrato público novo (`ClienteAtualizado` v1)
 **Repo dono do contrato**: enrichment-lab. O consumidor no CRM é feature separada no repo do CRM.

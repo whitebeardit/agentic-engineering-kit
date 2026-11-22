@@ -9,8 +9,8 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 ---
 
 **Design**: `.specs/features/001-merge-por-unidade/design.md`
-**Status**: Draft
-**Approved**: [written when the user approves - YYYY-MM-DD - user: "their words"]
+**Status**: Approved
+**Approved**: 2026-11-22 - user: "Aprovo conforme sugerido."
 **Build**: `npm run gate`
 **Run unit**: `npx jest --ci --verbose --reporters=default --selectProjects unit -t 'RN_ENR_004'`
 **Run int**: `npx jest --ci --verbose --reporters=default --selectProjects int`
