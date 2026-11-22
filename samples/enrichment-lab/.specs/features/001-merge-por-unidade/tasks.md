@@ -198,6 +198,7 @@ Proof: run unit | ✓ RN_ENR_004_IF_origem_provedor_THEN_SHALL_preencher_lacuna_
 Proof: run unit | ✓ RN_ENR_004_IF_cadastro_completo_e_evento_incompleto_THEN_SHALL_lancar
 Proof: run unit | ✓ RN_ENR_004_WHEN_evento_traz_exatamente_N_SHALL_aceitar
 Proof: run unit | ✓ RN_ENR_004_IF_origem_provedor_THEN_limiar_nao_se_aplica
+Proof: run unit | ✓ RN_ENR_004_WHEN_cadastro_tem_apto_SHALL_nao_contar_apto_no_limiar
 
 **C6** - Merge que resulta no mesmo estado devolve `changed = false`, não avança a versão e não emite evento (ING-06, AC 6)
 Proof: run unit | ✓ RN_ENR_004_IF_estado_identico_THEN_SHALL_nao_mudar_nem_emitir
@@ -213,7 +214,7 @@ Proof: run int | ✓ should publish one ClienteAtualizado v1 per real change, no
 The feature's live state, written as it happens - a compaction gives no warning.
 
 **Settled mid-build:** none
-**Dispatched:** none yet
+**Dispatched:** Verifier (sub-agente, contexto limpo) em `ccf3980`, 2026-11-22, com o pedido de mutação de `docs/tlc-adaptacao.md` do kit
 **Walked:** n/a - a feature não tem tela; o Independent Test da spec é o teste de integração de C7
 
 **Migração (2026-11-21):** o código e os testes desta feature foram construídos em 2026-08/09 com o tlc-spec-driven 3.3.0 (um commit por tarefa; relatório antigo em `validation.md`, no histórico do git até `kit--v0.5.9`). Este arquivo foi levado ao formato da 4.1.0 nesta data: saiu o campo `Tools`, entraram `Approved`, `Build`, `Run` e os Checks. As tarefas não foram reexecutadas; `proofs.md` e `verification.md` nascem de execução nova sobre o código que já existia.
