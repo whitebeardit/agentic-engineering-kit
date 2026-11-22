@@ -35,6 +35,7 @@
 - **Phase / Task**: Concluída — migrada para o tlc 4.1.0 em 2026-11-22: `check_proofs.py` 17/17 em `1f534ae` e `validate_verification.py` com 0 erros. O Verifier deu FAIL nas duas rodadas (13 mutações com 4 vivas; depois 18 com 1 viva) e os 7 achados estão fechados por commit: 6 de teste e 1 de regra, o ING-08, decidido pelo PO (T7). Antes, na 3.3.0: Verifier PASS (`validation.md`: 7/7 ACs, gate 44/44, sensor 3/3 mortos)
 - **Completed**: T1, T2, T3, T4, T5, T6, T7
 - **In-progress** (file:line): none
+- **Lições**: cinco candidatas (L-002 a L-006), gravadas por `lessons.py` em 2026-11-22 a partir dos sete achados do `verification.md`; a L-001 de agosto saiu do arquivo na mesma escrita, por ter mais de 45 dias sem reincidir
 - **Next step**: próxima feature candidata: 002 — consulta ao provedor quando o documento não existe (hybrid miss: 200/202/404 com cache negativo), ou consumidor do `ClienteAtualizado` no repo do CRM (fora deste repo)
 - **Blockers**: none
 - **Uncommitted files**: none após o commit de validação

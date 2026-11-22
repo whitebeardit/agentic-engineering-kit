@@ -3,23 +3,99 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 2,
+  "next_id": 7,
   "lessons": [
     {
-      "id": "L-001",
-      "key": "spec_deviation::editing docs by exact string replacement after prettier reformats them silently no ops assert every replacement and run prettier before editing or the task closes in two commits",
-      "text": "Editing docs by exact-string replacement after prettier reformats them silently no-ops; assert every replacement and run prettier before editing, or the task closes in two commits.",
-      "signal": "spec_deviation",
-      "scope": "docs",
+      "id": "L-002",
+      "key": "weak_test::assert every value the criterion names not a subset of them",
+      "text": "Assert every value the criterion names, not a subset of them.",
+      "signal": "weak_test",
+      "scope": "tests",
       "status": "candidate",
-      "features": ["001-merge-por-unidade"],
+      "features": [
+        "001-merge-por-unidade"
+      ],
       "recurrence": 1,
       "harmful": 0,
       "evidence": [
-        ".specs/features/001-merge-por-unidade/validation.md (Verifier, nota 1: T6 em dois commits) (docs)"
+        ".specs/features/001-merge-por-unidade/verification.md Findings 1 (C5, ruleId; mutação M4) (tests)",
+        ".specs/features/001-merge-por-unidade/verification.md Findings 4 (C7, occurredAt; mutação M7) (tests)",
+        ".specs/features/001-merge-por-unidade/verification.md Findings 5 (C1, versão 1) (tests)"
       ],
-      "created": "2026-08-30T16:54:41Z",
-      "last_seen": "2026-08-30T16:54:41Z"
+      "created": "2026-11-22T18:40:58Z",
+      "last_seen": "2026-11-22T18:40:58Z"
+    },
+    {
+      "id": "L-003",
+      "key": "weak_test::assert both sides of every numeric boundary a criterion fixes on each operand of the comparison",
+      "text": "Assert both sides of every numeric boundary a criterion fixes, on each operand of the comparison.",
+      "signal": "weak_test",
+      "scope": "tests",
+      "status": "candidate",
+      "features": [
+        "001-merge-por-unidade"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/001-merge-por-unidade/verification.md Findings 2 (C5, fronteira N-1; mutação M3) (tests)"
+      ],
+      "created": "2026-11-22T18:40:58Z",
+      "last_seen": "2026-11-22T18:40:58Z"
+    },
+    {
+      "id": "L-004",
+      "key": "weak_test::give every confirmed assumption in the spec a test that fails when the assumption is reversed",
+      "text": "Give every confirmed assumption in the spec a test that fails when the assumption is reversed.",
+      "signal": "weak_test",
+      "scope": "tests",
+      "status": "candidate",
+      "features": [
+        "001-merge-por-unidade"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/001-merge-por-unidade/verification.md Findings 3 (C5, apto fora do limiar; mutação M11) (tests)"
+      ],
+      "created": "2026-11-22T18:40:58Z",
+      "last_seen": "2026-11-22T18:40:58Z"
+    },
+    {
+      "id": "L-005",
+      "key": "ac_gap::when two criteria decide by different attributes of the same unit write the criterion for the case where they disagree",
+      "text": "When two criteria decide by different attributes of the same unit, write the criterion for the case where they disagree.",
+      "signal": "ac_gap",
+      "scope": "spec",
+      "status": "candidate",
+      "features": [
+        "001-merge-por-unidade"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/001-merge-por-unidade/verification.md Findings 6 (ING-04 com ING-06; exemplo próprio) (spec)"
+      ],
+      "created": "2026-11-22T18:40:58Z",
+      "last_seen": "2026-11-22T18:40:58Z"
+    },
+    {
+      "id": "L-006",
+      "key": "weak_test::test the excluded case of every condition a criterion restricts to one origin or role",
+      "text": "Test the excluded case of every condition a criterion restricts to one origin or role.",
+      "signal": "weak_test",
+      "scope": "tests",
+      "status": "candidate",
+      "features": [
+        "001-merge-por-unidade"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/001-merge-por-unidade/verification.md Findings 7 (C8; mutação A5) (tests)"
+      ],
+      "created": "2026-11-22T18:40:58Z",
+      "last_seen": "2026-11-22T18:40:58Z"
     }
   ]
 }

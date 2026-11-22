@@ -112,6 +112,17 @@ Saíram na 4.x: as mutações do Verifier (o kit as mantém como pedido, seção
   essa reprovação.
 - **`dotnet test` não imprime uma linha por teste por padrão.** O `Run` do laboratório .NET pede
   `--logger "console;verbosity=normal"`.
+- **O `enrichment-lab` saiu do método em um ponto: teve um segundo Verifier.** A 4.1.0 diz que não há segundo
+  Verifier; depois das correções roda-se `check_proofs.py` de novo e o gate. No laboratório, o critério 8 (ING-08)
+  entrou depois da verificação, e um segundo Verifier foi chamado só para ele (seção "Segunda rodada" do
+  `verification.md`). Foi desvio de quem conduziu, registrado aqui e no `tasks.md` do laboratório; o kit não adota a
+  prática.
+- **Gravar lição nova descarta candidata velha.** O método manda registrar uma lição por achado do Verifier, com
+  `lessons.py add`. No `enrichment-lab` isso foi feito depois da tag `kit--v0.6.0`, e o script, ao gravar as cinco
+  lições novas, tirou do arquivo a L-001 de agosto de 2026: candidata com mais de 45 dias sem reincidir em outra
+  feature sai na escrita seguinte. No `orders-sample` as lições dos dois achados **não** foram gravadas, porque a
+  L-001 de lá sairia do mesmo jeito e o livro *Cercando a IA* imprime essa lição; quem injeta para de injetar antes
+  de o kit retirar.
 
 `tools/test-validadores.sh` roda os validadores contra a spec e as tasks do laboratório e contra mutantes, e reprova
 qualquer desvio **do que está documentado aqui** — inclusive o upstream corrigir o #162: aí a linha acima muda, com

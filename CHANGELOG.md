@@ -1,5 +1,18 @@
 # Changelog
 
+## kit--v0.6.1 — 2026-11-22
+
+Registro de dois desvios do método na migração da v0.6.0, apontados pela revisão do livro *Cercando a IA*. Só
+documentos e os registros do `enrichment-lab` mudam; nenhum hook, agente, modelo ou código de laboratório.
+
+- **Segundo Verifier no `enrichment-lab`.** O tlc-spec-driven 4.1.0 diz que não há segundo Verifier; o laboratório
+  chamou um para o critério acrescentado depois da verificação. Fica escrito como desvio em `docs/tlc-adaptacao.md` e
+  no `tasks.md` do laboratório. O kit não adota a prática.
+- **Lições dos achados.** As lições dos sete achados do `enrichment-lab` foram gravadas por `lessons.py` (cinco
+  candidatas, L-002 a L-006). Na mesma escrita o script descartou a L-001 de agosto de 2026, candidata com mais de 45
+  dias sem reincidência, e `docs/tlc-adaptacao.md` passa a avisar disso. As do `orders-sample` não foram gravadas: a
+  L-001 de lá sairia do mesmo jeito, e o livro a imprime.
+
 ## kit--v0.6.0 — 2026-11-22
 
 O kit passa a acompanhar o **tlc-spec-driven 4.1.0**. A 4.x trocou o relatório único do Verifier (`validation.md`) por
