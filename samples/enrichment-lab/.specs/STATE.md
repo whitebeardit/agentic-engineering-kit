@@ -32,8 +32,8 @@
 ## Handoff
 
 - **Feature**: 001-merge-por-unidade / `.specs/features/001-merge-por-unidade`
-- **Phase / Task**: Em verificação — migrada para o tlc 4.1.0 em 2026-11-22: `check_proofs.py` 13/13, Verifier FAIL com 6 achados (13 mutações pedidas pelo kit, 4 vivas); 5 de teste fechados em `ae22d25`, 1 de regra aguarda decisão do PO. Antes, na 3.3.0: Verifier PASS (`validation.md`: 7/7 ACs, gate 44/44, sensor 3/3 mortos)
-- **Completed**: T1, T2, T3, T4, T5, T6
+- **Phase / Task**: Concluída — migrada para o tlc 4.1.0 em 2026-11-22: `check_proofs.py` 17/17 em `1f534ae` e `validate_verification.py` com 0 erros. O Verifier deu FAIL nas duas rodadas (13 mutações com 4 vivas; depois 18 com 1 viva) e os 7 achados estão fechados por commit: 6 de teste e 1 de regra, o ING-08, decidido pelo PO (T7). Antes, na 3.3.0: Verifier PASS (`validation.md`: 7/7 ACs, gate 44/44, sensor 3/3 mortos)
+- **Completed**: T1, T2, T3, T4, T5, T6, T7
 - **In-progress** (file:line): none
 - **Next step**: próxima feature candidata: 002 — consulta ao provedor quando o documento não existe (hybrid miss: 200/202/404 com cache negativo), ou consumidor do `ClienteAtualizado` no repo do CRM (fora deste repo)
 - **Blockers**: none

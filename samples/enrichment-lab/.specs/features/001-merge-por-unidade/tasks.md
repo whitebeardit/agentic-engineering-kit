@@ -9,7 +9,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 ---
 
 **Design**: `.specs/features/001-merge-por-unidade/design.md`
-**Status**: Approved
+**Status**: Done
 **Approved**: 2026-11-22 - user: "Aprovo conforme sugerido."
 **Build**: `npm run gate`
 **Run unit**: `npx jest --ci --verbose --reporters=default --selectProjects unit -t 'RN_ENR_004'`
