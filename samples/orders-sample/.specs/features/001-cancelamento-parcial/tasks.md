@@ -9,7 +9,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 ---
 
 **Design**: `.specs/features/001-cancelamento-parcial/design.md`
-**Status**: Approved
+**Status**: Done
 **Approved**: 2026-11-22 - user: "Aprovo conforme sugerido."
 **Build**: `dotnet build Orders.slnx`; `dotnet format Orders.slnx --verify-no-changes`
 **Run regra**: `dotnet test Orders.slnx --filter "FullyQualifiedName~RN_ORD_012" --logger "console;verbosity=normal"`
@@ -253,7 +253,7 @@ Proof: run regra | Passed RN_ORD_012_WHEN_handler_recebe_comando_SHALL_orquestra
 The feature's live state, written as it happens - a compaction gives no warning.
 
 **Settled mid-build:** none
-**Dispatched:** Verifier (sub-agente, contexto limpo), 2026-11-22, com o pedido de mutação de `docs/tlc-adaptacao.md` do kit
+**Dispatched:** Verifier (sub-agente, contexto limpo), 2026-11-22, com o pedido de mutação de `docs/tlc-adaptacao.md` do kit - returned (FAIL, 2 achados, fechados em `961b0ae`); `check_proofs.py` 12 de 12 em `95019de` e `validate_verification.py` com 0 erros antes do commit que grava o `proofs.md`
 **Walked:** n/a - a feature não tem tela; o Independent Test da spec é coberto pelos testes de C1 a C7
 
 **Migração (2026-11-21):** o código e os testes desta feature foram construídos com o tlc-spec-driven 3.3.0 (relatório antigo em `validation.md`, no histórico do git até `kit--v0.5.9`). Este arquivo foi levado ao formato da 4.1.0 nesta data: saiu o campo `Tools`, entraram `Approved`, `Build`, `Run` e os Checks. As tarefas não foram reexecutadas; `proofs.md` e `verification.md` nascem de execução nova sobre o código que já existia.
