@@ -60,6 +60,14 @@ Orquestração sem regra; regra marcada como verificada. (T5 depende de T4, últ
 T4 → T5 → T6
 ```
 
+### Phase 3: Achado do Verifier
+
+Critério acrescentado depois da verificação (ING-08), com decisão do PO.
+
+```
+T6 → T7
+```
+
 ---
 
 ## Task Breakdown
@@ -178,6 +186,25 @@ T4 → T5 → T6
 
 ---
 
+### T7: Reafirmação pelo cliente passa a anotação (ING-08)
+
+**What**: `mesclar` devolve `reanotado` quando evento `cliente:*` traz valor igual ao de unidade de origem `provedor:*` e troca a anotação (origem do evento; instante mais recente); `Cliente.aplicar` aplica as unidades e devolve `changed = false`, `reanotado: true`, sem evento; o worker grava (versão avança) e não publica; cláusula nova em `docs/regras/enriquecimento.md`; contagens em `AGENTS.md`
+**Where**: `src/domain/cliente/service/merge.ts`, `src/domain/cliente/cliente.entity.ts`, `src/infrastructure/messaging/worker.ts`, `src/__tests__/unit/RN_ENR_004.merge-por-unidade.unit.test.ts`, `src/__tests__/integration/clientes.get.int.test.ts`, `docs/regras/enriquecimento.md`, `AGENTS.md`
+**Depends on**: T6
+**Reuses**: `mesclar`, `gravarComRetry`
+**Requirement**: ING-08
+
+**Done when**:
+
+- [x] Teste de unidade `RN_ENR_004_WHEN_cliente_reafirma_valor_de_provedor_SHALL_anotar_cliente_sem_emitir` e teste de integração da reafirmação verdes; os dois ficam vermelhos sem a correção (conferido estragando `merge.ts` e `worker.ts`, um por vez)
+- [x] Build gate passes: `npm run gate` exit 0
+
+**Tests**: unit (1 novo), integration (1 novo)
+**Gate**: build
+**Status**: ✅ Done
+
+---
+
 ## Checks
 
 **C1** - Evento de documento sem cadastro cria o cadastro com todas as unidades do evento, cada uma com `updatedAt` e `origin`, na versão 1 (ING-01, AC 1)
@@ -207,13 +234,17 @@ Proof: run unit | ✓ RN_ENR_004_IF_estado_identico_THEN_SHALL_nao_mudar_nem_emi
 Proof: run unit | ✓ RN_ENR_004_WHEN_cadastro_muda_SHALL_emitir_um_ClienteAtualizado_v1
 Proof: run int | ✓ should publish one ClienteAtualizado v1 per real change, none otherwise
 
+**C8** - Evento de origem `cliente:*` com valor igual ao de uma unidade de origem `provedor:*` passa a anotação para o cliente, grava com versão nova e não emite evento; provedor mais novo deixa de sobrescrever (ING-08, AC 8)
+Proof: run unit | ✓ RN_ENR_004_WHEN_cliente_reafirma_valor_de_provedor_SHALL_anotar_cliente_sem_emitir
+Proof: run int | ✓ should store a client reaffirmation with a new version and publish nothing
+
 ---
 
 ## Handoff
 
 The feature's live state, written as it happens - a compaction gives no warning.
 
-**Settled mid-build:** none
+**Settled mid-build:** ING-08 (2026-11-22) - o Verifier mostrou que valor reafirmado pelo cliente era sobrescrito por provedor; o PO decidiu corrigir: anotação passa ao cliente, grava e avança a versão, sem evento. Critério 8 acrescentado à spec, T7 e C8 aqui
 **Dispatched:** Verifier (sub-agente, contexto limpo) em `ccf3980`, 2026-11-22, com o pedido de mutação de `docs/tlc-adaptacao.md` do kit
 **Walked:** n/a - a feature não tem tela; o Independent Test da spec é o teste de integração de C7
 

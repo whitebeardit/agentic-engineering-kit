@@ -97,8 +97,9 @@ export class EventoIngestaoWorker {
         (await this.repo.obter(evento.documento)) ??
         Cliente.novo(evento.documento, evento.tipoPessoa);
       const versaoEsperada = cliente.versao;
-      const { changed, eventos } = cliente.aplicar(evento, this.limiarN);
-      if (!changed) return 'sem-mudanca';
+      const { changed, eventos, reanotado } = cliente.aplicar(evento, this.limiarN);
+      // ING-08: anotação nova grava e avança a versão, sem evento para publicar.
+      if (!changed && !reanotado) return 'sem-mudanca';
       try {
         await this.repo.gravar(cliente, versaoEsperada);
       } catch (erro) {

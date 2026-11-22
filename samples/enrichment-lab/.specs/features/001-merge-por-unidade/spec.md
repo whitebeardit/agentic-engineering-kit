@@ -1,6 +1,7 @@
 # Aplicar evento ao cadastro com limiar de completude (ENR-042) Specification
 
 **Approved**: 2026-11-22 - user: "Aprovo conforme sugerido."
+**Amended**: 2026-11-22 - user: "Corrija do jeito que vc recomenda." (critério 8, ING-08, acrescentado depois do achado do Verifier; os critérios 1 a 7 não foram editados)
 
 **Card**: ENR-042 · **Tier de risco**: alto (dados pessoais) · **Tamanho (auto-sizing)**: Complex — tier alto e contrato público novo (`ClienteAtualizado` v1)
 **Repo dono do contrato**: enrichment-lab. O consumidor no CRM é feature separada no repo do CRM.
@@ -44,6 +45,7 @@ Every ambiguity is resolved or recorded here - nothing is left silently unclear.
 | `apto`                                                            | É uma unidade como as outras (recência e proveniência); quando ausente, RN-ENR-006 já a inferiu antes do merge | Uma regra só para todas as unidades                           | y — tech lead, Discuss 2026-08-30 |
 | Contagem de campos para o limiar                                  | Unidades folha depois da blacklist (RN-ENR-003), sem contar `apto`                                             | O limiar mede completude dos dados, não flags                 | y — tech lead, Discuss 2026-08-30 |
 | Concorrência entre dois eventos do mesmo documento                | Coberta por RN-ENR-005 (gravação condicional com releitura) — o merge é refeito na releitura                   | Já existe e tem teste                                         | y — tech lead, Discuss 2026-08-30 |
+| Cliente reafirma valor que veio de provedor (achado do Verifier, 2026-11-22) | A anotação passa para o cliente; grava e avança a versão; não emite evento. No critério 6, "estado" inclui a anotação, então este caso não é "estado idêntico" | Declarado pelo cliente vale mais que comprado; o valor não mudou, então consumidor não é avisado; a versão avança porque a gravação é condicional por versão (RN-ENR-005) | y — PO, 2026-11-22 |
 | Evento que não muda nada                                          | Não grava, não avança versão, não emite; `eventId` é registrado como processado                                | Anti-eco: consumidores não recebem ruído                      | y — PO, card ENR-042 |
 
 **Open questions:** none blocking - o valor de N segue como parâmetro com default 11 até o PO confirmar (registrado acima).
@@ -82,6 +84,7 @@ Every ambiguity is resolved or recorded here - nothing is left silently unclear.
 5. IF o cadastro tem N ou mais unidades e o evento traz menos de N THEN system SHALL recusar com `DomainRuleViolation` cujo `ruleId` é `RN-ENR-004` e `motivo` `descartado-limiar`, sem alterar unidades, versão nem eventos; eventos de origem `provedor:*` nunca são recusados por isto <!-- unwanted-behavior -->
 6. IF o estado resultante do merge é idêntico ao gravado THEN system SHALL devolver `changed = false`, não gravar, não avançar a versão e não emitir evento <!-- unwanted-behavior -->
 7. WHEN o cadastro muda THEN system SHALL emitir exatamente um `ClienteAtualizado` v1 com `documento`, a `versao` nova e `occurredAt` — e o worker SHALL só orquestrar: carregar, delegar a decisão ao domínio (entidade + specification), gravar condicionalmente e publicar <!-- event-driven -->
+8. WHEN um evento de origem `cliente:*` traz, para uma unidade cuja origem gravada é `provedor:*`, valor igual ao gravado THEN system SHALL passar a anotação da unidade para a origem do evento (com o instante mais recente entre o gravado e o do evento), gravar avançando a versão e não emitir evento <!-- event-driven -->
 
 **Independent Test**: Documento novo recebe evento A (nome, e-mail, telefone; 12:00) → versão 1 e um `ClienteAtualizado`. Evento B do mesmo documento (e-mail diferente, 11:00; cep novo) → e-mail mantido, cep preenchido, versão 2, um evento. Evento C de provedor (nome diferente, 13:00) → nome mantido, `changed = false`, versão 2, nenhum evento. Evento D com um campo só contra cadastro com N ≥ 11 → recusa `RN-ENR-004`, nada muda.
 
@@ -94,6 +97,7 @@ Edge cases are usually unwanted-behavior (IF/THEN) or boundary (WHEN) criteria:
 - WHEN o evento e a unidade gravada têm o mesmo instante THEN system SHALL manter o gravado (boundary de ING-03)
 - WHEN o cadastro tem exatamente N unidades e o evento traz exatamente N THEN system SHALL aceitar (boundary de ING-05: "menos de N" recusa)
 - IF o evento é de provedor e a unidade gravada é de provedor com instante mais antigo THEN system SHALL sobrescrever (ING-04 permite)
+- WHEN o cliente reafirma um valor de provedor com instante anterior ao gravado THEN system SHALL passar a origem para o cliente e manter o instante gravado (boundary de ING-08)
 - IF o evento não traz nenhuma unidade nova nem mais nova, mas traz `apto` diferente THEN system SHALL tratar `apto` como unidade (ING-03) e emitir evento (ING-07)
 
 ---
@@ -111,9 +115,10 @@ Each requirement gets a unique ID for tracking across design, tasks, and validat
 | ING-05         | P1: limiar de completude recusa com RN-ENR-004              | Done  | ✅ Verified |
 | ING-06         | P1: anti-eco — nada muda, nada grava, sem evento            | Done  | ✅ Verified |
 | ING-07         | P1: um ClienteAtualizado v1 por mudança; worker orquestra   | Done  | ✅ Verified |
+| ING-08         | P1: cliente reafirma valor de provedor; anotação passa a ele | Done  | ✅ Verified |
 
 **ID format:** `[CATEGORY]-[NUMBER]` · **Status values:** Pending → In Design → In Tasks → Implementing → Verified
-**Coverage:** 7 total, 7 mapped to tasks (T1–T6), 0 unmapped
+**Coverage:** 8 total, 8 mapped to tasks (T1–T7), 0 unmapped
 
 ---
 

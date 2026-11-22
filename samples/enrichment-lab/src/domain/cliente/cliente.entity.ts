@@ -19,6 +19,8 @@ export interface Unidade {
 export interface ResultadoAplicacao {
   changed: boolean;
   eventos: ClienteAtualizadoV1[];
+  /** ING-08: nada mudou de valor, mas a anotação mudou e precisa ser gravada. */
+  reanotado?: true;
 }
 
 export class Cliente {
@@ -52,10 +54,11 @@ export class Cliente {
   aplicar(evento: EventoIngestao, limiarN: number): ResultadoAplicacao {
     const elegivel = EventoElegivelParaMerge.estaSatisfeitaPor(this, evento, limiarN);
     if (!elegivel.ok) throw new DomainRuleViolation('RN-ENR-004', elegivel.motivo);
-    const { unidades, changed } = mesclar(this.unidades, evento);
-    if (!changed) return { changed: false, eventos: [] };
+    const { unidades, changed, reanotado } = mesclar(this.unidades, evento);
+    if (!changed && !reanotado) return { changed: false, eventos: [] };
     this.unidades.clear();
     for (const [c, u] of unidades) this.unidades.set(c, u);
+    if (!changed) return { changed: false, eventos: [], reanotado: true };
     return {
       changed: true,
       eventos: [criarClienteAtualizadoV1(this.documento, this.versao + 1)],

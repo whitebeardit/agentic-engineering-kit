@@ -179,6 +179,32 @@ describe('RN-ENR-004 — Aplicar evento ao cadastro: merge por unidade', () => {
     expect(r).toEqual({ changed: false, eventos: [] });
     expect(unidade(c, 'cadastro.nome')?.instante).toBe(T12); // anotação não renova
   });
+  it('RN_ENR_004_WHEN_cliente_reafirma_valor_de_provedor_SHALL_anotar_cliente_sem_emitir', () => {
+    const c = Cliente.novo(CPF_VALIDO, 'F');
+    const uf = (origin: 'provedor:biro' | 'cliente:app', updatedAt: string, v: string) =>
+      eventoValido({ origin, updatedAt, data: { endereco: { uf: v } } });
+    c.aplicar(uf('provedor:biro', T12, 'SP'), N);
+    const r = c.aplicar(uf('cliente:app', T13, 'SP'), N);
+    expect(r).toEqual({ changed: false, eventos: [], reanotado: true });
+    expect(unidade(c, 'endereco.uf')).toEqual({
+      valor: 'SP',
+      instante: T13,
+      origem: 'cliente:app',
+    });
+    // provedor mais novo já não sobrescreve
+    const T14 = '2026-08-30T14:00:00Z';
+    expect(c.aplicar(uf('provedor:biro', T14, 'RJ'), N).changed).toBe(false);
+    expect(unidade(c, 'endereco.uf')?.valor).toBe('SP');
+    // reafirmação mais antiga que o gravado: a origem passa, o instante fica
+    const d = Cliente.novo(CPF_VALIDO, 'F');
+    d.aplicar(uf('provedor:biro', T12, 'SP'), N);
+    d.aplicar(uf('cliente:app', T11, 'SP'), N);
+    expect(unidade(d, 'endereco.uf')).toEqual({
+      valor: 'SP',
+      instante: T12,
+      origem: 'cliente:app',
+    });
+  });
   it('RN_ENR_004_WHEN_cadastro_muda_SHALL_emitir_um_ClienteAtualizado_v1', () => {
     const c = Cliente.reidratar(CPF_VALIDO, 'F', 3, new Map());
     const r = c.aplicar(eventoValido({ updatedAt: T12 }), N);

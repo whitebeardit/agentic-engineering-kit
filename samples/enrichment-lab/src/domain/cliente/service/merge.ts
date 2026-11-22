@@ -5,6 +5,8 @@ import { achatar, type Caminho } from '../unidades';
 export interface ResultadoMerge {
   unidades: Map<Caminho, Unidade>;
   changed: boolean;
+  /** ING-08: só a anotação mudou (valor igual, origem passou a ser o cliente). */
+  reanotado: boolean;
 }
 
 const igual = (a: unknown, b: unknown): boolean =>
@@ -18,7 +20,9 @@ const instante = (iso: string): number => Date.parse(iso);
  * - presente → só se o evento é estritamente mais novo; empate mantém;
  * - origem provedor só preenche lacuna ou sobrescreve unidade escrita por provedor;
  * - `apto` é a unidade "apto"; valor idêntico não conta como mudança (nem renova a
- * anotação).
+ * anotação);
+ * - ING-08: valor idêntico vindo do cliente sobre unidade escrita por provedor passa
+ * a anotação para o cliente (`reanotado`), sem contar como mudança.
  */
 export function mesclar(
   atuais: Map<Caminho, Unidade>,
@@ -29,15 +33,27 @@ export function mesclar(
   if (evento.apto !== undefined) entrada.set('apto', evento.apto);
   const provedor = ehProvedor(evento.origin);
   let changed = false;
+  let reanotado = false;
   for (const [caminho, valor] of entrada) {
     const atual = unidades.get(caminho);
     if (atual) {
       const maisNovo = instante(evento.updatedAt) > instante(atual.instante);
+      if (igual(atual.valor, valor)) {
+        if (!provedor && ehProvedor(atual.origem)) {
+          unidades.set(caminho, {
+            valor: atual.valor,
+            instante: maisNovo ? evento.updatedAt : atual.instante,
+            origem: evento.origin,
+          });
+          reanotado = true;
+        }
+        continue;
+      }
       const podeSobrescrever = maisNovo && (!provedor || ehProvedor(atual.origem));
-      if (!podeSobrescrever || igual(atual.valor, valor)) continue;
+      if (!podeSobrescrever) continue;
     }
     unidades.set(caminho, { valor, instante: evento.updatedAt, origem: evento.origin });
     changed = true;
   }
-  return { unidades, changed };
+  return { unidades, changed, reanotado };
 }
