@@ -245,7 +245,7 @@ Proof: run int | ✓ should store a client reaffirmation with a new version and 
 The feature's live state, written as it happens - a compaction gives no warning.
 
 **Settled mid-build:** ING-08 (2026-11-22) - o Verifier mostrou que valor reafirmado pelo cliente era sobrescrito por provedor; o PO decidiu corrigir: anotação passa ao cliente, grava e avança a versão, sem evento. Critério 8 acrescentado à spec, T7 e C8 aqui
-**Dispatched:** Verifier (sub-agente, contexto limpo) em `ccf3980`, 2026-11-22, com o pedido de mutação de `docs/tlc-adaptacao.md` do kit
+**Dispatched:** Verifier (sub-agente, contexto limpo) em `ccf3980`, 2026-11-22, com o pedido de mutação de `docs/tlc-adaptacao.md` do kit; segunda rodada, só para o C8 (ING-08), em `022a0b8`, 2026-11-22
 **Walked:** n/a - a feature não tem tela; o Independent Test da spec é o teste de integração de C7
 
 **Migração (2026-11-21):** o código e os testes desta feature foram construídos em 2026-08/09 com o tlc-spec-driven 3.3.0 (um commit por tarefa; relatório antigo em `validation.md`, no histórico do git até `kit--v0.5.9`). Este arquivo foi levado ao formato da 4.1.0 nesta data: saiu o campo `Tools`, entraram `Approved`, `Build`, `Run` e os Checks. As tarefas não foram reexecutadas; `proofs.md` e `verification.md` nascem de execução nova sobre o código que já existia.
